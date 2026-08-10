@@ -861,13 +861,23 @@ footer p {
 }
 
 .btn-tiktok,
-.btn-whatsapp-red {
-  text-decoration: none;
-  padding: 14px 22px;
+.btn-whatsapp-red,
+.btn-facebook {
+  min-width: 185px;
+  height: 46px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 22px;
   border-radius: 30px;
+
   color: white;
   font-weight: bold;
   font-size: 14px;
+  text-decoration: none;
+
   transition: .3s;
 }
 
@@ -887,6 +897,7 @@ footer p {
 .btn-whatsapp-red:hover,
 .btn-facebook:hover {
   transform: translateY(-3px);
+  opacity: .92;
 }
 
 

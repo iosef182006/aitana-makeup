@@ -199,6 +199,17 @@ nav a:hover {
   margin-bottom: 18px;
 }
 
+.precio {
+  display: inline-block;
+  font-size: 21px;
+  font-weight: 700;
+  color: #c85f80;
+  background: #fff0f4;
+  padding: 7px 14px;
+  border-radius: 20px;
+  margin: 8px 0 12px;
+}
+
 .whatsapp {
   display: inline-block;
   text-decoration: none;

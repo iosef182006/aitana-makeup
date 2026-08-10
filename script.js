@@ -1,6 +1,10 @@
 const numeroWhatsapp = "51914745871";
 
 
+// ======================================
+// PRODUCTOS
+// ======================================
+
 const productos = [
 
   // ==========================
@@ -11,6 +15,7 @@ const productos = [
     nombre: "Tinta Samantha",
     categoria: "Tintas labiales",
     imagen: "Tinta Samantha",
+    precio: "5.00",
     detalles: [
       "Codigo 4"
     ]
@@ -20,6 +25,7 @@ const productos = [
     nombre: "Tinta Jarusa",
     categoria: "Tintas labiales",
     imagen: "Tinta jarusa",
+    precio: "4.00",
     detalles: [
       "Codigo 6"
     ]
@@ -33,25 +39,29 @@ const productos = [
   {
     nombre: "Gloss Dup Dior",
     categoria: "Lip Gloss",
-    imagen: "Gloss dup dior"
+    imagen: "Gloss dup dior",
+    precio: "8.00"
   },
 
   {
     nombre: "Gloss Mirror",
     categoria: "Lip Gloss",
-    imagen: "Gloss mirror"
+    imagen: "Gloss mirror",
+    precio: "4.00"
   },
 
   {
     nombre: "Gloss Conejo",
     categoria: "Lip Gloss",
-    imagen: "Gloss conejo"
+    imagen: "Gloss conejo",
+    precio: "6.00"
   },
 
   {
     nombre: "Gloss Terciopelo Revel",
     categoria: "Lip Gloss",
-    imagen: "Gloss terciopelo revel"
+    imagen: "Gloss terciopelo revel",
+    precio: "8.00"
   },
 
 
@@ -63,6 +73,7 @@ const productos = [
     nombre: "Labial Líquido Matte",
     categoria: "Labiales",
     imagen: "Labial liquido matte",
+    precio: "8.00",
     detalles: [
       "5 codigos"
     ]
@@ -72,6 +83,7 @@ const productos = [
     nombre: "Labial Corazón Matte",
     categoria: "Labiales",
     imagen: "Labial corazon matte",
+    precio: "8.00",
     detalles: [
       "5 codigos labial corazon"
     ]
@@ -81,6 +93,7 @@ const productos = [
     nombre: "Labial Osito",
     categoria: "Labiales",
     imagen: "Labial osito",
+    precio: "6.50",
     detalles: [
       "10 tonos",
       "10 tonos-2"
@@ -95,7 +108,8 @@ const productos = [
   {
     nombre: "Delineadores",
     categoria: "Ojos y labios",
-    imagen: "delineadores"
+    imagen: "delineadores",
+    precio: "3.00"
   },
 
 
@@ -106,19 +120,22 @@ const productos = [
   {
     nombre: "Rubor Líquido",
     categoria: "Rostro",
-    imagen: "rubor liquido"
+    imagen: "rubor liquido",
+    precio: "8.00"
   },
 
   {
     nombre: "Iluminador",
     categoria: "Rostro",
-    imagen: "iluminador"
+    imagen: "iluminador",
+    precio: "9.00"
   },
 
   {
     nombre: "Iluminador y Rubor 2 en 1",
     categoria: "Rostro",
-    imagen: "iluminador y rubor 2 en 1"
+    imagen: "iluminador y rubor 2 en 1",
+    precio: "10.00"
   },
 
 
@@ -129,13 +146,15 @@ const productos = [
   {
     nombre: "Corrector Líquido Samantha",
     categoria: "Correctores",
-    imagen: "corrector liquido samantha"
+    imagen: "corrector liquido samantha",
+    precio: "8.00"
   },
 
   {
     nombre: "Corrector Líquido Bellespa",
     categoria: "Correctores",
-    imagen: "corrector liquido bellespa"
+    imagen: "corrector liquido bellespa",
+    precio: "8.50"
   },
 
 
@@ -146,19 +165,22 @@ const productos = [
   {
     nombre: "Bálsamo Dup Nivea",
     categoria: "Bálsamos",
-    imagen: "belsamo dup  nivea"
+    imagen: "belsamo dup  nivea",
+    precio: "6.00"
   },
 
   {
     nombre: "Bálsamo con Color",
     categoria: "Bálsamos",
-    imagen: "belsamo con color"
+    imagen: "belsamo con color",
+    precio: "3.00"
   },
 
   {
     nombre: "Bálsamo Fresita",
     categoria: "Bálsamos",
     imagen: "belsamo fresita",
+    precio: "3.00",
     detalles: [
       "belsamo fresita-2"
     ]
@@ -172,19 +194,22 @@ const productos = [
   {
     nombre: "Polvo Translúcido Banana Jarusa",
     categoria: "Rostro",
-    imagen: "polvo translucido banana jarusa"
+    imagen: "polvo translucido banana jarusa",
+    precio: "10.00"
   },
 
   {
     nombre: "Polvo Compacto Flower Secret",
     categoria: "Rostro",
-    imagen: "polvo compacto flower secret"
+    imagen: "polvo compacto flower secret",
+    precio: "8.00"
   },
 
   {
     nombre: "Concealer Revel",
     categoria: "Rostro",
-    imagen: "conncealer revel"
+    imagen: "conncealer revel",
+    precio: "8.00"
   },
 
 
@@ -195,13 +220,15 @@ const productos = [
   {
     nombre: "Beauty Blender",
     categoria: "Accesorios",
-    imagen: "beauty blender"
+    imagen: "beauty blender",
+    precio: "3.50"
   },
 
   {
     nombre: "Magic Box 7 en 1",
     categoria: "Accesorios",
-    imagen: "magic box 7 en 1"
+    imagen: "magic box 7 en 1",
+    precio: "8.00"
   },
 
 
@@ -212,13 +239,15 @@ const productos = [
   {
     nombre: "Brocha para Cejas",
     categoria: "Brochas",
-    imagen: "brocha para cejas"
+    imagen: "brocha para cejas",
+    precio: "3.00"
   },
 
   {
-    nombre: "Juego de 6 Brochas para Ojos",
+    nombre: "Set de 6 Brochas para Ojos",
     categoria: "Brochas",
-    imagen: "juego de 6 brochas para ojos"
+    imagen: "juego de 6 brochas para ojos",
+    precio: "10.00"
   },
 
 
@@ -229,13 +258,15 @@ const productos = [
   {
     nombre: "Disco Revel",
     categoria: "Paletas",
-    imagen: "disco revel"
+    imagen: "disco revel",
+    precio: "10.00"
   },
 
   {
-    nombre: "Paleta Gliter",
+    nombre: "Paleta Glitter",
     categoria: "Paletas",
-    imagen: "paleta gliter"
+    imagen: "paleta gliter",
+    precio: "5.00"
   },
 
 
@@ -246,7 +277,8 @@ const productos = [
   {
     nombre: "Mascarillas Faciales Bioaqua",
     categoria: "Cuidado facial",
-    imagen: "mascarillas faciales bioaqua"
+    imagen: "mascarillas faciales bioaqua",
+    precio: "3.50"
   },
 
 
@@ -257,32 +289,37 @@ const productos = [
   {
     nombre: "Perfiladores",
     categoria: "Accesorios",
-    imagen: "perfiladores"
+    imagen: "perfiladores",
+    precio: "3.50"
   },
 
   {
     nombre: "Rizadores",
     categoria: "Accesorios",
-    imagen: "rizadores"
+    imagen: "rizadores",
+    precio: "6.00"
   },
 
   {
     nombre: "Toallitas Desmaquillantes",
     categoria: "Cuidado facial",
-    imagen: "toallitas desmaquillantes"
+    imagen: "toallitas desmaquillantes",
+    precio: "3.50"
   },
 
   {
     nombre: "Ganchos Hawaianos",
     categoria: "Accesorios",
-    imagen: "ganchos hawaianos"
+    imagen: "ganchos hawaianos",
+    precio: "3.00"
   }
 
 ];
 
 
+
 // ======================================
-// BUSCA JPG O PNG AUTOMÁTICAMENTE
+// BUSCAR JPG O PNG AUTOMÁTICAMENTE
 // ======================================
 
 function imagenHTML(nombre, alt, clase = "") {
@@ -292,6 +329,7 @@ function imagenHTML(nombre, alt, clase = "") {
       src="img/${nombre}.jpg"
       alt="${alt}"
       class="${clase}"
+      loading="lazy"
       onerror="
         if(!this.dataset.intento){
           this.dataset.intento='png';
@@ -303,6 +341,7 @@ function imagenHTML(nombre, alt, clase = "") {
 }
 
 
+
 // ======================================
 // CREAR PRODUCTOS
 // ======================================
@@ -310,92 +349,109 @@ function imagenHTML(nombre, alt, clase = "") {
 const contenedor = document.getElementById("lista-productos");
 
 
-productos.forEach((producto, index) => {
+function crearProductos() {
 
-  const tieneDetalles =
-    producto.detalles &&
-    producto.detalles.length > 0;
+  contenedor.innerHTML = "";
 
+  productos.forEach((producto, index) => {
 
-  const mensajeWhatsapp =
-    encodeURIComponent(
-      `Hola Aitana Make Up, quiero consultar por ${producto.nombre}`
-    );
+    const tieneDetalles =
+      producto.detalles &&
+      producto.detalles.length > 0;
 
 
-  const tarjeta = document.createElement("article");
-
-  tarjeta.classList.add("producto");
-
-
-  tarjeta.innerHTML = `
-
-    <div class="producto-imagen">
-
-      ${imagenHTML(
-        producto.imagen,
-        producto.nombre
-      )}
-
-    </div>
+    const mensajeWhatsapp =
+      encodeURIComponent(
+        `Hola Aitana Make Up, quiero consultar por ${producto.nombre} - S/${producto.precio}`
+      );
 
 
-    <div class="producto-info">
+    const tarjeta = document.createElement("article");
 
-      <span class="categoria">
-        ${producto.categoria}
-      </span>
-
-      <h3>
-        ${producto.nombre}
-      </h3>
-
-      <p>
-        Consulta disponibilidad, tonos y precio.
-      </p>
+    tarjeta.classList.add("producto");
 
 
-      <div class="acciones-producto">
+    tarjeta.innerHTML = `
 
-        ${
-          tieneDetalles
-          ?
-          `
-          <button
-            class="ver-tonos"
-            onclick="abrirModal(${index})"
-          >
-            Ver tonos
-          </button>
-          `
-          :
-          ""
-        }
+      <div class="producto-imagen">
 
-
-        <a
-          href="https://wa.me/${numeroWhatsapp}?text=${mensajeWhatsapp}"
-          target="_blank"
-          class="whatsapp"
-        >
-          Consultar
-        </a>
+        ${imagenHTML(
+          producto.imagen,
+          producto.nombre
+        )}
 
       </div>
 
-    </div>
 
-  `;
+      <div class="producto-info">
+
+        <span class="categoria">
+          ${producto.categoria}
+        </span>
 
 
-  contenedor.appendChild(tarjeta);
+        <h3>
+          ${producto.nombre}
+        </h3>
 
-});
+
+        <div class="precio">
+          S/${producto.precio}
+        </div>
+
+
+        <p>
+          Consulta disponibilidad y tonos.
+        </p>
+
+
+        <div class="acciones-producto">
+
+          ${
+            tieneDetalles
+            ?
+            `
+            <button
+              class="ver-tonos"
+              onclick="abrirModal(${index})"
+            >
+              Ver tonos
+            </button>
+            `
+            :
+            ""
+          }
+
+
+          <a
+            href="https://wa.me/${numeroWhatsapp}?text=${mensajeWhatsapp}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="whatsapp"
+          >
+            Consultar
+          </a>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    contenedor.appendChild(tarjeta);
+
+  });
+
+}
+
+
+crearProductos();
 
 
 
 // ======================================
-// MODAL
+// MODAL PARA TONOS / DETALLES
 // ======================================
 
 const modal =
@@ -416,8 +472,9 @@ function abrirModal(index) {
 
   const producto = productos[index];
 
+
   modalTitulo.textContent =
-    producto.nombre;
+    `${producto.nombre} - S/${producto.precio}`;
 
 
   modalImagenes.innerHTML = "";
@@ -451,27 +508,7 @@ function abrirModal(index) {
 
 
 
-cerrarModal.addEventListener("click", () => {
-
-  cerrarVentana();
-
-});
-
-
-
-modal.addEventListener("click", (e) => {
-
-  if(e.target === modal){
-
-    cerrarVentana();
-
-  }
-
-});
-
-
-
-function cerrarVentana(){
+function cerrarVentana() {
 
   modal.classList.remove("activo");
 
@@ -481,7 +518,33 @@ function cerrarVentana(){
 
 
 
-// ESC CIERRA MODAL
+if (cerrarModal) {
+
+  cerrarModal.addEventListener("click", () => {
+
+    cerrarVentana();
+
+  });
+
+}
+
+
+
+if (modal) {
+
+  modal.addEventListener("click", (e) => {
+
+    if(e.target === modal){
+
+      cerrarVentana();
+
+    }
+
+  });
+
+}
+
+
 
 document.addEventListener("keydown", (e) => {
 
@@ -494,21 +557,28 @@ document.addEventListener("keydown", (e) => {
 });
 
 
+
 // ======================================
-// BUSCADOR Y FILTROS
+// BUSCADOR
 // ======================================
 
-const buscador = document.getElementById("buscador");
+const buscador =
+  document.getElementById("buscador");
 
-const botonesFiltro = document.querySelectorAll(".filtro");
+const botonesFiltro =
+  document.querySelectorAll(".filtro");
 
-let categoriaActual = "Todos";
+let categoriaActual =
+  "Todos";
+
 
 
 function filtrarProductos() {
 
   const texto =
-    buscador.value.toLowerCase();
+    buscador
+      ? buscador.value.toLowerCase().trim()
+      : "";
 
 
   const tarjetas =
@@ -524,6 +594,10 @@ function filtrarProductos() {
     const coincideTexto =
       producto.nombre
         .toLowerCase()
+        .includes(texto) ||
+
+      producto.categoria
+        .toLowerCase()
         .includes(texto);
 
 
@@ -532,11 +606,15 @@ function filtrarProductos() {
       producto.categoria === categoriaActual;
 
 
-    if(coincideTexto && coincideCategoria){
+    if(
+      coincideTexto &&
+      coincideCategoria
+    ){
 
       tarjeta.style.display = "block";
 
-    } else {
+    }
+    else {
 
       tarjeta.style.display = "none";
 
@@ -547,18 +625,27 @@ function filtrarProductos() {
 }
 
 
-buscador.addEventListener(
-  "input",
-  filtrarProductos
-);
+
+if (buscador) {
+
+  buscador.addEventListener(
+    "input",
+    filtrarProductos
+  );
+
+}
+
 
 
 botonesFiltro.forEach(boton => {
 
   boton.addEventListener("click", () => {
 
+
     botonesFiltro.forEach(b => {
+
       b.classList.remove("activo");
+
     });
 
 
@@ -576,21 +663,47 @@ botonesFiltro.forEach(boton => {
 });
 
 
+
 // ======================================
-// MENÚ MÓVIL
+// MENÚ CELULAR
 // ======================================
 
-const menuToggle = document.getElementById("menuToggle");
-const menu = document.getElementById("menu");
+const menuToggle =
+  document.getElementById("menuToggle");
 
-menuToggle.addEventListener("click", () => {
-  menu.classList.toggle("abierto");
-});
+const menu =
+  document.getElementById("menu");
 
-document.querySelectorAll("#menu a").forEach(enlace => {
 
-  enlace.addEventListener("click", () => {
-    menu.classList.remove("abierto");
+if(menuToggle && menu){
+
+  menuToggle.addEventListener("click", () => {
+
+    menu.classList.toggle("abierto");
+
   });
 
-});
+
+  document
+    .querySelectorAll("#menu a")
+    .forEach(enlace => {
+
+      enlace.addEventListener("click", () => {
+
+        menu.classList.remove("abierto");
+
+      });
+
+    });
+
+}
+
+
+
+// ======================================
+// MENSAJE CONSOLA
+// ======================================
+
+console.log(
+  "Aitana Make Up cargó correctamente."
+);

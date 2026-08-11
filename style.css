@@ -343,6 +343,29 @@ nav a:hover {
   margin-bottom: 30px;
 }
 
+.contacto-whatsapp {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-whatsapp {
+  display: inline-block;
+  background: #25D366;
+  color: white;
+  padding: 13px 22px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn-whatsapp:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
 
 /* FOOTER */
 

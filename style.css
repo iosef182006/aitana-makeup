@@ -1201,15 +1201,11 @@ footer p {
 
   .filtros {
 
-    justify-content: flex-start;
+    justify-content: center;
 
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
 
     width: 100%;
-
-    overflow-x: auto;
-
-    padding-bottom: 5px;
 
   }
 
@@ -2331,7 +2327,8 @@ button:disabled {
 
 
   .buscador-contenedor {
-    max-width: none;
+    width: 100%;
+    max-width: 100%;
   }
 
 
@@ -2341,28 +2338,14 @@ button:disabled {
 
 
   .stock-filtros {
-    overflow-x: auto;
-
-    flex-wrap: nowrap;
-  }
-
-
-  .stock-filtro {
-    flex: 0 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
 
   .filtros {
-    flex-wrap: nowrap;
-
-    overflow-x: auto;
-
-    padding-bottom: 7px;
-  }
-
-
-  .filtro {
-    flex: 0 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
 }
@@ -2745,7 +2728,19 @@ footer {
   }
 
   .catalogo-panel {
-    padding: 38px 16px 26px;
+    padding: 26px 16px 18px;
+  }
+
+  .catalogo-encabezado {
+    margin-bottom: 16px;
+  }
+
+  .catalogo-herramientas {
+    margin-bottom: 12px;
+  }
+
+  .stock-filtros {
+    padding: 12px 0;
   }
 
   .catalogo-encabezado h2 {
@@ -2869,6 +2864,11 @@ footer {
   .ayuda-redes a {
     width: 46px;
     height: 46px;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
 }

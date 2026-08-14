@@ -2634,3 +2634,241 @@ footer {
   }
 
 }
+
+
+/* =====================================
+   ETAPA FINAL: RESPONSIVE MÓVIL
+===================================== */
+
+/* ---------- HEADER: hamburguesa en ≤900 ---------- */
+
+@media (max-width: 900px) {
+
+  .header {
+    height: 64px;
+    padding: 0 5%;
+  }
+
+  .logo img {
+    width: 48px;
+    height: 48px;
+    padding: 2px;
+    border-width: 2px;
+  }
+
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #fff0f5;
+    color: #f63372;
+
+    font-size: 24px;
+    line-height: 1;
+
+    cursor: pointer;
+  }
+
+  .header nav {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    width: 100%;
+
+    display: none;
+    flex-direction: column;
+
+    background: #fff;
+    padding: 10px 16px 14px;
+
+    border-bottom: 3px solid #f63372;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, .12);
+  }
+
+  .header nav.abierto {
+    display: flex;
+  }
+
+  .header nav a {
+    width: 100%;
+
+    padding: 15px 16px;
+
+    border-radius: 10px;
+    border-bottom: 1px solid #f6e3e9;
+
+    font-size: 16px;
+  }
+
+  .header nav a:last-child {
+    border-bottom: none;
+  }
+
+  .header-whatsapp {
+    display: none;
+  }
+
+}
+
+
+/* ---------- HERO + SECCIONES en ≤768 ---------- */
+
+@media (max-width: 768px) {
+
+  .hero {
+    min-height: 0;
+    padding: 36px 6% 28px;
+    gap: 0;
+  }
+
+  .hero h1 {
+    font-size: 38px;
+    margin-bottom: 16px;
+  }
+
+  .hero .mini {
+    margin-bottom: 10px;
+  }
+
+  .hero-texto > p:not(.mini) {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .catalogo-panel {
+    padding: 38px 16px 26px;
+  }
+
+  .catalogo-encabezado h2 {
+    font-size: 30px;
+  }
+
+  .nosotros {
+    padding: 46px 6%;
+  }
+
+  .nosotros-imagen img {
+    max-width: 200px;
+  }
+
+  .nosotros-texto h2 {
+    font-size: 30px;
+  }
+
+  .opiniones {
+    padding: 55px 16px;
+  }
+
+  .formulario-opinion {
+    padding: 24px 18px;
+  }
+
+  .estrellas {
+    gap: 10px;
+  }
+
+  .estrellas i {
+    font-size: 34px;
+  }
+
+  .contacto-info h2 {
+    font-size: 26px;
+  }
+
+  .ayuda {
+    padding: 55px 16px;
+  }
+
+  .ayuda h2 {
+    font-size: 30px;
+  }
+
+  .ayuda-tarjeta {
+    padding: 26px 18px;
+  }
+
+  footer {
+    padding: 40px 16px 26px;
+  }
+
+  .whatsapp-flotante {
+    width: 52px;
+    height: 52px;
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .whatsapp-flotante i {
+    font-size: 27px;
+  }
+
+  .modal-contenido {
+    padding: 28px 16px;
+  }
+
+  .modal-contenido h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+}
+
+
+/* ---------- Pantallas muy pequeñas ≤480 ---------- */
+
+@media (max-width: 480px) {
+
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .hero-texto > p:not(.mini) {
+    font-size: 14px;
+  }
+
+  .catalogo-encabezado h2 {
+    font-size: 27px;
+  }
+
+  .catalogo-mini {
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+
+  .filtro,
+  .stock-filtro {
+    padding: 11px 16px;
+  }
+
+  .producto-info h3 {
+    font-size: 20px;
+  }
+
+  .precio {
+    font-size: 23px;
+  }
+
+  .whatsapp-flotante {
+    width: 48px;
+    height: 48px;
+  }
+
+  .whatsapp-flotante i {
+    font-size: 24px;
+  }
+
+  .ayuda-redes a {
+    width: 46px;
+    height: 46px;
+  }
+
+}

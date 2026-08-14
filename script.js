@@ -988,21 +988,19 @@ if(menuToggle && menu){
   });
 
 
-  const sinResultados =
-    document.getElementById(
-      "sin-resultados"
-    );
+  document.addEventListener("click", (e) => {
 
-  const visibles =
-    Array.from(tarjetas)
-      .filter(t =>
-        t.style.display !== "none"
-      ).length;
+    if (
+      menu.classList.contains("abierto") &&
+      !menu.contains(e.target) &&
+      !menuToggle.contains(e.target)
+    ) {
 
-  if (sinResultados) {
-    sinResultados.hidden =
-      visibles > 0;
-  }
+      menu.classList.remove("abierto");
+
+    }
+
+  });
 
 }
 

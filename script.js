@@ -381,6 +381,8 @@ function crearProductos() {
 
     tarjeta.classList.add("producto");
 
+    tarjeta.dataset.index = index;
+
 
     if(producto.agotado){
       tarjeta.classList.add("producto-agotado");
@@ -527,7 +529,7 @@ const observadorAnimaciones =
 
 
 document
-  .querySelectorAll(".producto, .titulo-catalogo, .hero-texto")
+  .querySelectorAll(".producto, .catalogo-titulo, .hero-texto")
   .forEach(elemento => {
 
     observadorAnimaciones.observe(elemento);
@@ -684,7 +686,7 @@ document.addEventListener("keydown", (e) => {
 
 
 // ======================================
-// BUSCADOR
+// CATÁLOGO: BUSCADOR, FILTROS Y ORDEN
 // ======================================
 
 const buscador =
@@ -693,27 +695,39 @@ const buscador =
 const botonesFiltro =
   document.querySelectorAll(".filtro");
 
+const ordenProductos =
+  document.getElementById("ordenProductos");
+
+const contadorProductos =
+  document.getElementById("contadorProductos");
+
+const sinResultados =
+  document.getElementById("sinResultados");
+
+const botonesStock =
+  document.querySelectorAll(".stock-filtro");
+
+let filtroStock = "todos";
+
 let categoriaActual =
   "Todos";
 
 
 
-function filtrarProductos() {
+function actualizarCatalogo() {
 
   const texto =
-    buscador
-      ? buscador.value.toLowerCase().trim()
-      : "";
-
+    buscador.value.toLowerCase().trim();
 
   const tarjetas =
-    document.querySelectorAll(".producto");
+    [...document.querySelectorAll(".producto")];
+
+  let visibles = 0;
 
 
   tarjetas.forEach((tarjeta, index) => {
 
-    const producto =
-      productos[index];
+    const producto = productos[index];
 
 
     const coincideTexto =
@@ -731,21 +745,43 @@ function filtrarProductos() {
       producto.categoria === categoriaActual;
 
 
-    if(
-      coincideTexto &&
-      coincideCategoria
-    ){
+    let coincideStock = true;
 
-      tarjeta.style.display = "flex";
 
+    if(filtroStock === "disponible") {
+      coincideStock = !producto.agotado;
     }
-    else {
 
-      tarjeta.style.display = "none";
 
+    if(filtroStock === "agotado") {
+      coincideStock = producto.agotado === true;
+    }
+
+
+    const mostrar =
+      coincideTexto &&
+      coincideCategoria &&
+      coincideStock;
+
+
+    tarjeta.style.display =
+      mostrar ? "flex" : "none";
+
+
+    if(mostrar) {
+      visibles++;
     }
 
   });
+
+
+  contadorProductos.textContent = visibles;
+
+
+  sinResultados.style.display =
+    visibles === 0
+      ? "block"
+      : "none";
 
 }
 
@@ -755,10 +791,31 @@ if (buscador) {
 
   buscador.addEventListener(
     "input",
-    filtrarProductos
+    actualizarCatalogo
   );
 
 }
+
+
+
+botonesStock.forEach(boton => {
+
+  boton.addEventListener("click", () => {
+
+    botonesStock.forEach(b => {
+      b.classList.remove("activo");
+    });
+
+    boton.classList.add("activo");
+
+    filtroStock =
+      boton.dataset.stock;
+
+    actualizarCatalogo();
+
+  });
+
+});
 
 
 
@@ -781,11 +838,84 @@ botonesFiltro.forEach(boton => {
       boton.dataset.categoria;
 
 
-    filtrarProductos();
+    actualizarCatalogo();
 
   });
 
 });
+
+
+
+if (ordenProductos) {
+
+  ordenProductos.addEventListener("change", () => {
+
+    const valor =
+      ordenProductos.value;
+
+    const tarjetas =
+      [...document.querySelectorAll(".producto")];
+
+
+    tarjetas.sort((a, b) => {
+
+      const indexA =
+        Number(a.dataset.index);
+
+      const indexB =
+        Number(b.dataset.index);
+
+
+      const productoA =
+        productos[indexA];
+
+      const productoB =
+        productos[indexB];
+
+
+      if(valor === "precio-asc") {
+
+        return (
+          parseFloat(productoA.precio) -
+          parseFloat(productoB.precio)
+        );
+
+      }
+
+
+      if(valor === "precio-desc") {
+
+        return (
+          parseFloat(productoB.precio) -
+          parseFloat(productoA.precio)
+        );
+
+      }
+
+
+      if(valor === "nombre") {
+
+        return productoA.nombre
+          .localeCompare(productoB.nombre);
+
+      }
+
+
+      return indexA - indexB;
+
+    });
+
+
+    tarjetas.forEach(tarjeta => {
+      contenedor.appendChild(tarjeta);
+    });
+
+  });
+
+}
+
+
+actualizarCatalogo();
 
 
 

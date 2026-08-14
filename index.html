@@ -92,23 +92,67 @@
 
 <section class="productos" id="productos">
 
-  <div class="titulo-catalogo">
-    <span>NUESTRO CATÁLOGO</span>
-    <h2>Encuentra tu favorito</h2>
-    <p>Explora nuestros productos de maquillaje, belleza y accesorios.</p>
-  </div>
+  <div class="catalogo-cabecera">
 
-  <div class="herramientas-catalogo">
-
-    <div class="buscador-contenedor">
-      <span>⌕</span>
-
-      <input
-        type="text"
-        id="buscador"
-        placeholder="Buscar producto..."
-      >
+    <div class="catalogo-titulo">
+      <span>NUESTRO CATÁLOGO</span>
+      <h2>Encuentra tu favorito</h2>
+      <p>Explora maquillaje, belleza y accesorios de Aitana Make Up.</p>
     </div>
+
+    <div class="catalogo-barra">
+
+      <div class="buscador-contenedor">
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+          type="text"
+          id="buscador"
+          placeholder="Buscar producto..."
+        >
+      </div>
+
+      <select id="ordenProductos" class="orden-productos">
+        <option value="default">Ordenar por</option>
+        <option value="precio-asc">Precio: menor a mayor</option>
+        <option value="precio-desc">Precio: mayor a menor</option>
+        <option value="nombre">Nombre A-Z</option>
+      </select>
+
+    </div>
+
+
+    <div class="catalogo-info">
+
+      <p>
+        <strong id="contadorProductos">0</strong>
+        productos
+      </p>
+
+      <div class="stock-filtros">
+
+        <button
+          class="stock-filtro activo"
+          data-stock="todos">
+          Todos
+        </button>
+
+        <button
+          class="stock-filtro"
+          data-stock="disponible">
+          Disponibles
+        </button>
+
+        <button
+          class="stock-filtro"
+          data-stock="agotado">
+          Agotados
+        </button>
+
+      </div>
+
+    </div>
+
 
     <div class="filtros">
 
@@ -148,15 +192,13 @@
 
   </div>
 
+  <div class="grid-productos" id="lista-productos"></div>
 
-  <div
-    class="grid-productos"
-    id="lista-productos">
+  <div class="sin-resultados" id="sinResultados">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <h3>No encontramos productos</h3>
+    <p>Prueba buscando otro nombre o categoría.</p>
   </div>
-
-  <p class="sin-resultados" id="sin-resultados" hidden>
-    No encontramos productos con ese nombre.
-  </p>
 
 </section>
 

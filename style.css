@@ -1977,7 +1977,10 @@ footer p {
 .btn-opinion {
   width: 100%;
 
-  border: none;
+  border: none !important;
+  outline: none;
+  box-shadow: none;
+
   border-radius: 30px;
 
   background: #f63372;
@@ -1998,6 +2001,10 @@ footer p {
   transition: .2s;
 }
 
+.btn-opinion:focus {
+  outline: none;
+}
+
 .btn-opinion:hover {
   background: #db205d;
   transform: translateY(-2px);
@@ -2011,7 +2018,8 @@ footer p {
 }
 
 .mensaje-formulario.error {
-  color: #d91515;
+  color: #e63962;
+  font-weight: 600;
 }
 
 @media (max-width: 900px) {

@@ -827,3 +827,21 @@ if(menuToggle && menu){
 console.log(
   "Aitana Make Up cargó correctamente."
 );
+
+
+
+// ======================================
+// RECARGAR SIEMPRE AL INICIO
+// ======================================
+
+window.addEventListener("load", () => {
+
+  history.replaceState(
+    null,
+    null,
+    window.location.pathname
+  );
+
+  window.scrollTo(0, 0);
+
+});

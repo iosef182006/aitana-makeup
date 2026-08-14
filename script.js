@@ -40,7 +40,8 @@ const productos = [
     nombre: "Gloss Dup Dior",
     categoria: "Lip Gloss",
     imagen: "Gloss dup dior",
-    precio: "8.00"
+    precio: "8.00",
+    agotado: true
   },
 
   {

@@ -391,6 +391,19 @@ function crearProductos() {
         )}
 
         ${
+          !producto.agotado
+          ?
+          `
+          <div class="etiqueta-disponible">
+            <i class="fa-solid fa-circle-check"></i>
+            Disponible
+          </div>
+          `
+          :
+          ""
+        }
+
+        ${
           producto.agotado
           ?
           `
@@ -477,6 +490,82 @@ function crearProductos() {
 
 
 crearProductos();
+
+
+
+// ======================================
+// ANIMACIONES AL HACER SCROLL
+// ======================================
+
+const observadorAnimaciones =
+  new IntersectionObserver(
+    (entradas) => {
+
+      entradas.forEach(entrada => {
+
+        if(entrada.isIntersecting){
+
+          entrada.target.classList.add("visible");
+
+          observadorAnimaciones.unobserve(
+            entrada.target
+          );
+
+        }
+
+      });
+
+    },
+    { threshold: 0.08 }
+  );
+
+
+document
+  .querySelectorAll(".producto, .titulo-catalogo, .hero-texto")
+  .forEach(elemento => {
+
+    observadorAnimaciones.observe(elemento);
+
+  });
+
+
+
+// ======================================
+// BOTÓN VOLVER ARRIBA
+// ======================================
+
+const volverArriba =
+  document.getElementById("volverArriba");
+
+
+if (volverArriba) {
+
+  window.addEventListener("scroll", () => {
+
+    if(window.scrollY > 400){
+
+      volverArriba.classList.add("mostrar");
+
+    }
+    else {
+
+      volverArriba.classList.remove("mostrar");
+
+    }
+
+  });
+
+
+  volverArriba.addEventListener("click", () => {
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  });
+
+}
 
 
 
@@ -641,7 +730,7 @@ function filtrarProductos() {
       coincideCategoria
     ){
 
-      tarjeta.style.display = "block";
+      tarjeta.style.display = "flex";
 
     }
     else {

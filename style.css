@@ -124,6 +124,9 @@ body {
   min-height: 470px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+
+  gap: 40px;
 
   padding: 55px 9% 45px;
 
@@ -145,6 +148,53 @@ body {
 
 .hero-texto {
   max-width: 620px;
+}
+
+.hero-imagen {
+  position: relative;
+
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-imagen img {
+  width: 290px;
+  height: 340px;
+
+  object-fit: cover;
+
+  border-radius: 28px;
+
+  border: 5px solid #fff;
+
+  box-shadow:
+    0 22px 45px rgba(214, 96, 135, .28);
+
+  transform: rotate(3deg);
+}
+
+.hero-imagen .hero-imagen-sec {
+  position: absolute;
+
+  bottom: -22px;
+  left: -42px;
+
+  width: 150px;
+  height: 150px;
+
+  object-fit: cover;
+
+  border-radius: 20px;
+
+  border: 5px solid #fff;
+
+  box-shadow:
+    0 14px 30px rgba(214, 96, 135, .25);
+
+  transform: rotate(-9deg);
 }
 
 .mini {
@@ -329,6 +379,10 @@ body {
 
 .producto {
 
+  display: flex;
+
+  flex-direction: column;
+
   background: white;
 
   border-radius: 14px;
@@ -358,6 +412,8 @@ body {
 .producto-imagen {
 
   height: 285px;
+
+  flex-shrink: 0;
 
   position: relative;
 
@@ -389,6 +445,12 @@ body {
 
 
 .producto-info {
+
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
 
   padding: 16px 18px 18px;
 
@@ -435,10 +497,49 @@ body {
 
 
 /* ============================
+   ETIQUETA DISPONIBLE
+============================ */
+
+.etiqueta-disponible {
+
+  position: absolute;
+
+  top: 12px;
+  left: 12px;
+
+  z-index: 20;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  background: #1eb56b;
+
+  color: white;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 3px 8px rgba(0,0,0,.12);
+
+}
+
+
+/* ============================
    BOTONES
 ============================ */
 
 .acciones-producto {
+
+  margin-top: auto;
 
   display: flex;
 
@@ -449,6 +550,8 @@ body {
   gap: 10px;
 
   flex-wrap: wrap;
+
+  padding-top: 4px;
 
 }
 
@@ -1327,4 +1430,148 @@ footer p {
 .red-social:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0,0,0,.15);
+}
+
+
+/* ============================
+   FOOTER
+============================ */
+
+.footer-logo img {
+  width: 72px;
+  height: 72px;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+
+  border: 2px solid #f2afc2;
+
+  margin-bottom: 14px;
+}
+
+.footer-envios {
+  font-weight: 600;
+  color: #f2afc2;
+}
+
+.footer-envios i {
+  margin-right: 6px;
+}
+
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.footer-links i {
+  font-size: 18px;
+}
+
+
+/* ============================
+   BOTÓN VOLVER ARRIBA
+============================ */
+
+.volver-arriba {
+  position: fixed;
+  left: 25px;
+  bottom: 25px;
+
+  width: 46px;
+  height: 46px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f63372;
+  color: white;
+
+  font-size: 18px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,.22);
+
+  z-index: 9998;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+
+  transition: .3s;
+}
+
+.volver-arriba.mostrar {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.volver-arriba:hover {
+  background: #db205d;
+}
+
+
+/* ============================
+   FLOTANTE CON LATIDO SUAVE
+============================ */
+
+.whatsapp-flotante {
+  animation: latido 2.2s infinite;
+}
+
+@keyframes latido {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
+.whatsapp-flotante:hover {
+  animation: none;
+  transform: scale(1.1);
+}
+
+
+/* ============================
+   ANIMACIÓN AL HACER SCROLL
+============================ */
+
+.producto,
+.titulo-catalogo,
+.hero-texto {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity .55s ease,
+    transform .55s ease,
+    box-shadow .25s ease;
+}
+
+.producto.visible,
+.titulo-catalogo.visible,
+.hero-texto.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.producto.visible:hover {
+  transform: translateY(-4px);
+}
+
+
+/* ============================
+   RESPONSIVE HERO
+============================ */
+
+@media (max-width: 1000px) {
+
+  .hero-imagen {
+    display: none;
+  }
+
 }

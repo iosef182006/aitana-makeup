@@ -37,11 +37,11 @@
   </a>
 
   <nav id="menu">
-    <a href="#inicio" class="activo-menu">Inicio</a>
-    <a href="#productos">Catálogo</a>
-    <a href="#nosotros">Nosotros</a>
-    <a href="#opiniones">Opiniones</a>
-    <a href="#contacto">Contacto</a>
+    <a href="#inicio" class="nav-link activo-menu">Inicio</a>
+    <a href="#productos" class="nav-link">Catálogo</a>
+    <a href="#nosotros" class="nav-link">Nosotros</a>
+    <a href="#opiniones" class="nav-link">Opiniones</a>
+    <a href="#contacto" class="nav-link">Contacto</a>
   </nav>
 
   <a
@@ -92,15 +92,28 @@
 
 <section class="productos" id="productos">
 
-  <div class="catalogo-cabecera">
+  <div class="catalogo-panel">
 
-    <div class="catalogo-titulo">
-      <span>NUESTRO CATÁLOGO</span>
-      <h2>Encuentra tu favorito</h2>
-      <p>Explora maquillaje, belleza y accesorios de Aitana Make Up.</p>
+    <div class="catalogo-encabezado">
+
+      <div>
+        <span class="catalogo-mini">NUESTRO CATÁLOGO</span>
+        <h2>Encuentra tu favorito</h2>
+        <p>
+          Explora nuestros productos de maquillaje,
+          belleza y accesorios.
+        </p>
+      </div>
+
+      <div class="resultado-total">
+        <strong id="contadorProductos">0</strong>
+        productos
+      </div>
+
     </div>
 
-    <div class="catalogo-barra">
+
+    <div class="catalogo-herramientas">
 
       <div class="buscador-contenedor">
         <i class="fa-solid fa-magnifying-glass"></i>
@@ -109,47 +122,53 @@
           type="text"
           id="buscador"
           placeholder="Buscar producto..."
+          autocomplete="off"
         >
       </div>
 
+
       <select id="ordenProductos" class="orden-productos">
-        <option value="default">Ordenar por</option>
-        <option value="precio-asc">Precio: menor a mayor</option>
-        <option value="precio-desc">Precio: mayor a menor</option>
-        <option value="nombre">Nombre A-Z</option>
+
+        <option value="original">
+          Ordenar por
+        </option>
+
+        <option value="precio-asc">
+          Precio: menor a mayor
+        </option>
+
+        <option value="precio-desc">
+          Precio: mayor a menor
+        </option>
+
+        <option value="nombre">
+          Nombre A-Z
+        </option>
+
       </select>
 
     </div>
 
 
-    <div class="catalogo-info">
+    <div class="stock-filtros">
 
-      <p>
-        <strong id="contadorProductos">0</strong>
-        productos
-      </p>
+      <button
+        class="stock-filtro activo"
+        data-stock="todos">
+        Todos
+      </button>
 
-      <div class="stock-filtros">
+      <button
+        class="stock-filtro"
+        data-stock="disponible">
+        Disponibles
+      </button>
 
-        <button
-          class="stock-filtro activo"
-          data-stock="todos">
-          Todos
-        </button>
-
-        <button
-          class="stock-filtro"
-          data-stock="disponible">
-          Disponibles
-        </button>
-
-        <button
-          class="stock-filtro"
-          data-stock="agotado">
-          Agotados
-        </button>
-
-      </div>
+      <button
+        class="stock-filtro"
+        data-stock="agotado">
+        Agotados
+      </button>
 
     </div>
 
@@ -194,10 +213,16 @@
 
   <div class="grid-productos" id="lista-productos"></div>
 
-  <div class="sin-resultados" id="sinResultados">
+  <div id="sinResultados" class="sin-resultados">
+
     <i class="fa-solid fa-magnifying-glass"></i>
+
     <h3>No encontramos productos</h3>
-    <p>Prueba buscando otro nombre o categoría.</p>
+
+    <p>
+      Prueba con otro nombre o selecciona otra categoría.
+    </p>
+
   </div>
 
 </section>
@@ -321,7 +346,7 @@
 </section>
 
 
-<section class="redes" id="contacto">
+<section class="redes contacto" id="contacto">
   <h2>Síguenos</h2>
 
   <p>

@@ -529,7 +529,7 @@ const observadorAnimaciones =
 
 
 document
-  .querySelectorAll(".producto, .catalogo-titulo, .hero-texto")
+  .querySelectorAll(".producto, .catalogo-panel, .hero-texto")
   .forEach(elemento => {
 
     observadorAnimaciones.observe(elemento);
@@ -685,17 +685,14 @@ document.addEventListener("keydown", (e) => {
 
 
 
-// ======================================
-// CATÁLOGO: BUSCADOR, FILTROS Y ORDEN
-// ======================================
+/* =====================================
+   CATÁLOGO: BÚSQUEDA + FILTROS + ORDEN
+===================================== */
 
-const buscador =
+const buscadorCatalogo =
   document.getElementById("buscador");
 
-const botonesFiltro =
-  document.querySelectorAll(".filtro");
-
-const ordenProductos =
+const selectOrden =
   document.getElementById("ordenProductos");
 
 const contadorProductos =
@@ -707,33 +704,47 @@ const sinResultados =
 const botonesStock =
   document.querySelectorAll(".stock-filtro");
 
-let filtroStock = "todos";
+const botonesCategoria =
+  document.querySelectorAll(".filtro");
 
-let categoriaActual =
-  "Todos";
 
+let categoriaSeleccionada = "Todos";
+
+let stockSeleccionado = "todos";
 
 
 function actualizarCatalogo() {
 
   const texto =
-    buscador.value.toLowerCase().trim();
+    buscadorCatalogo.value
+      .toLowerCase()
+      .trim();
+
 
   const tarjetas =
-    [...document.querySelectorAll(".producto")];
-
-  let visibles = 0;
+    document.querySelectorAll(".producto");
 
 
-  tarjetas.forEach((tarjeta, index) => {
-
-    const producto = productos[index];
+  let totalVisible = 0;
 
 
-    const coincideTexto =
+  tarjetas.forEach(tarjeta => {
+
+    const index =
+      Number(tarjeta.dataset.index);
+
+
+    const producto =
+      productos[index];
+
+
+    const coincideBusqueda =
+
       producto.nombre
         .toLowerCase()
-        .includes(texto) ||
+        .includes(texto)
+
+      ||
 
       producto.categoria
         .toLowerCase()
@@ -741,25 +752,37 @@ function actualizarCatalogo() {
 
 
     const coincideCategoria =
-      categoriaActual === "Todos" ||
-      producto.categoria === categoriaActual;
+
+      categoriaSeleccionada === "Todos"
+
+      ||
+
+      producto.categoria ===
+      categoriaSeleccionada;
 
 
     let coincideStock = true;
 
 
-    if(filtroStock === "disponible") {
-      coincideStock = !producto.agotado;
+    if(stockSeleccionado === "disponible") {
+
+      coincideStock =
+        producto.agotado !== true;
+
     }
 
 
-    if(filtroStock === "agotado") {
-      coincideStock = producto.agotado === true;
+    if(stockSeleccionado === "agotado") {
+
+      coincideStock =
+        producto.agotado === true;
+
     }
 
 
     const mostrar =
-      coincideTexto &&
+
+      coincideBusqueda &&
       coincideCategoria &&
       coincideStock;
 
@@ -769,17 +792,20 @@ function actualizarCatalogo() {
 
 
     if(mostrar) {
-      visibles++;
+
+      totalVisible++;
+
     }
 
   });
 
 
-  contadorProductos.textContent = visibles;
+  contadorProductos.textContent =
+    totalVisible;
 
 
   sinResultados.style.display =
-    visibles === 0
+    totalVisible === 0
       ? "block"
       : "none";
 
@@ -787,44 +813,22 @@ function actualizarCatalogo() {
 
 
 
-if (buscador) {
+/* BUSCADOR */
 
-  buscador.addEventListener(
-    "input",
-    actualizarCatalogo
-  );
-
-}
+buscadorCatalogo.addEventListener(
+  "input",
+  actualizarCatalogo
+);
 
 
 
-botonesStock.forEach(boton => {
+/* CATEGORÍAS */
 
-  boton.addEventListener("click", () => {
-
-    botonesStock.forEach(b => {
-      b.classList.remove("activo");
-    });
-
-    boton.classList.add("activo");
-
-    filtroStock =
-      boton.dataset.stock;
-
-    actualizarCatalogo();
-
-  });
-
-});
-
-
-
-botonesFiltro.forEach(boton => {
+botonesCategoria.forEach(boton => {
 
   boton.addEventListener("click", () => {
 
-
-    botonesFiltro.forEach(b => {
+    botonesCategoria.forEach(b => {
 
       b.classList.remove("activo");
 
@@ -834,7 +838,7 @@ botonesFiltro.forEach(boton => {
     boton.classList.add("activo");
 
 
-    categoriaActual =
+    categoriaSeleccionada =
       boton.dataset.categoria;
 
 
@@ -846,73 +850,105 @@ botonesFiltro.forEach(boton => {
 
 
 
-if (ordenProductos) {
+/* STOCK */
 
-  ordenProductos.addEventListener("change", () => {
+botonesStock.forEach(boton => {
 
-    const valor =
-      ordenProductos.value;
+  boton.addEventListener("click", () => {
 
-    const tarjetas =
-      [...document.querySelectorAll(".producto")];
+    botonesStock.forEach(b => {
 
+      b.classList.remove("activo");
 
-    tarjetas.sort((a, b) => {
-
-      const indexA =
-        Number(a.dataset.index);
-
-      const indexB =
-        Number(b.dataset.index);
+    });
 
 
-      const productoA =
-        productos[indexA];
-
-      const productoB =
-        productos[indexB];
+    boton.classList.add("activo");
 
 
-      if(valor === "precio-asc") {
+    stockSeleccionado =
+      boton.dataset.stock;
+
+
+    actualizarCatalogo();
+
+  });
+
+});
+
+
+
+/* ORDEN */
+
+selectOrden.addEventListener("change", () => {
+
+  const tarjetas =
+    [
+      ...document.querySelectorAll(".producto")
+    ];
+
+
+  tarjetas.sort((tarjetaA, tarjetaB) => {
+
+    const productoA =
+      productos[
+        Number(tarjetaA.dataset.index)
+      ];
+
+
+    const productoB =
+      productos[
+        Number(tarjetaB.dataset.index)
+      ];
+
+
+    switch(selectOrden.value) {
+
+
+      case "precio-asc":
 
         return (
           parseFloat(productoA.precio) -
           parseFloat(productoB.precio)
         );
 
-      }
 
-
-      if(valor === "precio-desc") {
+      case "precio-desc":
 
         return (
           parseFloat(productoB.precio) -
           parseFloat(productoA.precio)
         );
 
-      }
 
-
-      if(valor === "nombre") {
+      case "nombre":
 
         return productoA.nombre
-          .localeCompare(productoB.nombre);
-
-      }
-
-
-      return indexA - indexB;
-
-    });
+          .localeCompare(
+            productoB.nombre,
+            "es"
+          );
 
 
-    tarjetas.forEach(tarjeta => {
-      contenedor.appendChild(tarjeta);
-    });
+      default:
+
+        return (
+          Number(tarjetaA.dataset.index) -
+          Number(tarjetaB.dataset.index)
+        );
+
+    }
 
   });
 
-}
+
+  tarjetas.forEach(tarjeta => {
+
+    contenedor.appendChild(tarjeta);
+
+  });
+
+});
 
 
 actualizarCatalogo();
@@ -994,7 +1030,11 @@ window.addEventListener("load", () => {
     window.location.pathname
   );
 
-  window.scrollTo(0, 0);
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "instant"
+  });
 
 });
 

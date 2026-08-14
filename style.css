@@ -1758,3 +1758,93 @@ footer p {
   border-radius: 10px;
   margin: 12px auto 0;
 }
+
+
+/* ============================
+   IMÁGENES DE PRODUCTOS
+   SIN RECORTAR
+============================ */
+
+.producto-imagen {
+  width: 100%;
+  height: 280px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #fff;
+  overflow: hidden;
+
+  position: relative;
+}
+
+.producto-imagen img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain !important;
+  object-position: center;
+
+  display: block;
+}
+
+
+/* ============================
+   MÓVIL: TARJETAS COMPACTAS
+============================ */
+
+@media (max-width: 650px) {
+
+  .producto-imagen {
+    height: auto;
+    aspect-ratio: 1 / 1;
+    padding: 10px;
+    background: #fff;
+  }
+
+  .producto-imagen img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain !important;
+    object-position: center;
+  }
+
+  .producto {
+    border-radius: 22px;
+    overflow: hidden;
+  }
+
+  .producto-info {
+    padding: 18px 16px 20px;
+  }
+
+  .producto-info h3 {
+    font-size: 24px;
+    line-height: 1.2;
+    margin: 8px 0;
+  }
+
+  .precio {
+    font-size: 27px;
+    margin: 14px 0 18px;
+  }
+
+  .acciones-producto {
+    padding-top: 4px;
+  }
+
+  .whatsapp-flotante {
+    width: 58px;
+    height: 58px;
+
+    right: 16px;
+    bottom: 18px;
+  }
+
+  .whatsapp-flotante i {
+    font-size: 29px;
+  }
+
+}

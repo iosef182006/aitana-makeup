@@ -1848,3 +1848,15 @@ footer p {
   }
 
 }
+
+
+/* ============================
+   FILTRO ACTIVO CON CONTRASTE
+============================ */
+
+.filtro.activo,
+.filter-btn.active {
+  background: #f72f70;
+  color: #fff !important;
+  border-color: #f72f70;
+}

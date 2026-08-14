@@ -814,7 +814,24 @@ if(menuToggle && menu){
 
       });
 
-    });
+  });
+
+
+  const sinResultados =
+    document.getElementById(
+      "sin-resultados"
+    );
+
+  const visibles =
+    Array.from(tarjetas)
+      .filter(t =>
+        t.style.display !== "none"
+      ).length;
+
+  if (sinResultados) {
+    sinResultados.hidden =
+      visibles > 0;
+  }
 
 }
 
@@ -1008,6 +1025,14 @@ if (formularioOpinion) {
       const datos =
         new FormData(formularioOpinion);
 
+      const botonEnviar =
+        formularioOpinion.querySelector(
+          'button[type="submit"]'
+        );
+
+      botonEnviar.disabled = true;
+      botonEnviar.innerHTML = "Enviando...";
+
       try {
 
         const respuesta =
@@ -1031,6 +1056,10 @@ if (formularioOpinion) {
 
           pintarEstrellas(0);
 
+          setTimeout(() => {
+            limpiarMensaje();
+          }, 6000);
+
         }
         else {
 
@@ -1046,6 +1075,13 @@ if (formularioOpinion) {
         mostrarError(
           "Revisa la conexión e inténtalo de nuevo."
         );
+
+      }
+      finally {
+
+        botonEnviar.disabled = false;
+        botonEnviar.innerHTML =
+          '<i class="fa-solid fa-heart"></i> Enviar opinión';
 
       }
 

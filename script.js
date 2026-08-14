@@ -311,10 +311,11 @@ const productos = [
   },
 
   {
-    nombre: "Toallitas Desmaquillantes",
-    categoria: "Cuidado facial",
-    imagen: "toallitas desmaquillantes",
-    precio: "3.50"
+     nombre: "Toallitas Desmaquillantes",
+     categoria: "Cuidado facial",
+     imagen: "toallitas desmaquillantes",
+     precio: "3.50",
+     agotado: true
   },
 
   {

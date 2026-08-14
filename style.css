@@ -20,8 +20,8 @@ body {
 ============================ */
 
 .header {
-  height: 105px;
-  padding: 0 5%;
+  height: 85px;
+  padding: 0 6%;
 
   display: flex;
   align-items: center;
@@ -43,8 +43,8 @@ body {
 }
 
 .logo img {
-  width: 210px;
-  height: 75px;
+  width: 74px;
+  height: 74px;
 
   object-fit: contain;
 
@@ -115,18 +115,30 @@ body {
 /* HERO */
 
 .hero {
-  min-height: 620px;
+  min-height: 430px;
   display: flex;
   align-items: center;
-  padding: 0 10%;
+
+  padding: 55px 9% 45px;
+
   background:
-    radial-gradient(circle at 85% 20%, #f8c8d5 0, #f8c8d5 12%, transparent 13%),
-    radial-gradient(circle at 75% 55%, #f9dfe6 0, #f9dfe6 18%, transparent 19%),
+    radial-gradient(
+      circle at 86% 18%,
+      #f8c8d5 0,
+      #f8c8d5 10%,
+      transparent 11%
+    ),
+    radial-gradient(
+      circle at 76% 58%,
+      #f9dfe6 0,
+      #f9dfe6 16%,
+      transparent 17%
+    ),
     linear-gradient(135deg, #fff8fa, #fcedf1);
 }
 
 .hero-texto {
-  max-width: 600px;
+  max-width: 620px;
 }
 
 .mini {
@@ -137,10 +149,14 @@ body {
   margin-bottom: 20px;
 }
 
+.hero .mini {
+  margin-bottom: 12px;
+}
+
 .hero h1 {
-  font-size: 65px;
-  line-height: 1;
-  margin-bottom: 25px;
+  font-size: 58px;
+  line-height: .98;
+  margin-bottom: 22px;
 }
 
 .hero h1 span {
@@ -150,9 +166,10 @@ body {
 
 .hero-texto > p:not(.mini) {
   color: #666;
-  max-width: 470px;
-  line-height: 1.7;
-  margin-bottom: 30px;
+  max-width: 520px;
+  font-size: 16px;
+  line-height: 1.65;
+  margin-bottom: 26px;
 }
 
 .boton {
@@ -163,6 +180,10 @@ body {
   border-radius: 30px;
   text-decoration: none;
   transition: .3s;
+}
+
+.hero .boton {
+  padding: 13px 28px;
 }
 
 .boton:hover {
@@ -176,42 +197,35 @@ body {
 ============================ */
 
 .herramientas-catalogo {
-
-  padding: 20px 4%;
-
+  padding: 24px 4%;
   background: #fff0f5;
 
   display: flex;
-
   align-items: center;
+  justify-content: center;
 
-  gap: 30px;
+  gap: 18px;
 
   flex-wrap: wrap;
 
-  margin-bottom: 30px;
-
+  margin-bottom: 28px;
 }
 
 
 .buscador-contenedor {
-
-  width: 360px;
+  width: 390px;
+  max-width: 100%;
 
   display: flex;
-
   align-items: center;
-
   gap: 8px;
 
   background: white;
 
-  border: 1px solid #e4e4e4;
+  border: 1px solid #e7d7dc;
+  border-radius: 30px;
 
-  border-radius: 16px;
-
-  padding: 0 15px;
-
+  padding: 0 18px;
 }
 
 
@@ -225,42 +239,36 @@ body {
 
 
 #buscador {
-
   width: 100%;
 
   border: none;
-
   outline: none;
 
-  padding: 14px 5px;
+  padding: 14px 4px;
 
   font-size: 15px;
 
   background: transparent;
-
 }
 
 
 .filtros {
-
   display: flex;
+  align-items: center;
+  justify-content: center;
 
-  gap: 12px;
+  gap: 9px;
 
   flex-wrap: wrap;
-
 }
 
 
 .filtro {
-
-  border: 1px solid #f2b9ca;
-
+  border: 1px solid #efb5c6;
   background: #fff8fa;
-
   color: #222;
 
-  padding: 11px 21px;
+  padding: 10px 18px;
 
   border-radius: 24px;
 
@@ -269,7 +277,6 @@ body {
   font-weight: 600;
 
   transition: .2s;
-
 }
 
 
@@ -291,7 +298,7 @@ body {
 
 .productos {
 
-  padding: 0 3% 80px;
+  padding: 0 3% 55px;
 
   background: white;
 
@@ -1055,9 +1062,9 @@ footer p {
 
   .herramientas-catalogo {
 
-    padding: 15px;
+    padding: 18px 15px;
 
-    gap: 15px;
+    gap: 12px;
 
   }
 
@@ -1071,13 +1078,15 @@ footer p {
 
   .filtros {
 
+    justify-content: flex-start;
+
     flex-wrap: nowrap;
 
     width: 100%;
 
     overflow-x: auto;
 
-    padding-bottom: 4px;
+    padding-bottom: 5px;
 
   }
 
@@ -1113,10 +1122,9 @@ footer p {
 
   }
 
-
   .hero {
-    min-height: 500px;
-    padding: 55px 7% 45px;
+    min-height: 420px;
+    padding: 45px 7% 35px;
     background:
       radial-gradient(
         circle at 90% 20%,
@@ -1133,8 +1141,9 @@ footer p {
       linear-gradient(135deg, #fff8fa, #fcedf1);
   }
 
+
   .hero h1 {
-    font-size: 43px;
+    font-size: 42px;
     line-height: 0.98;
     margin-bottom: 28px;
   }

@@ -456,6 +456,7 @@ function crearProductos() {
               rel="noopener noreferrer"
               class="whatsapp"
             >
+              <i class="fa-brands fa-whatsapp"></i>
               Consultar
             </a>
             `

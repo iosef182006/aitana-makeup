@@ -943,13 +943,15 @@ footer p {
 
   text-decoration: none;
 
-  font-size: 26px;
-
-  box-shadow: 0 8px 25px rgba(0,0,0,.2);
+  box-shadow: 0 5px 18px rgba(0,0,0,.20);
 
   z-index: 9999;
 
   transition: .3s;
+}
+
+.whatsapp-flotante i {
+  font-size: 31px;
 }
 
 .whatsapp-flotante:hover {
@@ -1176,4 +1178,20 @@ footer p {
     gap: 7px;
   }
 
+}
+
+
+/* ============================
+   ÍCONOS WHATSAPP (FONT AWESOME)
+============================ */
+
+.whatsapp i,
+.header-whatsapp i {
+  font-size: 18px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.header-whatsapp i {
+  font-size: 21px;
 }

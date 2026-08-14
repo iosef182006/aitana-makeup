@@ -981,6 +981,12 @@ if(menuToggle && menu){
 
       enlace.addEventListener("click", () => {
 
+        const href = enlace.getAttribute("href");
+
+        if (href && href.startsWith("#")) {
+          marcarActivo(href.slice(1));
+        }
+
         menu.classList.remove("abierto");
 
       });
@@ -1003,6 +1009,125 @@ if(menuToggle && menu){
   });
 
 }
+
+
+
+// ======================================
+// MENÚ ACTIVO / SCROLLSPY
+// ======================================
+
+function marcarActivo(id) {
+
+  const enlace =
+    document.querySelector(
+      '.nav-link[href="#' + id + '"]'
+    );
+
+  if (!enlace) return;
+
+
+  const activo =
+    document.querySelector(
+      ".nav-link.activo-menu"
+    );
+
+  if (activo && activo !== enlace) {
+    activo.classList.remove("activo-menu");
+  }
+
+  enlace.classList.add("activo-menu");
+
+}
+
+
+function actualizarScrollspy() {
+
+  const header =
+    document.querySelector(".header");
+
+  const altoHeader =
+    header ? header.offsetHeight : 0;
+
+  const seccionReferencia =
+    document.getElementById("productos");
+
+  const margenScroll =
+    seccionReferencia
+      ? parseFloat(
+          getComputedStyle(
+            seccionReferencia
+          ).scrollMarginTop
+        ) || 0
+      : 0;
+
+  const margen =
+    Math.max(
+      altoHeader + 12,
+      margenScroll + 10
+    );
+
+  const secciones = [
+    "inicio",
+    "productos",
+    "nosotros",
+    "opiniones",
+    "contacto"
+  ];
+
+  let seccionActiva = secciones[0];
+
+  for (const id of secciones) {
+
+    const seccion =
+      document.getElementById(id);
+
+    if (!seccion) continue;
+
+    if (
+      seccion.getBoundingClientRect().top
+        <= margen
+    ) {
+
+      seccionActiva = id;
+
+    }
+
+  }
+
+  marcarActivo(seccionActiva);
+
+}
+
+
+let scrollspyProgramado = false;
+
+window.addEventListener(
+  "scroll",
+  () => {
+
+    if (scrollspyProgramado) return;
+
+    scrollspyProgramado = true;
+
+    requestAnimationFrame(() => {
+
+      actualizarScrollspy();
+
+      scrollspyProgramado = false;
+
+    });
+
+  },
+  { passive: true }
+);
+
+
+actualizarScrollspy();
+
+window.addEventListener(
+  "resize",
+  actualizarScrollspy
+);
 
 
 

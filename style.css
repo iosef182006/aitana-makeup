@@ -1106,19 +1106,23 @@ footer p {
    RESPONSIVE
 ============================ */
 
+@media (max-width: 1120px) {
+
+  .header-whatsapp {
+
+    display: none;
+
+  }
+
+}
+
+
 @media (max-width: 1000px) {
 
   .grid-productos {
 
     grid-template-columns:
       repeat(2, 1fr);
-
-  }
-
-
-  .header-whatsapp {
-
-    display: none;
 
   }
 

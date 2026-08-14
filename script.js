@@ -1354,6 +1354,8 @@ if (formularioOpinion) {
 
           pintarEstrellas(0);
 
+          calificacionInput.value = "0";
+
           setTimeout(() => {
             limpiarMensaje();
           }, 6000);

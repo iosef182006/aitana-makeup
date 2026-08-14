@@ -1575,3 +1575,74 @@ footer p {
   }
 
 }
+
+
+/* ============================
+   PULIDO FINAL
+============================ */
+
+/* HERO MÁS EQUILIBRADO */
+.hero {
+  min-height: 500px;
+  padding-top: 45px;
+  padding-bottom: 45px;
+}
+
+.hero-imagen {
+  transform: scale(.92);
+}
+
+
+/* MÁS ESPACIO ENTRE TÍTULO Y BUSCADOR */
+.titulo-catalogo {
+  padding-bottom: 32px;
+}
+
+.herramientas-catalogo {
+  padding-top: 0;
+  margin-bottom: 34px;
+}
+
+
+/* TARJETAS UNIFORMES */
+.producto {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.producto-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.acciones-producto {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+
+/* FOTOS MÁS UNIFORMES */
+.producto-imagen {
+  height: 270px;
+}
+
+.producto-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* SELLOS DE STOCK MÁS LIMPIOS */
+.etiqueta-disponible {
+  font-size: 12px;
+  padding: 6px 11px;
+  border-radius: 18px;
+}
+
+.sello-agotado {
+  font-size: 30px;
+}

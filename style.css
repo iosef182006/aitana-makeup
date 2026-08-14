@@ -854,19 +854,28 @@ body {
 }
 
 
+/* Anclas con offset por el header fijo */
+#productos,
+#nosotros,
+#opiniones,
+#contacto {
+  scroll-margin-top: 100px;
+}
+
+
 /* CONTACTO */
 
-.contacto {
+.opiniones {
   padding: 100px 20px;
   text-align: center;
 }
 
-.contacto h2 {
+.opiniones h2 {
   font-size: 42px;
   margin-bottom: 15px;
 }
 
-.contacto p {
+.opiniones p {
   color: #666;
   margin-bottom: 30px;
 }
@@ -1681,7 +1690,7 @@ footer p {
 /* ===== MEJORA SECCIÓN FINAL ===== */
 
 /* ¿Te gustó algún producto? */
-.contacto {
+.opiniones {
   background: linear-gradient(135deg, #fff1f5 0%, #ffe1ea 100%);
   padding: 70px 20px;
 }
@@ -1748,7 +1757,7 @@ footer p {
 
 
 /* Detalle rosa en los títulos */
-.contacto h2::after,
+.opiniones h2::after,
 .redes h2::after {
   content: "";
   display: block;
@@ -1866,7 +1875,7 @@ footer p {
    FORMULARIO DE OPINIONES
 ============================ */
 
-.contacto {
+.opiniones {
   text-align: center;
 }
 

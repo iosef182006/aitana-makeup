@@ -934,7 +934,7 @@ if (formularioOpinion) {
         if (respuesta.ok) {
 
           mensajeFormulario.textContent =
-            "¡Gracias por tu opinión! 💗";
+            "💗 ¡Gracias por tu opinión! Nos ayuda a seguir mejorando.";
 
           formularioOpinion.reset();
 

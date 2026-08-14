@@ -173,33 +173,72 @@
 
 <section class="contacto" id="contacto">
 
-  <h2>¿Te gustó algún producto?</h2>
+  <div class="contacto-contenedor">
 
-  <p>
-    Escríbenos y consulta disponibilidad, tonos y precios.
-  </p>
+    <div class="contacto-info">
+      <span class="mini">TU OPINIÓN CUENTA</span>
 
-  <div class="contacto-whatsapp">
+      <h2>¿Qué te pareció nuestro catálogo?</h2>
 
-    <a
-      href="https://wa.me/51982797861"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="btn-whatsapp btn-principal"
+      <p>
+        Cuéntanos qué te gustó y qué podríamos mejorar.
+        Tu opinión nos ayuda a seguir creciendo.
+      </p>
+    </div>
+
+    <form
+      class="formulario-opinion"
+      action="https://formspree.io/f/TU_ID_FORMSPREE"
+      method="POST"
     >
-      <i class="fa-brands fa-whatsapp"></i>
-      Consultar productos
-    </a>
 
-    <a
-      href="https://wa.me/51914745871"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="btn-whatsapp btn-secundario"
-    >
-      <i class="fa-brands fa-whatsapp"></i>
-      Otras consultas
-    </a>
+      <div class="campo-calificacion">
+        <label>Califica tu experiencia</label>
+
+        <div class="estrellas" id="estrellas">
+          <i class="fa-solid fa-star" data-valor="1"></i>
+          <i class="fa-solid fa-star" data-valor="2"></i>
+          <i class="fa-solid fa-star" data-valor="3"></i>
+          <i class="fa-solid fa-star" data-valor="4"></i>
+          <i class="fa-solid fa-star" data-valor="5"></i>
+        </div>
+
+        <input
+          type="hidden"
+          name="calificacion"
+          id="calificacion"
+          value="0"
+        >
+      </div>
+
+      <div class="campo">
+        <label for="me-gusto">¿Qué te gustó?</label>
+        <textarea
+          name="me_gusto"
+          id="me-gusto"
+          rows="3"
+          placeholder="Ej: Los gloss y los precios..."
+        ></textarea>
+      </div>
+
+      <div class="campo">
+        <label for="mejorar">¿Qué podríamos mejorar?</label>
+        <textarea
+          name="mejorar"
+          id="mejorar"
+          rows="3"
+          placeholder="Ej: Más tonos de labiales..."
+        ></textarea>
+      </div>
+
+      <button type="submit" class="btn-opinion">
+        <i class="fa-solid fa-heart"></i>
+        Enviar opinión
+      </button>
+
+      <p class="mensaje-formulario" id="mensajeFormulario"></p>
+
+    </form>
 
   </div>
 

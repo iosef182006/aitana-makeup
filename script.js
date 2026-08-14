@@ -845,3 +845,118 @@ window.addEventListener("load", () => {
   window.scrollTo(0, 0);
 
 });
+
+
+
+// ======================================
+// FORMULARIO DE OPINIONES
+// ======================================
+
+const estrellas =
+  document.querySelectorAll(".estrellas i");
+
+const calificacionInput =
+  document.getElementById("calificacion");
+
+const formularioOpinion =
+  document.querySelector(".formulario-opinion");
+
+const mensajeFormulario =
+  document.getElementById("mensajeFormulario");
+
+
+function pintarEstrellas(valor) {
+
+  estrellas.forEach(estrella => {
+
+    const numero =
+      parseInt(estrella.dataset.valor);
+
+    if(numero <= valor){
+
+      estrella.classList.add("seleccionada");
+
+    }
+    else {
+
+      estrella.classList.remove("seleccionada");
+
+    }
+
+  });
+
+}
+
+
+estrellas.forEach(estrella => {
+
+  estrella.addEventListener("click", () => {
+
+    const valor =
+      parseInt(estrella.dataset.valor);
+
+    calificacionInput.value = valor;
+
+    pintarEstrellas(valor);
+
+  });
+
+});
+
+
+if (formularioOpinion) {
+
+  formularioOpinion.addEventListener(
+    "submit",
+    async (e) => {
+
+      e.preventDefault();
+
+      mensajeFormulario.textContent = "";
+
+      const datos =
+        new FormData(formularioOpinion);
+
+      try {
+
+        const respuesta =
+          await fetch(
+            formularioOpinion.action,
+            {
+              method: "POST",
+              body: datos,
+              headers: {
+                "Accept": "application/json"
+              }
+            }
+          );
+
+        if (respuesta.ok) {
+
+          mensajeFormulario.textContent =
+            "¡Gracias por tu opinión! 💗";
+
+          formularioOpinion.reset();
+
+          pintarEstrellas(0);
+
+        }
+        else {
+
+          mensajeFormulario.textContent =
+            "Ocurrió un error, vuelve a intentarlo.";
+
+        }
+
+      }
+      catch (error) {
+
+        mensajeFormulario.textContent =
+          "Revisa la conexión e inténtalo de nuevo.";
+
+      }
+
+    }
+  );
+
+}

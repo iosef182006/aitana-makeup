@@ -1860,3 +1860,165 @@ footer p {
   color: #fff !important;
   border-color: #f72f70;
 }
+
+
+/* ============================
+   FORMULARIO DE OPINIONES
+============================ */
+
+.contacto {
+  text-align: center;
+}
+
+.contacto-contenedor {
+  max-width: 960px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+
+  align-items: center;
+
+  text-align: left;
+}
+
+.contacto-info {
+  text-align: center;
+}
+
+.contacto-info h2 {
+  font-size: 34px;
+  color: #222;
+  margin: 10px 0 14px;
+}
+
+.contacto-info p {
+  color: #6d4a55;
+  line-height: 1.7;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.formulario-opinion {
+  background: #fff;
+  border-radius: 24px;
+  padding: 30px 28px;
+
+  box-shadow: 0 14px 40px rgba(214, 96, 135, .18);
+
+  text-align: left;
+}
+
+.campo-calificacion {
+  margin-bottom: 20px;
+}
+
+.campo-calificacion label,
+.campo label {
+  display: block;
+  font-weight: 700;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.estrellas {
+  display: flex;
+  gap: 8px;
+}
+
+.estrellas i {
+  font-size: 30px;
+  color: #e5d5da;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.estrellas i:hover {
+  transform: scale(1.1);
+}
+
+.estrellas i:hover,
+.estrellas i.seleccionada {
+  color: #f5316f;
+}
+
+.campo {
+  margin-bottom: 18px;
+}
+
+.campo textarea {
+  width: 100%;
+
+  border: 1px solid #ead4db;
+  border-radius: 14px;
+
+  padding: 12px 14px;
+
+  font-size: 15px;
+  font-family: inherit;
+  color: #333;
+
+  outline: none;
+
+  resize: vertical;
+
+  background: #fffafb;
+
+  transition: .2s;
+}
+
+.campo textarea:focus {
+  border-color: #f5316f;
+  background: #fff;
+}
+
+.btn-opinion {
+  width: 100%;
+
+  border: none;
+  border-radius: 30px;
+
+  background: #f63372;
+  color: #fff;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  padding: 14px 20px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  transition: .2s;
+}
+
+.btn-opinion:hover {
+  background: #db205d;
+  transform: translateY(-2px);
+}
+
+.mensaje-formulario {
+  margin: 14px 0 0;
+  font-weight: 700;
+  color: #1eb56b;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+
+  .contacto-contenedor {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .contacto-info h2 {
+    font-size: 28px;
+  }
+
+}

@@ -1390,3 +1390,160 @@ if (formularioOpinion) {
   );
 
 }
+
+
+// ======================================
+// PORTADA MÓVIL AITANA (solo <=768px)
+// Reutiliza: menuToggle, #menu, buscador (#buscador),
+// .filtro (data-categoria), #productos, modal, scrollspy.
+// ======================================
+
+const productosDestacadosMobile = [
+  "Gloss Terciopelo Revel",
+  "Labial Osito",
+  "Iluminador",
+  "Paleta Glitter"
+];
+
+function ajustarMobile() {
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  const home = document.querySelector(".aitana-mobile-home");
+  if (home) {
+    home.style.display = isMobile ? "block" : "none";
+  }
+
+  const heroViejo = document.querySelectorAll(".hero-texto, .hero-imagen");
+  if (home) {
+    heroViejo.forEach(el => {
+      if (el) el.style.display = isMobile ? "none" : "";
+    });
+  }
+
+  if (isMobile) {
+    renderizarMobileProductos();
+    sincronizarBottomNav();
+  }
+}
+
+function renderizarMobileProductos() {
+  const contenedor = document.getElementById("aitanaMobileProducts");
+  if (!contenedor) return;
+  contenedor.innerHTML = "";
+
+  const mapa = {};
+  productos.forEach(p => {
+    mapa[p.nombre] = p;
+  });
+
+  productosDestacadosMobile.forEach(nombre => {
+    const producto = mapa[nombre];
+    if (!producto || producto.agotado) return;
+
+    const tarjeta = document.createElement("div");
+    tarjeta.className = "aitana-mobile-product";
+
+    const hrefWA =
+      "https://wa.me/" + numeroWhatsapp +
+      "?text=" + encodeURIComponent(
+        "Hola Aitana Make Up, quiero consultar por " +
+        producto.nombre + " - S/" + producto.precio
+      );
+
+    tarjeta.innerHTML = `
+      <a href="${hrefWA}" target="_blank" rel="noopener noreferrer" aria-label="Consultar ${producto.nombre} por WhatsApp">
+        ${imagenHTML(producto.imagen, producto.nombre)}
+      </a>
+      <h3>${producto.nombre}</h3>
+      <div class="aitana-mobile-precio">S/${producto.precio}</div>
+      <a href="${hrefWA}" target="_blank" rel="noopener noreferrer" class="aitana-mobile-whatsapp" aria-label="Consultar por WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+      </a>
+    `;
+
+    contenedor.appendChild(tarjeta);
+  });
+}
+
+function sincronizarBottomNav() {
+  const linksNav = document.querySelectorAll(".aitana-mobile-bottom-link");
+  const linksNavMap = {};
+  linksNav.forEach(link => {
+    const href = link.getAttribute("href");
+    linksNavMap[href] = link;
+  });
+
+  const seccionActiva =
+    document.querySelector(".nav-link.activo-menu") ||
+    document.querySelector("a[href='#inicio']");
+
+  const hrefActivo = seccionActiva
+    ? seccionActiva.getAttribute("href")
+    : "#inicio";
+
+  linksNav.forEach(link => link.classList.remove("active"));
+  if (linksNavMap[hrefActivo]) {
+    linksNavMap[hrefActivo].classList.add("active");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", ajustarMobile);
+window.addEventListener("resize", ajustarMobile);
+
+// Buscador móvil → controla el buscador real del catálogo
+const mobileSearch = document.getElementById("aitanaMobileSearch");
+const buscadorReal = document.getElementById("buscador");
+if (mobileSearch && buscadorReal) {
+  mobileSearch.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const texto = mobileSearch.value.trim();
+      buscadorReal.value = texto;
+      buscadorReal.dispatchEvent(
+        new Event("input", { bubbles: true })
+      );
+      const productosSec = document.getElementById("productos");
+      if (productosSec) {
+        productosSec.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  });
+}
+
+// Categorías móviles → activan el filtro real del catálogo
+document.querySelectorAll(".aitana-mobile-cat").forEach(boton => {
+  boton.addEventListener("click", () => {
+    const categoria = boton.dataset.categoria;
+
+    const filtroReal = document.querySelector(
+      '.filtro[data-categoria="' + categoria + '"]'
+    );
+    if (filtroReal) {
+      filtroReal.click();
+    }
+
+    const stockTodos = document.querySelector(
+      '.stock-filtro[data-stock="todos"]'
+    );
+    if (stockTodos) {
+      stockTodos.click();
+    }
+
+    const productosSec = document.getElementById("productos");
+    if (productosSec) {
+      productosSec.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+});
+
+// Scrollspy: mantener la barra inferior móvil sincronizada
+let syncNavPendiente = false;
+window.addEventListener("scroll", () => {
+  if (syncNavPendiente) return;
+  syncNavPendiente = true;
+  requestAnimationFrame(() => {
+    sincronizarBottomNav();
+    syncNavPendiente = false;
+  });
+}, { passive: true });
+
+

@@ -87,6 +87,80 @@
       alt="Iluminador"
     >
   </div>
+
+  <!-- PORTADA MÓVIL (solo <=768px) -->
+  <div class="aitana-mobile-home" aria-hidden="false">
+
+    <div class="aitana-mobile-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input
+        type="search"
+        id="aitanaMobileSearch"
+        class="aitana-mobile-search-input"
+        placeholder="Buscar productos..."
+        autocomplete="off"
+        aria-label="Buscar productos"
+      >
+    </div>
+
+    <div class="aitana-mobile-banner">
+      <div class="aitana-mobile-logo">
+        <img src="img/logo de aitana.jpeg" alt="Aitana Make Up">
+      </div>
+      <p class="aitana-mobile-tagline">Belleza que acompaña tu estilo</p>
+      <a href="#productos" class="aitana-mobile-btn">Ver catálogo</a>
+    </div>
+
+    <div class="aitana-mobile-categories">
+      <div class="aitana-mobile-cat" data-categoria="Labiales">Labiales</div>
+      <div class="aitana-mobile-cat" data-categoria="Lip Gloss">Gloss</div>
+      <div class="aitana-mobile-cat" data-categoria="Rostro">Rostro</div>
+      <div class="aitana-mobile-cat" data-categoria="Ojos y labios">Ojos</div>
+      <div class="aitana-mobile-cat" data-categoria="Accesorios">Accesorios</div>
+    </div>
+
+    <div class="aitana-mobile-coming">
+      <p class="aitana-mobile-coming-title">Próximamente</p>
+      <div class="aitana-mobile-coming-carousel" id="aitanaComingCarousel">
+        <div class="aitana-mobile-card">
+          <span class="aitana-mobile-card-sign">?</span>
+          <span class="aitana-mobile-card-label">PRÓXIMAMENTE</span>
+        </div>
+        <div class="aitana-mobile-card">
+          <span class="aitana-mobile-card-sign">?</span>
+          <span class="aitana-mobile-card-label">PRÓXIMAMENTE</span>
+        </div>
+        <div class="aitana-mobile-card">
+          <span class="aitana-mobile-card-sign">?</span>
+          <span class="aitana-mobile-card-label">PRÓXIMAMENTE</span>
+        </div>
+      </div>
+      <p class="aitana-mobile-coming-sub">Algo nuevo está por llegar a Aitana... 👀💗</p>
+    </div>
+
+    <div class="aitana-mobile-products">
+      <div class="aitana-mobile-section-header">
+        <h2>Los más vendidos</h2>
+        <a href="#productos" class="aitana-mobile-ver-todos">Ver todos</a>
+      </div>
+      <div class="aitana-mobile-products-carousel" id="aitanaMobileProducts">
+      </div>
+    </div>
+
+    <div class="aitana-mobile-cta">
+      <p>¿Tienes dudas o quieres pedir?</p>
+      <a
+        href="https://wa.me/51982797861?text=Hola%20Aitana%20Make%20Up,%20quiero%20consultar%20por%20sus%20productos"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="aitana-mobile-cta-btn"
+        aria-label="Consultar por WhatsApp"
+      >
+        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+      </a>
+    </div>
+
+  </div>
 </section>
 
 
@@ -517,6 +591,31 @@
 </div>
 
 <script src="script.js"></script>
+
+<nav class="aitana-mobile-bottom-nav" aria-label="Navegación principal móvil">
+  <a href="#inicio" class="aitana-mobile-bottom-link" aria-label="Inicio">
+    <i class="fa-solid fa-house"></i>
+    <span>Inicio</span>
+  </a>
+  <a href="#productos" class="aitana-mobile-bottom-link" aria-label="Catálogo">
+    <i class="fa-solid fa-tag"></i>
+    <span>Catálogo</span>
+  </a>
+  <a
+    href="https://wa.me/51982797861?text=Hola%20Aitana%20Make%20Up,%20quiero%20consultar%20por%20sus%20productos"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="aitana-mobile-bottom-link"
+    aria-label="WhatsApp"
+  >
+    <i class="fa-brands fa-whatsapp"></i>
+    <span>WhatsApp</span>
+  </a>
+  <a href="#opiniones" class="aitana-mobile-bottom-link" aria-label="Opiniones">
+    <i class="fa-solid fa-star"></i>
+    <span>Opiniones</span>
+  </a>
+</nav>
 
 <a
   href="https://wa.me/51982797861?text=Hola%20Aitana%20Make%20Up,%20quiero%20consultar%20por%20sus%20productos"

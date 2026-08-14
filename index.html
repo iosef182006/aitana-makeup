@@ -11,19 +11,30 @@
 <body>
 
 <header class="header">
+
   <a href="#inicio" class="logo">
-    <img src="img/logo de aitana.jpeg" alt="Logo Aitana Make Up">
-    <span>Aitana Make Up</span>
+    <img src="img/logo de aitana.jpeg" alt="Aitana Make Up">
   </a>
 
-  <button class="menu-toggle" id="menuToggle">☰</button>
-
   <nav id="menu">
-    <a href="#inicio">Inicio</a>
-    <a href="#productos">Productos</a>
+    <a href="#inicio" class="activo-menu">Inicio</a>
+    <a href="#productos">Catálogo</a>
     <a href="#nosotros">Nosotros</a>
     <a href="#contacto">Contacto</a>
   </nav>
+
+  <a
+    href="https://wa.me/51982797861"
+    target="_blank"
+    class="header-whatsapp"
+  >
+    WhatsApp: 982 797 861
+  </a>
+
+  <button class="menu-toggle" id="menuToggle">
+    ☰
+  </button>
+
 </header>
 
 <section class="hero" id="inicio">
@@ -49,23 +60,30 @@
 
 <section class="productos" id="productos">
 
-  <div class="titulo-seccion">
-    <p>NUESTRO CATÁLOGO</p>
-    <h2>Productos destacados</h2>
-  </div>
-
   <div class="herramientas-catalogo">
 
-    <input
-      type="text"
-      id="buscador"
-      placeholder="Buscar producto..."
-    >
+    <div class="buscador-contenedor">
+      <span>⌕</span>
+
+      <input
+        type="text"
+        id="buscador"
+        placeholder="Buscar producto..."
+      >
+    </div>
 
     <div class="filtros">
 
       <button class="filtro activo" data-categoria="Todos">
         Todos
+      </button>
+
+      <button class="filtro" data-categoria="Tintas labiales">
+        Tintas labiales
+      </button>
+
+      <button class="filtro" data-categoria="Lip Gloss">
+        Lip Gloss
       </button>
 
       <button class="filtro" data-categoria="Labiales">
@@ -76,19 +94,26 @@
         Rostro
       </button>
 
-      <button class="filtro" data-categoria="Lip Gloss">
-        Gloss
+      <button class="filtro" data-categoria="Ojos y labios">
+        Ojos
       </button>
 
       <button class="filtro" data-categoria="Accesorios">
         Accesorios
       </button>
 
+      <button class="filtro" data-categoria="Cuidado facial">
+        Cuidado facial
+      </button>
+
     </div>
 
   </div>
 
-  <div class="grid-productos" id="lista-productos">
+
+  <div
+    class="grid-productos"
+    id="lista-productos">
   </div>
 
 </section>

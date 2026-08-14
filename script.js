@@ -54,14 +54,18 @@ const productos = [
     nombre: "Gloss Conejo",
     categoria: "Lip Gloss",
     imagen: "Gloss conejo",
-    precio: "6.00"
+    precio: "6.00",
+    agotado: true
   },
 
   {
     nombre: "Gloss Terciopelo Revel",
     categoria: "Lip Gloss",
     imagen: "Gloss terciopelo revel",
-    precio: "8.00"
+    precio: "8.00",
+    detalles: [
+      "tonos-gloss-revel"
+    ]
   },
 
 
@@ -366,9 +370,15 @@ function crearProductos() {
       );
 
 
-    const tarjeta = document.createElement("article");
+    const tarjeta =
+      document.createElement("article");
 
     tarjeta.classList.add("producto");
+
+
+    if(producto.agotado){
+      tarjeta.classList.add("producto-agotado");
+    }
 
 
     tarjeta.innerHTML = `
@@ -379,6 +389,18 @@ function crearProductos() {
           producto.imagen,
           producto.nombre
         )}
+
+        ${
+          producto.agotado
+          ?
+          `
+          <div class="sello-agotado">
+            AGOTADO
+          </div>
+          `
+          :
+          ""
+        }
 
       </div>
 
@@ -400,15 +422,10 @@ function crearProductos() {
         </div>
 
 
-        <p>
-          Consulta disponibilidad y tonos.
-        </p>
-
-
         <div class="acciones-producto">
 
           ${
-            tieneDetalles
+            !producto.agotado && tieneDetalles
             ?
             `
             <button
@@ -423,14 +440,26 @@ function crearProductos() {
           }
 
 
-          <a
-            href="https://wa.me/${numeroWhatsapp}?text=${mensajeWhatsapp}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="whatsapp"
-          >
-            Consultar
-          </a>
+          ${
+            producto.agotado
+            ?
+            `
+            <span class="boton-agotado">
+              Producto agotado
+            </span>
+            `
+            :
+            `
+            <a
+              href="https://wa.me/${numeroWhatsapp}?text=${mensajeWhatsapp}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="whatsapp"
+            >
+              Consultar
+            </a>
+            `
+          }
 
         </div>
 

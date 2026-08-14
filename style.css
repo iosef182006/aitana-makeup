@@ -1676,3 +1676,85 @@ footer p {
   }
 
 }
+
+
+/* ===== MEJORA SECCIÓN FINAL ===== */
+
+/* ¿Te gustó algún producto? */
+.contacto {
+  background: linear-gradient(135deg, #fff1f5 0%, #ffe1ea 100%);
+  padding: 70px 20px;
+}
+
+/* Botones del CTA */
+.btn-principal {
+  background: #f63372;
+  color: #fff;
+}
+
+.btn-principal:hover {
+  background: #db205d;
+}
+
+.btn-secundario {
+  background: #fff;
+  color: #f63372;
+  border: 2px solid #f63372;
+}
+
+.btn-secundario:hover {
+  background: #fff0f5;
+}
+
+
+/* Tarjetas informativas (Envíos / Atención / Aitana) */
+.envio-item {
+  background: #ffffff;
+  border: 1px solid #f7ccd8;
+  box-shadow: 0 8px 25px rgba(219, 126, 153, 0.10);
+  border-radius: 20px;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.envio-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(219, 126, 153, 0.18);
+}
+
+.envio-item span {
+  width: 60px;
+  height: 60px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #fff0f5;
+  border: 1px solid #f7ccd8;
+
+  border-radius: 50%;
+
+  font-size: 26px;
+}
+
+
+/* Zona de redes */
+.redes {
+  background: #fff7f9;
+  padding: 65px 20px;
+}
+
+
+/* Detalle rosa en los títulos */
+.contacto h2::after,
+.redes h2::after {
+  content: "";
+  display: block;
+  width: 55px;
+  height: 4px;
+  background: #f5316f;
+  border-radius: 10px;
+  margin: 12px auto 0;
+}

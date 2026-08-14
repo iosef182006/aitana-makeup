@@ -1,6 +1,11 @@
 const numeroWhatsapp = "51982797861";
 
 
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+
+
 // ======================================
 // PRODUCTOS
 // ======================================

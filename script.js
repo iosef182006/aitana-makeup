@@ -906,13 +906,104 @@ estrellas.forEach(estrella => {
 
 if (formularioOpinion) {
 
+  const campoGusto =
+    formularioOpinion.querySelector(
+      '[name="me_gusto"]'
+    );
+
+  const campoMejorar =
+    formularioOpinion.querySelector(
+      '[name="mejorar"]'
+    );
+
+
+  function mostrarError(texto) {
+
+    mensajeFormulario.textContent = texto;
+
+    mensajeFormulario.classList.add("error");
+
+  }
+
+
+  function limpiarMensaje() {
+
+    mensajeFormulario.textContent = "";
+
+    mensajeFormulario.classList.remove("error");
+
+  }
+
+
+  estrellas.forEach(estrella => {
+
+    estrella.addEventListener("click", () => {
+
+      limpiarMensaje();
+
+    });
+
+  });
+
+
+  [campoGusto, campoMejorar].forEach(campo => {
+
+    if (campo) {
+
+      campo.addEventListener("input", () => {
+
+        limpiarMensaje();
+
+      });
+
+    }
+
+  });
+
+
   formularioOpinion.addEventListener(
     "submit",
     async (e) => {
 
       e.preventDefault();
 
-      mensajeFormulario.textContent = "";
+      limpiarMensaje();
+
+      const calificacionValor =
+        parseInt(calificacionInput.value) || 0;
+
+      const textoGusto =
+        campoGusto
+          ? campoGusto.value.trim()
+          : "";
+
+      const textoMejorar =
+        campoMejorar
+          ? campoMejorar.value.trim()
+          : "";
+
+
+      if (calificacionValor < 1) {
+
+        mostrarError(
+          "⚠️ Selecciona una calificación de 1 a 5 estrellas."
+        );
+
+        return;
+
+      }
+
+
+      if (!textoGusto && !textoMejorar) {
+
+        mostrarError(
+          "⚠️ Cuéntanos qué te gustó o qué podríamos mejorar."
+        );
+
+        return;
+
+      }
+
 
       const datos =
         new FormData(formularioOpinion);
@@ -943,16 +1034,18 @@ if (formularioOpinion) {
         }
         else {
 
-          mensajeFormulario.textContent =
-            "Ocurrió un error, vuelve a intentarlo.";
+          mostrarError(
+            "Ocurrió un error, vuelve a intentarlo."
+          );
 
         }
 
       }
       catch (error) {
 
-        mensajeFormulario.textContent =
-          "Revisa la conexión e inténtalo de nuevo.";
+        mostrarError(
+          "Revisa la conexión e inténtalo de nuevo."
+        );
 
       }
 

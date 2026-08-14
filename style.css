@@ -2010,6 +2010,10 @@ footer p {
   text-align: center;
 }
 
+.mensaje-formulario.error {
+  color: #d91515;
+}
+
 @media (max-width: 900px) {
 
   .contacto-contenedor {

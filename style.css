@@ -1270,3 +1270,61 @@ footer p {
 
   gap: 10px;
 }
+
+
+/* ============================
+   BOTONES REDES SOCIALES
+============================ */
+
+.redes-botones {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+
+.red-social {
+  min-width: 235px;
+  height: 56px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 0 25px;
+
+  border-radius: 30px;
+
+  color: white;
+  text-decoration: none;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  transition: transform .2s ease,
+              box-shadow .2s ease;
+}
+
+.red-social i {
+  font-size: 23px;
+}
+
+.red-social.tiktok {
+  background: #111;
+}
+
+.red-social.whatsapp-red {
+  background: #25D366;
+}
+
+.red-social.facebook {
+  background: #1877F2;
+}
+
+.red-social:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.15);
+}

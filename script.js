@@ -274,7 +274,7 @@ const productos = [
 
   {
     nombre: "Paleta Glitter",
-    categoria: "Paletas",
+    categoria: "Ojos y labios",
     imagen: "paleta gliter",
     precio: "5.00"
   },

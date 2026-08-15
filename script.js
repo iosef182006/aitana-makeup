@@ -262,12 +262,12 @@ const productos = [
 
 
   // ==========================
-  // PALETAS
+  // OJOS y labios
   // ==========================
 
   {
     nombre: "Disco Revel",
-    categoria: "Paletas",
+    categoria: "Ojos y labios",
     imagen: "disco revel",
     precio: "10.00"
   },

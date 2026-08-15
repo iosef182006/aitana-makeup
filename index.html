@@ -51,7 +51,7 @@
     class="header-whatsapp"
   >
     <i class="fa-brands fa-whatsapp"></i>
-    Consultas: 982 797 861
+    <span class="header-whatsapp-text">Consultas: 982 797 861</span>
   </a>
 
   <button class="menu-toggle" id="menuToggle">
@@ -89,10 +89,9 @@
   </div>
 
   <!-- PORTADA MÓVIL (solo <=768px) -->
-  <div class="aitana-mobile-home" aria-hidden="false">
+  <div class="aitana-mobile-home">
 
     <div class="aitana-mobile-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
       <input
         type="search"
         id="aitanaMobileSearch"
@@ -101,54 +100,79 @@
         autocomplete="off"
         aria-label="Buscar productos"
       >
+      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
     </div>
 
     <div class="aitana-mobile-banner">
-      <div class="aitana-mobile-logo">
-        <img src="img/logo de aitana.jpeg" alt="Aitana Make Up">
+      <div class="aitana-mobile-banner-texto">
+        <p class="aitana-mobile-banner-titulo">AITANA MAKE UP</p>
+        <p class="aitana-mobile-banner-sub">Belleza que acompaña tu estilo</p>
+        <p class="aitana-mobile-banner-desc">Descubre maquillaje, belleza y accesorios.</p>
+        <a href="#productos" class="aitana-mobile-banner-btn">
+          Ver catálogo <i class="fa-solid fa-arrow-right"></i>
+        </a>
       </div>
-      <p class="aitana-mobile-tagline">Belleza que acompaña tu estilo</p>
-      <a href="#productos" class="aitana-mobile-btn">Ver catálogo</a>
+      <div class="aitana-mobile-banner-foto">
+        <img src="img/Gloss terciopelo revel.jpg" alt="Gloss Terciopelo Revel">
+      </div>
     </div>
 
-    <div class="aitana-mobile-categories">
-      <div class="aitana-mobile-cat" data-categoria="Labiales">Labiales</div>
-      <div class="aitana-mobile-cat" data-categoria="Lip Gloss">Gloss</div>
-      <div class="aitana-mobile-cat" data-categoria="Rostro">Rostro</div>
-      <div class="aitana-mobile-cat" data-categoria="Ojos y labios">Ojos</div>
-      <div class="aitana-mobile-cat" data-categoria="Accesorios">Accesorios</div>
+    <div class="aitana-mobile-categoria-titulo">Categorías</div>
+    <div class="aitana-mobile-categories" id="aitanaMobileCategories">
+      <div class="aitana-mobile-cat" data-categoria="Labiales" aria-label="Labiales">
+        <span class="aitana-mobile-cat-circle"><img src="img/icons/labiales.png" alt="Labiales" loading="lazy" width="26" height="26"></span>
+        <span class="aitana-mobile-cat-label">Labiales</span>
+      </div>
+      <div class="aitana-mobile-cat" data-categoria="Lip Gloss" aria-label="Gloss">
+        <span class="aitana-mobile-cat-circle"><img src="img/icons/gloss.png" alt="Gloss" loading="lazy" width="26" height="26"></span>
+        <span class="aitana-mobile-cat-label">Gloss</span>
+      </div>
+      <div class="aitana-mobile-cat" data-categoria="Rostro" aria-label="Rostro">
+        <span class="aitana-mobile-cat-circle"><img src="img/icons/rost.png" alt="Rostro" loading="lazy" width="26" height="26"></span>
+        <span class="aitana-mobile-cat-label">Rostro</span>
+      </div>
+      <div class="aitana-mobile-cat" data-categoria="Ojos y labios" aria-label="Ojos">
+        <span class="aitana-mobile-cat-circle"><img src="img/icons/ojos.png" alt="Ojos" loading="lazy" width="26" height="26"></span>
+        <span class="aitana-mobile-cat-label">Ojos</span>
+      </div>
+      <div class="aitana-mobile-cat" data-categoria="Accesorios" aria-label="Accesorios">
+        <span class="aitana-mobile-cat-circle"><img src="img/icons/accesorios.png" alt="Accesorios" loading="lazy" width="26" height="26"></span>
+        <span class="aitana-mobile-cat-label">Accesorios</span>
+      </div>
     </div>
 
     <div class="aitana-mobile-coming">
-      <p class="aitana-mobile-coming-title">Próximamente</p>
+      <p class="aitana-mobile-coming-title">Próximamente 👀</p>
+      <p class="aitana-mobile-coming-sub">Algo nuevo está por llegar a Aitana...</p>
       <div class="aitana-mobile-coming-carousel" id="aitanaComingCarousel">
         <div class="aitana-mobile-card">
-          <span class="aitana-mobile-card-sign">?</span>
-          <span class="aitana-mobile-card-label">PRÓXIMAMENTE</span>
+          <span class="aitana-mobile-card-icon" aria-hidden="true">🎁</span>
+          <span class="aitana-mobile-card-title">¿Qué será?</span>
+          <span class="aitana-mobile-card-sub">Descúbrelo pronto</span>
         </div>
         <div class="aitana-mobile-card">
-          <span class="aitana-mobile-card-sign">?</span>
-          <span class="aitana-mobile-card-label">PRÓXIMAMENTE</span>
-        </div>
-        <div class="aitana-mobile-card">
-          <span class="aitana-mobile-card-sign">?</span>
-          <span class="aitana-mobile-card-label">PRÓXIMAMENTE</span>
+          <span class="aitana-mobile-card-icon" aria-hidden="true">✨</span>
+          <span class="aitana-mobile-card-title">Muy pronto</span>
+          <span class="aitana-mobile-card-sub">En Aitana 💗</span>
         </div>
       </div>
-      <p class="aitana-mobile-coming-sub">Algo nuevo está por llegar a Aitana... 👀💗</p>
+      <p class="aitana-mobile-coming-hint">¿Qué creas que llegará? 👀 💗</p>
     </div>
 
     <div class="aitana-mobile-products">
       <div class="aitana-mobile-section-header">
-        <h2>Los más vendidos</h2>
-        <a href="#productos" class="aitana-mobile-ver-todos">Ver todos</a>
+        <h2>Destacados de Aitana 💗</h2>
+        <a href="#productos" class="aitana-mobile-ver-todos">Ver todos ></a>
       </div>
       <div class="aitana-mobile-products-carousel" id="aitanaMobileProducts">
       </div>
     </div>
 
     <div class="aitana-mobile-cta">
-      <p>¿Tienes dudas o quieres pedir?</p>
+      <div class="aitana-mobile-cta-texto">
+        <p>¿Tienes dudas o quieres pedir?</p>
+        <p>Escríbenos por WhatsApp</p>
+      </div>
       <a
         href="https://wa.me/51982797861?text=Hola%20Aitana%20Make%20Up,%20quiero%20consultar%20por%20sus%20productos"
         target="_blank"
@@ -156,7 +180,7 @@
         class="aitana-mobile-cta-btn"
         aria-label="Consultar por WhatsApp"
       >
-        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+        <i class="fa-brands fa-whatsapp"></i>
       </a>
     </div>
 

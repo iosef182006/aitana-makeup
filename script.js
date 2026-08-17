@@ -334,16 +334,69 @@ const productos = [
 // BUSCAR JPG O PNG AUTOMÁTICAMENTE
 // ======================================
 
+const dimensionesImagenes = {
+  "10 tonos": [450, 800],
+  "10 tonos-2": [450, 800],
+  "5 codigos labial corazon": [536, 640],
+  "5 codigos": [485, 640],
+  "beauty blender": [480, 640],
+  "belsamo con color": [480, 640],
+  "belsamo dup  nivea": [480, 640],
+  "belsamo fresita": [480, 640],
+  "belsamo fresita-2": [600, 600],
+  "brocha para cejas": [480, 640],
+  "Codigo 4": [450, 800],
+  "Codigo 6": [450, 800],
+  "conncealer revel": [480, 640],
+  "corrector liquido bellespa": [576, 768],
+  "corrector liquido samantha": [576, 768],
+  "delineadores": [600, 800],
+  "disco revel": [480, 640],
+  "ganchos hawaianos": [720, 960],
+  "Gloss conejo": [480, 640],
+  "Gloss dup dior": [480, 640],
+  "Gloss mirror": [480, 640],
+  "Gloss terciopelo revel": [480, 640],
+  "iluminador y rubor 2 en 1": [480, 640],
+  "iluminador": [480, 640],
+  "juego de 6 brochas para ojos": [480, 640],
+  "Labial corazon matte": [480, 640],
+  "Labial liquido matte": [480, 640],
+  "Labial osito": [480, 640],
+  "magic box 7 en 1": [576, 768],
+  "mascarillas faciales bioaqua": [672, 896],
+  "paleta gliter": [576, 768],
+  "perfiladores": [672, 896],
+  "polvo compacto flower secret": [466, 640],
+  "polvo translucido banana jarusa": [480, 640],
+  "rizadores": [576, 768],
+  "rubor liquido": [480, 640],
+  "Tinta jarusa": [480, 640],
+  "Tinta Samantha": [480, 640],
+  "toallitas desmaquillantes": [720, 960],
+  "tonos-gloss-revel": [900, 1600]
+};
+
 function imagenHTML(nombre, alt, clase = "") {
+
+  const dimensiones = dimensionesImagenes[nombre] || [];
+  const atributosDimensiones = dimensiones.length
+    ? `width="${dimensiones[0]}" height="${dimensiones[1]}"`
+    : "";
 
   return `
     <img
-      src="img/${nombre}.jpg"
+      src="img/${nombre}.webp"
       alt="${alt}"
       class="${clase}"
+      ${atributosDimensiones}
       loading="lazy"
+      decoding="async"
       onerror="
         if(!this.dataset.intento){
+          this.dataset.intento='jpg';
+          this.src='img/${nombre}.jpg';
+        } else if(this.dataset.intento === 'jpg'){
           this.dataset.intento='png';
           this.src='img/${nombre}.png';
         }

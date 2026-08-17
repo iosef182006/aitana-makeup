@@ -784,12 +784,23 @@ let categoriaSeleccionada = "Todos";
 let stockSeleccionado = "todos";
 
 
+function normalizarTexto(texto) {
+
+  return String(texto || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+
+}
+
+
 function actualizarCatalogo() {
 
-  const texto =
-    buscadorCatalogo.value
-      .toLowerCase()
-      .trim();
+  const terminosBusqueda =
+    normalizarTexto(buscadorCatalogo.value)
+      .split(/\s+/)
+      .filter(Boolean);
 
 
   const tarjetas =
@@ -809,17 +820,20 @@ function actualizarCatalogo() {
       productos[index];
 
 
+    const textoDisponibilidad = producto.agotado
+      ? "agotado agotados"
+      : "disponible disponibles";
+
+
+    const contenidoBusqueda = normalizarTexto(
+      `${producto.nombre} ${producto.categoria} ${textoDisponibilidad}`
+    );
+
+
     const coincideBusqueda =
-
-      producto.nombre
-        .toLowerCase()
-        .includes(texto)
-
-      ||
-
-      producto.categoria
-        .toLowerCase()
-        .includes(texto);
+      terminosBusqueda.every(termino =>
+        contenidoBusqueda.includes(termino)
+      );
 
 
     const coincideCategoria =

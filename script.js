@@ -84,6 +84,7 @@ const productos = [
     categoria: "Labiales",
     imagen: "Labial liquido matte",
     precio: "8.00",
+    agotado: true,
     detalles: [
       "5 codigos"
     ]
@@ -594,6 +595,8 @@ const modalImagenes =
 const cerrarModal =
   document.getElementById("cerrarModal");
 
+let elementoAntesDelModal = null;
+
 
 
 function abrirModal(index) {
@@ -628,9 +631,15 @@ function abrirModal(index) {
   });
 
 
+  elementoAntesDelModal = document.activeElement;
+
   modal.classList.add("activo");
 
+  modal.setAttribute("aria-hidden", "false");
+
   document.body.style.overflow = "hidden";
+
+  cerrarModal.focus();
 
 }
 
@@ -638,9 +647,17 @@ function abrirModal(index) {
 
 function cerrarVentana() {
 
+  if (!modal || !modal.classList.contains("activo")) return;
+
   modal.classList.remove("activo");
 
-  document.body.style.overflow = "auto";
+  modal.setAttribute("aria-hidden", "true");
+
+  document.body.style.overflow = "";
+
+  if (elementoAntesDelModal) {
+    elementoAntesDelModal.focus();
+  }
 
 }
 
@@ -973,6 +990,10 @@ if(menuToggle && menu){
 
     menu.classList.toggle("abierto");
 
+    const abierto = menu.classList.contains("abierto");
+    menuToggle.setAttribute("aria-expanded", String(abierto));
+    menuToggle.setAttribute("aria-label", abierto ? "Cerrar menú" : "Abrir menú");
+
   });
 
 
@@ -989,6 +1010,8 @@ if(menuToggle && menu){
         }
 
         menu.classList.remove("abierto");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Abrir menú");
 
       });
 
@@ -1004,6 +1027,8 @@ if(menuToggle && menu){
     ) {
 
       menu.classList.remove("abierto");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Abrir menú");
 
     }
 
@@ -1199,6 +1224,10 @@ function pintarEstrellas(valor) {
 
     }
 
+    const seleccionada = numero === valor;
+    estrella.setAttribute("aria-checked", String(seleccionada));
+    estrella.tabIndex = seleccionada || (valor === 0 && numero === 1) ? 0 : -1;
+
   });
 
 }
@@ -1215,6 +1244,24 @@ estrellas.forEach(estrella => {
 
     pintarEstrellas(valor);
 
+  });
+
+  estrella.addEventListener("keydown", (e) => {
+    const valorActual = parseInt(estrella.dataset.valor);
+    let nuevoValor = valorActual;
+
+    if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+      nuevoValor = Math.min(5, valorActual + 1);
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+      nuevoValor = Math.max(1, valorActual - 1);
+    } else if (e.key !== "Enter" && e.key !== " ") {
+      return;
+    }
+
+    e.preventDefault();
+    calificacionInput.value = nuevoValor;
+    pintarEstrellas(nuevoValor);
+    estrellas[nuevoValor - 1].focus();
   });
 
 });
@@ -1545,5 +1592,3 @@ window.addEventListener("scroll", () => {
     syncNavPendiente = false;
   });
 }, { passive: true });
-
-

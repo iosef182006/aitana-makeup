@@ -612,6 +612,106 @@ body {
 }
 
 
+.agregar-consulta {
+  border: 1px solid #f63372;
+  background: #fff;
+  color: #f63372;
+  border-radius: 20px;
+  padding: 9px 18px;
+  min-height: 39px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+
+.agregar-consulta:hover {
+  background: #fff0f5;
+}
+
+.agregar-consulta.agregado {
+  background: #fce1ea;
+  border-color: #ef8eae;
+  color: #bd2457;
+}
+
+
+.consulta-multiple-panel {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 5000;
+  width: min(560px, calc(100% - 32px));
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid #f5cfdb;
+  border-radius: 20px;
+  box-shadow: 0 5px 18px rgba(75, 25, 45, .12);
+}
+
+.consulta-multiple-panel[hidden] {
+  display: none;
+}
+
+.consulta-multiple-resumen,
+.consulta-multiple-acciones {
+  display: flex;
+  align-items: center;
+}
+
+.consulta-multiple-resumen {
+  gap: 8px;
+  color: #bd2457;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.consulta-multiple-acciones {
+  gap: 8px;
+}
+
+.consulta-multiple-limpiar,
+.consulta-multiple-whatsapp {
+  border: 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.consulta-multiple-limpiar {
+  padding: 8px 5px;
+  background: transparent;
+  color: #777;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.consulta-multiple-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 9px 16px;
+  background: #f63372;
+  color: #fff;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.consulta-multiple-whatsapp:hover {
+  background: #db205d;
+}
+
+
 /* ============================
    PRODUCTO AGOTADO
 ============================ */
@@ -3441,6 +3541,48 @@ footer {
     width: fit-content;
   }
 
+  .agregar-consulta-mobile {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .consulta-multiple-panel {
+    left: 12px;
+    right: 12px;
+    bottom: calc(68px + env(safe-area-inset-bottom, 0));
+    transform: none;
+    z-index: 5002;
+    width: auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 18px;
+  }
+
+  .consulta-multiple-resumen {
+    justify-content: center;
+  }
+
+  .consulta-multiple-acciones {
+    width: 100%;
+  }
+
+  .consulta-multiple-whatsapp {
+    flex: 1;
+    min-width: 0;
+  }
+
+  body.consulta-multiple-activa {
+    padding-bottom: calc(180px + env(safe-area-inset-bottom, 0));
+  }
+
+  body.consulta-multiple-activa .volver-arriba {
+    bottom: calc(190px + env(safe-area-inset-bottom, 0));
+  }
+
   /* ---- CTA WhatsApp ---- */
 
   .aitana-mobile-cta {
@@ -3535,4 +3677,3 @@ footer {
   /* ---- Menú hamburguesa: tap fuera sigue funcionando ---- */
   /* (sin cambios: el listener global del documento ya cierra el menu abierto) */
 }
-

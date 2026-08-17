@@ -329,6 +329,9 @@ const productos = [
 ];
 
 
+const productosConsulta = new Set();
+
+
 
 // ======================================
 // BUSCAR JPG O PNG AUTOMÁTICAMENTE
@@ -535,6 +538,15 @@ function crearProductos() {
               <i class="fa-brands fa-whatsapp"></i>
               Consultar
             </a>
+            <button
+              type="button"
+              class="agregar-consulta"
+              data-consulta-index="${index}"
+              aria-label="Agregar ${producto.nombre} a la consulta"
+              aria-pressed="false"
+            >
+              + Agregar a consulta
+            </button>
             `
           }
 
@@ -553,6 +565,129 @@ function crearProductos() {
 
 
 crearProductos();
+
+
+const panelConsultaMultiple =
+  document.getElementById("consultaMultiplePanel");
+
+const contadorConsultaMultiple =
+  document.getElementById("consultaMultipleContador");
+
+const limpiarConsulta =
+  document.getElementById("limpiarConsulta");
+
+const enviarConsultaWhatsapp =
+  document.getElementById("enviarConsultaWhatsapp");
+
+
+function actualizarConsultaMultiple() {
+
+  const cantidad = productosConsulta.size;
+
+  if (contadorConsultaMultiple) {
+    contadorConsultaMultiple.textContent = cantidad === 1
+      ? "1 producto seleccionado"
+      : `${cantidad} productos seleccionados`;
+  }
+
+  if (panelConsultaMultiple) {
+    panelConsultaMultiple.hidden = cantidad === 0;
+  }
+
+  document.body.classList.toggle(
+    "consulta-multiple-activa",
+    cantidad > 0
+  );
+
+  document
+    .querySelectorAll("[data-consulta-index]")
+    .forEach(boton => {
+      const index = Number(boton.dataset.consultaIndex);
+      const seleccionado = productosConsulta.has(index);
+      const producto = productos[index];
+
+      boton.classList.toggle("agregado", seleccionado);
+      boton.setAttribute("aria-pressed", String(seleccionado));
+      boton.setAttribute(
+        "aria-label",
+        seleccionado
+          ? `Quitar ${producto.nombre} de la consulta`
+          : `Agregar ${producto.nombre} a la consulta`
+      );
+      boton.textContent = seleccionado
+        ? "✓ Agregado"
+        : "+ Agregar a consulta";
+    });
+
+}
+
+
+function alternarProductoConsulta(index) {
+
+  const producto = productos[index];
+
+  if (!producto || producto.agotado) return;
+
+  if (productosConsulta.has(index)) {
+    productosConsulta.delete(index);
+  }
+  else {
+    productosConsulta.add(index);
+  }
+
+  actualizarConsultaMultiple();
+
+}
+
+
+function crearMensajeConsulta() {
+
+  const lineasProductos = [...productosConsulta]
+    .map(index => {
+      const producto = productos[index];
+      return `• ${producto.nombre} — S/${producto.precio}`;
+    })
+    .join("\n");
+
+  return `Hola Aitana Make Up, quiero consultar por:\n\n${lineasProductos}\n\n¿Están disponibles?`;
+
+}
+
+
+document.addEventListener("click", (e) => {
+
+  const boton = e.target.closest("[data-consulta-index]");
+
+  if (!boton) return;
+
+  alternarProductoConsulta(
+    Number(boton.dataset.consultaIndex)
+  );
+
+});
+
+
+if (limpiarConsulta) {
+  limpiarConsulta.addEventListener("click", () => {
+    productosConsulta.clear();
+    actualizarConsultaMultiple();
+  });
+}
+
+
+if (enviarConsultaWhatsapp) {
+  enviarConsultaWhatsapp.addEventListener("click", () => {
+    if (productosConsulta.size === 0) return;
+
+    const url =
+      `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(crearMensajeConsulta())}`;
+
+    window.open(url, "_blank", "noopener,noreferrer");
+  });
+}
+
+
+actualizarConsultaMultiple();
 
 
 
@@ -1545,13 +1680,15 @@ function renderizarMobileProductos() {
   contenedor.innerHTML = "";
 
   const mapa = {};
-  productos.forEach(p => {
-    mapa[p.nombre] = p;
+  productos.forEach((producto, index) => {
+    mapa[producto.nombre] = { producto, index };
   });
 
   productosDestacadosMobile.forEach(nombre => {
-    const producto = mapa[nombre];
-    if (!producto || producto.agotado) return;
+    const destacado = mapa[nombre];
+    if (!destacado || destacado.producto.agotado) return;
+
+    const { producto, index } = destacado;
 
     const tarjeta = document.createElement("div");
     tarjeta.className = "aitana-mobile-product";
@@ -1572,10 +1709,21 @@ function renderizarMobileProductos() {
       <a href="${hrefWA}" target="_blank" rel="noopener noreferrer" class="aitana-mobile-whatsapp" aria-label="Consultar por WhatsApp">
         <i class="fa-brands fa-whatsapp"></i> WhatsApp
       </a>
+      <button
+        type="button"
+        class="agregar-consulta agregar-consulta-mobile"
+        data-consulta-index="${index}"
+        aria-label="Agregar ${producto.nombre} a la consulta"
+        aria-pressed="false"
+      >
+        + Agregar a consulta
+      </button>
     `;
 
     contenedor.appendChild(tarjeta);
   });
+
+  actualizarConsultaMultiple();
 }
 
 function sincronizarBottomNav() {

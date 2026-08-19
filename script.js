@@ -1807,3 +1807,54 @@ window.addEventListener("scroll", () => {
     syncNavPendiente = false;
   });
 }, { passive: true });
+
+// Anuncio de bienvenida: se muestra una sola vez por sesión.
+const anuncioAitana = document.getElementById("anuncioAitana");
+const cerrarAnuncio = document.getElementById("cerrarAnuncio");
+const claveAnuncioVisto = "aitanaAnuncioVisto";
+let focoAntesDelAnuncio = null;
+
+function mostrarAnuncioAitana() {
+  if (!anuncioAitana || sessionStorage.getItem(claveAnuncioVisto)) return;
+
+  focoAntesDelAnuncio = document.activeElement;
+  anuncioAitana.hidden = false;
+  anuncioAitana.setAttribute("aria-hidden", "false");
+  document.body.classList.add("anuncio-abierto");
+
+  requestAnimationFrame(() => {
+    anuncioAitana.classList.add("anuncio-visible");
+    cerrarAnuncio?.focus();
+  });
+}
+
+function ocultarAnuncioAitana() {
+  if (!anuncioAitana || anuncioAitana.hidden) return;
+
+  sessionStorage.setItem(claveAnuncioVisto, "true");
+  anuncioAitana.classList.remove("anuncio-visible");
+  anuncioAitana.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("anuncio-abierto");
+
+  const finalizarCierre = () => {
+    anuncioAitana.hidden = true;
+    focoAntesDelAnuncio?.focus?.();
+  };
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    finalizarCierre();
+  } else {
+    window.setTimeout(finalizarCierre, 240);
+  }
+}
+
+cerrarAnuncio?.addEventListener("click", ocultarAnuncioAitana);
+anuncioAitana?.addEventListener("click", (evento) => {
+  if (evento.target === anuncioAitana) ocultarAnuncioAitana();
+});
+document.addEventListener("keydown", (evento) => {
+  if (evento.key === "Escape" && anuncioAitana?.classList.contains("anuncio-visible")) {
+    ocultarAnuncioAitana();
+  }
+});
+document.addEventListener("DOMContentLoaded", mostrarAnuncioAitana);

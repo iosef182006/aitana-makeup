@@ -3677,3 +3677,110 @@ footer {
   /* ---- Menú hamburguesa: tap fuera sigue funcionando ---- */
   /* (sin cambios: el listener global del documento ya cierra el menu abierto) */
 }
+
+/* Anuncio promocional de bienvenida */
+body.anuncio-abierto {
+  overflow: hidden;
+}
+
+.anuncio-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: 5vh 24px;
+  background: rgba(20, 8, 14, 0.78);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 240ms ease, visibility 240ms ease;
+}
+
+.anuncio-overlay[hidden] {
+  display: none;
+}
+
+.anuncio-overlay.anuncio-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.anuncio-modal {
+  position: relative;
+  max-width: min(850px, 92vw);
+  max-height: 90vh;
+  transform: scale(0.96);
+  transition: transform 240ms ease;
+}
+
+.anuncio-visible .anuncio-modal {
+  transform: scale(1);
+}
+
+.anuncio-modal img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.45);
+}
+
+.anuncio-cerrar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  display: grid;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  place-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  background: rgba(35, 15, 24, 0.82);
+  color: #fff;
+  font: 400 34px/1 Arial, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.35);
+}
+
+.anuncio-cerrar:hover,
+.anuncio-cerrar:focus-visible {
+  background: #c2185b;
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .anuncio-overlay {
+    padding: 7.5vh 5vw;
+  }
+
+  .anuncio-modal {
+    max-width: 90vw;
+    max-height: 85vh;
+  }
+
+  .anuncio-modal img {
+    max-height: 85vh;
+    border-radius: 12px;
+  }
+
+  .anuncio-cerrar {
+    top: 8px;
+    right: 8px;
+    width: 48px;
+    height: 48px;
+    font-size: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anuncio-overlay,
+  .anuncio-modal {
+    transition: none;
+  }
+}

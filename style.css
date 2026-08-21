@@ -3061,8 +3061,6 @@ footer {
    .aitana-mobile-banner,
    .aitana-mobile-categoria-titulo,
    .aitana-mobile-categories,
-   .aitana-mobile-coming,
-   .aitana-mobile-coming-carousel,
    .aitana-mobile-products,
    .aitana-mobile-section-header,
    .aitana-mobile-products-carousel,
@@ -3352,93 +3350,6 @@ footer {
     max-width: 58px;
     line-height: 1.2;
   }
-
-  /* ---- Próximamente ---- */
-
-   .aitana-mobile-coming {
-     padding: 16px 0;
-     margin: 0 16px;
-   }
-
-   .aitana-mobile-coming-title {
-     font-size: 18px;
-     font-weight: 700;
-     color: #f63372;
-     text-align: center;
-     margin: 0 auto 6px;
-   }
-
-   .aitana-mobile-coming-sub {
-     font-size: 14px;
-     font-weight: 600;
-     color: #f63372;
-     text-align: center;
-     max-width: 300px;
-     margin: 0 auto 16px;
-   }
-
-   .aitana-mobile-coming-carousel {
-     display: flex;
-     gap: 12px;
-     overflow-x: auto;
-     -webkit-overflow-scrolling: touch;
-     scroll-snap-type: x mandatory;
-     padding: 0 16px 8px;
-     margin: 0;
-     -ms-overflow-style: none;
-     scrollbar-width: none;
-   }
-
-   .aitana-mobile-coming-carousel::-webkit-scrollbar {
-     display: none;
-   }
-
-   .aitana-mobile-card {
-     flex: 0 0 200px;
-     width: 200px;
-     scroll-snap-align: start;
-     box-sizing: border-box;
-     height: 120px;
-     background: #fff5f8;
-     border: 1px solid rgba(246,51,114,.07);
-     border-radius: 18px;
-     padding: 14px 12px;
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     justify-content: center;
-     text-align: center;
-     gap: 6px;
-     box-shadow: 0 2px 8px rgba(0,0,0,.04);
-   }
-
-   .aitana-mobile-card-icon {
-     font-size: 28px;
-     line-height: 1;
-     color: #f63372;
-     font-family: "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji","Arial",sans-serif;
-   }
-
-   .aitana-mobile-card-title {
-     font-size: 14px;
-     font-weight: 600;
-     color: #f63372;
-     margin: 0;
-   }
-
-   .aitana-mobile-card-sub {
-     font-size: 11px;
-     color: #888;
-     margin: 0;
-   }
-
-   .aitana-mobile-coming-hint {
-     font-size: 12px;
-     color: #f63372;
-     text-align: center;
-     margin: 14px 0 0;
-   }
-
 
   /* ---- Destacados ---- */
 
@@ -3786,8 +3697,439 @@ body.anuncio-abierto {
 }
 
 /* Modo actualización: cambiar MODO_ACTUALIZACION en script.js para activarlo. */
+
+
+/* =====================================
+   SEGUNDA ETAPA: NOVEDADES DEL CATÁLOGO
+===================================== */
+
+.recien-llegados {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 52px 4% 12px;
+  overflow: hidden;
+}
+
+.recien-llegados-encabezado {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.recien-llegados-encabezado h2 {
+  margin: 7px 0;
+  color: #222;
+  font-size: clamp(27px, 3vw, 35px);
+}
+
+.recien-llegados-encabezado p {
+  margin: 0;
+  color: #777;
+}
+
+.ver-todos-nuevos {
+  flex: 0 0 auto;
+  padding: 11px 18px;
+  border: 1px solid #f43170;
+  border-radius: 24px;
+  background: #fff;
+  color: #f43170;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+
+.ver-todos-nuevos:hover,
+.ver-todos-nuevos:focus-visible {
+  background: #f43170;
+  color: #fff;
+}
+
+.recien-llegados-lista {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline mandatory;
+  scrollbar-width: none;
+  padding: 2px 2px 18px;
+}
+
+.recien-llegados-lista::-webkit-scrollbar,
+.filtros::-webkit-scrollbar {
+  display: none;
+}
+
+.recien-llegados-lista .producto-reciente {
+  flex: 0 0 calc((100% - 60px) / 4);
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.etiqueta-nuevo {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 21;
+  padding: 6px 11px;
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 18px;
+  background: #f43170;
+  box-shadow: 0 3px 8px rgba(0,0,0,.12);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .03em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.producto-info h3 {
+  min-height: 2.4em;
+}
+
+.acciones-producto {
+  width: 100%;
+}
+
+@media (max-width: 1000px) {
+  .recien-llegados-lista .producto-reciente {
+    flex-basis: calc((100% - 40px) / 3);
+  }
+}
+
+@media (max-width: 700px) {
+  .recien-llegados {
+    padding: 38px 18px 4px;
+  }
+
+  .recien-llegados-encabezado {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .recien-llegados-lista {
+    gap: 12px;
+    margin-right: -18px;
+    padding-right: 18px;
+  }
+
+  .recien-llegados-lista .producto-reciente {
+    flex-basis: calc((100% - 12px) / 2);
+    border-radius: 16px;
+  }
+
+  .recien-llegados-lista .producto-reciente .producto-imagen {
+    padding: 6px;
+  }
+
+  .recien-llegados-lista .producto-reciente .producto-info {
+    padding: 12px 9px 14px;
+  }
+
+  .recien-llegados-lista .producto-reciente .categoria {
+    font-size: 11px;
+  }
+
+  .recien-llegados-lista .producto-reciente h3 {
+    min-height: 3.6em;
+    margin: 5px 0;
+    font-size: 15px;
+    line-height: 1.2;
+  }
+
+  .recien-llegados-lista .producto-reciente .precio {
+    margin: 7px 0 10px;
+    font-size: 21px;
+  }
+
+  .recien-llegados-lista .producto-reciente .acciones-producto {
+    gap: 7px;
+  }
+
+  .recien-llegados-lista .producto-reciente .whatsapp,
+  .recien-llegados-lista .producto-reciente .agregar-consulta,
+  .recien-llegados-lista .producto-reciente .ver-tonos {
+    width: 100%;
+    min-height: 36px;
+    box-sizing: border-box;
+    padding: 8px 6px;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .recien-llegados-lista .producto-reciente .etiqueta-disponible,
+  .recien-llegados-lista .producto-reciente .etiqueta-nuevo {
+    top: 7px;
+    padding: 5px 7px;
+    font-size: 9px;
+  }
+
+  .recien-llegados-lista .producto-reciente .etiqueta-disponible {
+    left: 7px;
+  }
+
+  .recien-llegados-lista .producto-reciente .etiqueta-nuevo {
+    right: 7px;
+  }
+
+  .filtros {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    scroll-snap-type: inline proximity;
+    padding: 6px 0 8px;
+  }
+
+  .filtros .grupo-etiqueta {
+    display: none;
+  }
+
+  .filtros .filtro {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    white-space: nowrap;
+  }
+}
 body.modo-actualizacion-activo {
   overflow: hidden;
+}
+
+
+/* =====================================
+   ACCESO PRIVADO DE REVISIÓN
+===================================== */
+
+html.ruta-revision:not(.revision-autorizada) body > :not(#revisionAcceso) {
+  visibility: hidden;
+}
+
+.revision-acceso[hidden],
+.revision-form[hidden],
+.revision-cargando[hidden],
+.revision-error[hidden],
+.revision-barra[hidden] {
+  display: none !important;
+}
+
+.revision-acceso {
+  position: fixed;
+  inset: 0;
+  z-index: 1000000;
+  display: grid;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 24px 16px;
+  place-items: center;
+  overflow-y: auto;
+  visibility: visible !important;
+  background:
+    radial-gradient(circle at 15% 12%, rgba(255,255,255,.95) 0 5%, transparent 26%),
+    radial-gradient(circle at 88% 88%, rgba(255,255,255,.74) 0 4%, transparent 25%),
+    linear-gradient(145deg, #fff8fb, #ffe3ed 52%, #ffcfe0);
+}
+
+.revision-login-card {
+  width: min(100%, 430px);
+  padding: clamp(27px, 5vw, 42px);
+  border: 1px solid rgba(244,49,112,.17);
+  border-radius: 30px;
+  background: rgba(255,255,255,.94);
+  box-shadow: 0 22px 60px rgba(165,28,82,.18);
+  color: #3d1727;
+  text-align: center;
+}
+
+.revision-marca {
+  display: inline-flex;
+  flex-direction: column;
+  color: #d41461;
+  line-height: 1;
+}
+
+.revision-marca span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(38px, 10vw, 54px);
+  font-style: italic;
+  letter-spacing: -.05em;
+}
+
+.revision-marca small {
+  margin-top: 7px;
+  padding-left: .35em;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .48em;
+}
+
+.revision-candado {
+  margin-top: 25px;
+  font-size: 25px;
+}
+
+.revision-login-card h1 {
+  margin: 7px 0 8px;
+  color: #bd0d52;
+  font-size: clamp(25px, 6vw, 32px);
+}
+
+.revision-intro {
+  margin: 0 0 25px;
+  color: #805166;
+  font-size: 14px;
+}
+
+.revision-cargando {
+  padding: 18px 0 4px;
+  color: #bd0d52;
+  font-weight: 700;
+}
+
+.revision-form {
+  text-align: left;
+}
+
+.revision-form label {
+  display: block;
+  margin: 0 0 7px;
+  color: #5b273e;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.revision-form > input,
+.revision-password-wrap {
+  margin-bottom: 18px;
+}
+
+.revision-form input {
+  width: 100%;
+  min-height: 48px;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  border: 1px solid #edb8c9;
+  border-radius: 14px;
+  outline: none;
+  background: #fff;
+  color: #331321;
+  font: inherit;
+}
+
+.revision-form input:focus {
+  border-color: #f43170;
+  box-shadow: 0 0 0 3px rgba(244,49,112,.12);
+}
+
+.revision-password-wrap {
+  position: relative;
+}
+
+.revision-password-wrap input {
+  padding-right: 50px;
+}
+
+.revision-ver-password {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #bd0d52;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.revision-error {
+  margin: -3px 0 15px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fff0f3;
+  color: #a90f43;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.revision-ingresar {
+  width: 100%;
+  min-height: 49px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f43170, #c70d52);
+  box-shadow: 0 10px 22px rgba(199,13,82,.2);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.revision-ingresar:disabled,
+.revision-barra button:disabled {
+  cursor: wait;
+  opacity: .7;
+}
+
+.revision-barra {
+  display: flex;
+  min-height: 52px;
+  padding: 9px 5%;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 3vw, 38px);
+  border-bottom: 1px solid #f4bfd0;
+  background: #fff0f5;
+  color: #6a2943;
+  font-size: 13px;
+}
+
+.revision-barra strong {
+  color: #c70d52;
+  letter-spacing: .04em;
+}
+
+.revision-barra button {
+  padding: 8px 14px;
+  border: 1px solid #d91c60;
+  border-radius: 999px;
+  background: #fff;
+  color: #c70d52;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .revision-acceso {
+    padding: 14px;
+  }
+
+  .revision-login-card {
+    padding: 28px 20px;
+    border-radius: 24px;
+  }
+
+  .revision-barra {
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    gap: 7px 16px;
+    text-align: center;
+  }
+
+  .revision-barra strong {
+    flex-basis: 100%;
+  }
 }
 
 .modo-actualizacion {

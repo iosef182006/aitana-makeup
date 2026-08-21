@@ -21,6 +21,12 @@
   <meta property="og:locale" content="es_PE">
   <meta name="twitter:card" content="summary">
 
+  <script>
+    if (window.location.pathname.replace(/\/+$/, "") === "/revision") {
+      document.documentElement.classList.add("ruta-revision");
+    }
+  </script>
+
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -29,6 +35,73 @@
 </head>
 
 <body>
+
+<section
+  class="revision-acceso"
+  id="revisionAcceso"
+  aria-labelledby="revisionTitulo"
+  hidden
+>
+  <div class="revision-login-card">
+    <div class="revision-marca" aria-label="Aitana Make Up">
+      <span>AITANA</span>
+      <small>MAKE UP</small>
+    </div>
+
+    <div class="revision-candado" aria-hidden="true">🔒</div>
+    <h1 id="revisionTitulo">Revisión privada</h1>
+    <p class="revision-intro">Acceso exclusivo para revisión del catálogo.</p>
+
+    <div class="revision-cargando" id="revisionCargando" role="status">
+      Verificando acceso…
+    </div>
+
+    <form class="revision-form" id="revisionForm" hidden>
+      <label for="revisionCorreo">Correo</label>
+      <input
+        type="email"
+        id="revisionCorreo"
+        name="email"
+        autocomplete="username"
+        inputmode="email"
+        required
+      >
+
+      <label for="revisionPassword">Contraseña</label>
+      <div class="revision-password-wrap">
+        <input
+          type="password"
+          id="revisionPassword"
+          name="password"
+          autocomplete="current-password"
+          required
+        >
+        <button
+          type="button"
+          class="revision-ver-password"
+          id="revisionVerPassword"
+          aria-label="Mostrar contraseña"
+          aria-pressed="false"
+        >
+          <i class="fa-solid fa-eye" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <p class="revision-error" id="revisionError" role="alert" hidden></p>
+
+      <button type="submit" class="revision-ingresar" id="revisionIngresar">
+        Ingresar
+      </button>
+    </form>
+  </div>
+</section>
+
+<aside class="revision-barra" id="revisionBarra" aria-label="Estado del modo revisión" hidden>
+  <strong>🌸 MODO REVISIÓN AITANA</strong>
+  <span>Catálogo actual: <b>44 productos</b></span>
+  <span>Productos nuevos: <b>12</b></span>
+  <button type="button" id="revisionCerrarSesion">Cerrar sesión</button>
+</aside>
 
 <div
   class="modo-actualizacion"
@@ -209,24 +282,6 @@
       </div>
     </div>
 
-    <div class="aitana-mobile-coming">
-      <p class="aitana-mobile-coming-title">Próximamente 👀</p>
-      <p class="aitana-mobile-coming-sub">Algo nuevo está por llegar a Aitana...</p>
-      <div class="aitana-mobile-coming-carousel" id="aitanaComingCarousel">
-        <div class="aitana-mobile-card">
-          <span class="aitana-mobile-card-icon" aria-hidden="true">🎁</span>
-          <span class="aitana-mobile-card-title">¿Qué será?</span>
-          <span class="aitana-mobile-card-sub">Descúbrelo pronto</span>
-        </div>
-        <div class="aitana-mobile-card">
-          <span class="aitana-mobile-card-icon" aria-hidden="true">✨</span>
-          <span class="aitana-mobile-card-title">Muy pronto</span>
-          <span class="aitana-mobile-card-sub">En Aitana 💗</span>
-        </div>
-      </div>
-      <p class="aitana-mobile-coming-hint">¿Qué creas que llegará? 👀 💗</p>
-    </div>
-
     <div class="aitana-mobile-products">
       <div class="aitana-mobile-section-header">
         <h2>Destacados de Aitana 💗</h2>
@@ -257,6 +312,22 @@
 
 
 <section class="productos" id="productos">
+
+  <section class="recien-llegados" aria-labelledby="tituloRecienLlegados">
+    <div class="recien-llegados-encabezado">
+      <div>
+        <span class="catalogo-mini">NOVEDADES</span>
+        <h2 id="tituloRecienLlegados">RECIÉN LLEGADOS ✨</h2>
+        <p>Mira lo nuevo que acaba de llegar a Aitana 💗</p>
+      </div>
+
+      <button type="button" class="ver-todos-nuevos" id="verTodosNuevos">
+        Ver todos los nuevos
+      </button>
+    </div>
+
+    <div class="recien-llegados-lista" id="lista-recien-llegados"></div>
+  </section>
 
   <div class="catalogo-panel">
 
@@ -297,6 +368,10 @@
 
         <option value="original">
           Ordenar por
+        </option>
+
+        <option value="recientes">
+          Más recientes ✨
         </option>
 
         <option value="precio-asc">
@@ -777,6 +852,9 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="revision-auth.js"></script>
 <script src="script.js"></script>
 
 </body>

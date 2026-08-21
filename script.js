@@ -1,13 +1,19 @@
 const MODO_ACTUALIZACION = true;
 const numeroWhatsapp = "51982797861";
 
+const esRutaRevision =
+  window.location.pathname.replace(/\/+$/, "") === "/revision";
+
 const pantallaActualizacion = document.getElementById("modoActualizacion");
 
 if (pantallaActualizacion) {
-  pantallaActualizacion.hidden = !MODO_ACTUALIZACION;
-  document.body.classList.toggle("modo-actualizacion-activo", MODO_ACTUALIZACION);
+  const mostrarActualizacion =
+    MODO_ACTUALIZACION && !esRutaRevision;
 
-  if (MODO_ACTUALIZACION) {
+  pantallaActualizacion.hidden = !mostrarActualizacion;
+  document.body.classList.toggle("modo-actualizacion-activo", mostrarActualizacion);
+
+  if (mostrarActualizacion) {
     document.querySelectorAll("body > :not(#modoActualizacion)").forEach((elemento) => {
       elemento.inert = true;
     });
@@ -60,7 +66,7 @@ const productos = [
     categoria: "Lip Gloss",
     imagen: "Gloss dup dior",
     precio: "8.00",
-    agotado: true
+    agotado: false
   },
 
   {
@@ -86,6 +92,24 @@ const productos = [
     detalles: [
       "tonos-gloss-revel"
     ]
+  },
+
+  {
+    nombre: "Lip Gloss AOZY",
+    categoria: "Lip Gloss",
+    imagen: "lip-gloss-aozy",
+    precio: "8.00",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Lip Gloss 3D Karité Plump Lips Super Volumen con Espejo",
+    categoria: "Lip Gloss",
+    imagen: "lip-gloss-3d-plump-lips",
+    precio: "8.00",
+    agotado: false,
+    nuevo: true
   },
 
 
@@ -124,6 +148,33 @@ const productos = [
       "10 tonos",
       "10 tonos-2"
     ]
+  },
+
+  {
+    nombre: "Labial Líquido Waterproof Super Stay",
+    categoria: "Labiales",
+    imagen: "labial-waterproof-super-stay",
+    precio: "7.00",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Lápiz Delineador de Labios USHAS",
+    categoria: "Labiales",
+    imagen: "lapiz-labios-ushas",
+    precio: "3.50",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Labial Líquido Matte Ever Beauty",
+    categoria: "Labiales",
+    imagen: "labial-matte-ever-beauty",
+    precio: "7.00",
+    agotado: false,
+    nuevo: true
   },
 
 
@@ -309,6 +360,51 @@ const productos = [
     precio: "3.50"
   },
 
+  {
+    nombre: "Mascarilla Hidratante de Limpieza Profunda Flower Secret",
+    categoria: "Cuidado facial",
+    imagen: "mascarilla-limpieza-flower-secret",
+    precio: "3.00",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Tratamiento Reparador de Puntas",
+    categoria: "Cuidado facial",
+    imagen: "tratamiento-reparador-puntas",
+    precio: "2.00",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Crema de Arroz para Manos Bioaqua",
+    categoria: "Cuidado facial",
+    imagen: "crema-manos-arroz-bioaqua",
+    precio: "3.50",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Agua de Rosas Revel",
+    categoria: "Cuidado facial",
+    imagen: "agua-rosas-revel",
+    precio: "6.00",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Mascarilla de Colágeno para Ojeras con Ácido Hialurónico y Baba de Caracol",
+    categoria: "Cuidado facial",
+    imagen: "mascarilla-colageno-ojeras",
+    precio: "3.00",
+    agotado: false,
+    nuevo: true
+  },
+
 
   // ==========================
   // ACCESORIOS
@@ -326,6 +422,24 @@ const productos = [
     categoria: "Accesorios",
     imagen: "rizadores",
     precio: "6.00"
+  },
+
+  {
+    nombre: "Vinchas para Skincare",
+    categoria: "Accesorios",
+    imagen: "vinchas-skincare",
+    precio: "5.50",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Doble Espejo de Cartera",
+    categoria: "Accesorios",
+    imagen: "doble-espejo-cartera",
+    precio: "5.50",
+    agotado: false,
+    nuevo: true
   },
 
   {
@@ -365,6 +479,7 @@ const dimensionesImagenes = {
   "belsamo fresita": [480, 640],
   "belsamo fresita-2": [600, 600],
   "brocha para cejas": [480, 640],
+  "crema-manos-arroz-bioaqua": [720, 1280],
   "Codigo 4": [450, 800],
   "Codigo 6": [450, 800],
   "conncealer revel": [480, 640],
@@ -372,6 +487,8 @@ const dimensionesImagenes = {
   "corrector liquido samantha": [576, 768],
   "delineadores": [600, 800],
   "disco revel": [480, 640],
+  "doble-espejo-cartera": [960, 1280],
+  "agua-rosas-revel": [960, 1280],
   "ganchos hawaianos": [720, 960],
   "Gloss conejo": [480, 640],
   "Gloss dup dior": [480, 640],
@@ -383,8 +500,15 @@ const dimensionesImagenes = {
   "Labial corazon matte": [480, 640],
   "Labial liquido matte": [480, 640],
   "Labial osito": [480, 640],
+  "labial-matte-ever-beauty": [960, 1280],
+  "labial-waterproof-super-stay": [1044, 1280],
+  "lapiz-labios-ushas": [960, 1280],
+  "lip-gloss-3d-plump-lips": [960, 1280],
+  "lip-gloss-aozy": [960, 1280],
   "magic box 7 en 1": [576, 768],
   "mascarillas faciales bioaqua": [672, 896],
+  "mascarilla-colageno-ojeras": [960, 1280],
+  "mascarilla-limpieza-flower-secret": [960, 1280],
   "paleta gliter": [576, 768],
   "perfiladores": [672, 896],
   "polvo compacto flower secret": [466, 640],
@@ -394,7 +518,9 @@ const dimensionesImagenes = {
   "Tinta jarusa": [480, 640],
   "Tinta Samantha": [480, 640],
   "toallitas desmaquillantes": [720, 960],
-  "tonos-gloss-revel": [900, 1600]
+  "tonos-gloss-revel": [900, 1600],
+  "tratamiento-reparador-puntas": [960, 1280],
+  "vinchas-skincare": [960, 1280]
 };
 
 function imagenHTML(nombre, alt, clase = "") {
@@ -432,13 +558,11 @@ function imagenHTML(nombre, alt, clase = "") {
 // ======================================
 
 const contenedor = document.getElementById("lista-productos");
+const contenedorRecienLlegados =
+  document.getElementById("lista-recien-llegados");
 
 
-function crearProductos() {
-
-  contenedor.innerHTML = "";
-
-  productos.forEach((producto, index) => {
+function crearTarjetaProducto(producto, index, claseAdicional = "") {
 
     const tieneDetalles =
       producto.detalles &&
@@ -456,6 +580,10 @@ function crearProductos() {
 
     tarjeta.classList.add("producto");
 
+    if (claseAdicional) {
+      tarjeta.classList.add(claseAdicional);
+    }
+
     tarjeta.dataset.index = index;
 
 
@@ -467,6 +595,12 @@ function crearProductos() {
     tarjeta.innerHTML = `
 
       <div class="producto-imagen">
+
+        ${
+          producto.nuevo === true
+          ? `<div class="etiqueta-nuevo">✨ NUEVO</div>`
+          : ""
+        }
 
         ${imagenHTML(
           producto.imagen,
@@ -573,10 +707,31 @@ function crearProductos() {
 
     `;
 
+    return tarjeta;
+}
 
-    contenedor.appendChild(tarjeta);
 
+function crearProductos() {
+
+  contenedor.innerHTML = "";
+
+  productos.forEach((producto, index) => {
+    contenedor.appendChild(
+      crearTarjetaProducto(producto, index)
+    );
   });
+
+  if (contenedorRecienLlegados) {
+    contenedorRecienLlegados.innerHTML = "";
+
+    productos.forEach((producto, index) => {
+      if (producto.nuevo === true) {
+        contenedorRecienLlegados.appendChild(
+          crearTarjetaProducto(producto, index, "producto-reciente")
+        );
+      }
+    });
+  }
 
 }
 
@@ -930,6 +1085,9 @@ const botonesStock =
 const botonesCategoria =
   document.querySelectorAll(".filtro");
 
+const botonVerTodosNuevos =
+  document.getElementById("verTodosNuevos");
+
 
 let categoriaSeleccionada = "Todos";
 
@@ -956,7 +1114,7 @@ function actualizarCatalogo() {
 
 
   const tarjetas =
-    document.querySelectorAll(".producto");
+    contenedor.querySelectorAll(".producto");
 
 
   let totalVisible = 0;
@@ -978,7 +1136,7 @@ function actualizarCatalogo() {
 
 
     const contenidoBusqueda = normalizarTexto(
-      `${producto.nombre} ${producto.categoria} ${textoDisponibilidad}`
+      `${producto.nombre} ${producto.categoria} ${textoDisponibilidad} ${producto.nuevo === true ? "nuevo nuevos" : ""}`
     );
 
 
@@ -1117,11 +1275,11 @@ botonesStock.forEach(boton => {
 
 /* ORDEN */
 
-selectOrden.addEventListener("change", () => {
+function ordenarCatalogo() {
 
   const tarjetas =
     [
-      ...document.querySelectorAll(".producto")
+      ...contenedor.querySelectorAll(".producto")
     ];
 
 
@@ -1137,6 +1295,9 @@ selectOrden.addEventListener("change", () => {
       productos[
         Number(tarjetaB.dataset.index)
       ];
+
+    const indexA = Number(tarjetaA.dataset.index);
+    const indexB = Number(tarjetaB.dataset.index);
 
 
     switch(selectOrden.value) {
@@ -1167,12 +1328,20 @@ selectOrden.addEventListener("change", () => {
           );
 
 
+      case "recientes":
+
+        return (
+          Number(productoB.nuevo === true) -
+          Number(productoA.nuevo === true)
+        ) || (indexA - indexB);
+
+
       default:
 
         return (
-          Number(tarjetaA.dataset.index) -
-          Number(tarjetaB.dataset.index)
-        );
+          Number(productoA.agotado === true) -
+          Number(productoB.agotado === true)
+        ) || (indexA - indexB);
 
     }
 
@@ -1185,9 +1354,42 @@ selectOrden.addEventListener("change", () => {
 
   });
 
-});
+}
 
 
+selectOrden.addEventListener("change", ordenarCatalogo);
+
+
+if (botonVerTodosNuevos) {
+  botonVerTodosNuevos.addEventListener("click", () => {
+    buscadorCatalogo.value = "nuevo";
+    categoriaSeleccionada = "Todos";
+    stockSeleccionado = "todos";
+
+    botonesCategoria.forEach(boton => {
+      boton.classList.toggle(
+        "activo",
+        boton.dataset.categoria === "Todos"
+      );
+    });
+
+    botonesStock.forEach(boton => {
+      boton.classList.toggle(
+        "activo",
+        boton.dataset.stock === "todos"
+      );
+    });
+
+    actualizarCatalogo();
+    document.querySelector(".catalogo-panel").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+    buscadorCatalogo.focus({ preventScroll: true });
+  });
+}
+
+ordenarCatalogo();
 actualizarCatalogo();
 
 

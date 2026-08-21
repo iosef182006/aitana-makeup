@@ -1,4 +1,18 @@
+const MODO_ACTUALIZACION = true;
 const numeroWhatsapp = "51982797861";
+
+const pantallaActualizacion = document.getElementById("modoActualizacion");
+
+if (pantallaActualizacion) {
+  pantallaActualizacion.hidden = !MODO_ACTUALIZACION;
+  document.body.classList.toggle("modo-actualizacion-activo", MODO_ACTUALIZACION);
+
+  if (MODO_ACTUALIZACION) {
+    document.querySelectorAll("body > :not(#modoActualizacion)").forEach((elemento) => {
+      elemento.inert = true;
+    });
+  }
+}
 
 
 if ("scrollRestoration" in history) {

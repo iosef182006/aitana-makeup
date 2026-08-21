@@ -95,6 +95,7 @@ const productos = [
     categoria: "Labiales",
     imagen: "Labial corazon matte",
     precio: "8.00",
+    agotado: true,
     detalles: [
       "5 codigos labial corazon"
     ]
@@ -251,14 +252,16 @@ const productos = [
     nombre: "Brocha para Cejas",
     categoria: "Brochas",
     imagen: "brocha para cejas",
-    precio: "3.00"
+    precio: "3.00",
+    agotado: true
   },
 
   {
     nombre: "Set de 6 Brochas para Ojos",
     categoria: "Brochas",
     imagen: "juego de 6 brochas para ojos",
-    precio: "10.00"
+    precio: "10.00",
+    agotado: true
   },
 
 

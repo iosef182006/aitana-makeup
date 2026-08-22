@@ -109,7 +109,10 @@ const productos = [
     imagen: "lip-gloss-3d-plump-lips",
     precio: "8.50",
     agotado: false,
-    nuevo: true
+    nuevo: true,
+    detalles: [
+      "tonos-gloss-3d"
+    ]
   },
 
 
@@ -174,7 +177,10 @@ const productos = [
     imagen: "labial-matte-ever-beauty",
     precio: "7.00",
     agotado: false,
-    nuevo: true
+    nuevo: true,
+    detalles: [
+      "tonos-ever-beauty"
+    ]
   },
 
 
@@ -226,7 +232,7 @@ const productos = [
     imagen: "corrector liquido samantha",
     precio: "8.00",
     detalles: [
-      "tonos-correctores"
+      "tonos-corrector-samantha"
     ]
   },
 
@@ -236,7 +242,7 @@ const productos = [
     imagen: "corrector liquido bellespa",
     precio: "8.50",
     detalles: [
-      "tonos-correctores"
+      "tonos-corrector-bellespa"
     ]
   },
 
@@ -564,7 +570,10 @@ const dimensionesImagenes = {
   "Tinta jarusa": [480, 640],
   "Tinta Samantha": [480, 640],
   "toallitas desmaquillantes": [720, 960],
-  "tonos-correctores": [1280, 1040],
+  "tonos-corrector-bellespa": [1280, 1040],
+  "tonos-corrector-samantha": [1280, 1257],
+  "tonos-ever-beauty": [1280, 1048],
+  "tonos-gloss-3d": [1280, 966],
   "tonos-gloss-revel": [900, 1600],
   "tratamiento-reparador-puntas": [960, 1280],
   "vinchas-skincare": [960, 1280]

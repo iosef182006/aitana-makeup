@@ -107,7 +107,7 @@ const productos = [
     nombre: "Lip Gloss 3D Karité Plump Lips Super Volumen con Espejo",
     categoria: "Lip Gloss",
     imagen: "lip-gloss-3d-plump-lips",
-    precio: "8.00",
+    precio: "8.50",
     agotado: false,
     nuevo: true
   },

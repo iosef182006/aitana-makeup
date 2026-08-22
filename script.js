@@ -100,10 +100,7 @@ const productos = [
     imagen: "lip-gloss-aozy",
     precio: "8.00",
     agotado: false,
-    nuevo: true,
-    detalles: [
-      "tonos-aozy-matte"
-    ]
+    nuevo: true
   },
 
   {
@@ -122,6 +119,18 @@ const productos = [
   // ==========================
   // LABIALES
   // ==========================
+
+  {
+    nombre: "Labial Líquido Matte AOZY",
+    categoria: "Labiales",
+    imagen: "aozy-1",
+    precio: "8.00",
+    agotado: false,
+    nuevo: true,
+    detalles: [
+      "tonos-aozy-matte"
+    ]
+  },
 
   {
     nombre: "Labial Líquido Matte",
@@ -540,6 +549,7 @@ const dimensionesImagenes = {
   "disco revel": [480, 640],
   "doble-espejo-cartera": [960, 1280],
   "agua-rosas-revel": [960, 1280],
+  "aozy-1": [960, 1280],
   "ganchos hawaianos": [720, 960],
   "Gloss conejo": [480, 640],
   "Gloss dup dior": [480, 640],

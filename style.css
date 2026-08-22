@@ -3967,6 +3967,17 @@ body.anuncio-abierto {
   text-align: center;
 }
 
+.progreso-productos {
+  margin: 0 0 12px;
+  color: #795d68;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.progreso-productos[hidden] {
+  display: none;
+}
+
 .ver-mas-productos {
   min-width: 220px;
   min-height: 46px;
@@ -3990,6 +4001,26 @@ body.anuncio-abierto {
 
 .ver-mas-productos[hidden] {
   display: none;
+}
+
+.sin-resultados-limpiar {
+  margin-top: 16px;
+  padding: 10px 18px;
+  border: 1px solid #e52a68;
+  border-radius: 999px;
+  background: #fff;
+  color: #c51d59;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color .2s, color .2s, transform .2s;
+}
+
+.sin-resultados-limpiar:hover {
+  background: #e52a68;
+  color: #fff;
+  transform: translateY(-1px);
 }
 
 .recien-llegados-carrusel {

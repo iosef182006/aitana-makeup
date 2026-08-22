@@ -1097,6 +1097,12 @@ const botonLimpiarFiltros =
 const botonVerMasProductos =
   document.getElementById("verMasProductos");
 
+const progresoProductos =
+  document.getElementById("progresoProductos");
+
+const botonSinResultadosLimpiar =
+  document.getElementById("sinResultadosLimpiar");
+
 const PRODUCTOS_POR_CARGA = 8;
 
 
@@ -1216,6 +1222,14 @@ function actualizarCatalogo() {
 
   contadorProductos.textContent =
     totalResultados;
+
+  const cantidadMostrada =
+    Math.min(cantidadProductosVisible, totalResultados);
+
+  progresoProductos.textContent =
+    `Mostrando ${cantidadMostrada} de ${totalResultados} productos`;
+
+  progresoProductos.hidden = totalResultados === 0;
 
 
   sinResultados.style.display =
@@ -1474,6 +1488,10 @@ if (botonVerTodosNuevos) {
 botonVerMasProductos.addEventListener("click", () => {
   cantidadProductosVisible += PRODUCTOS_POR_CARGA;
   actualizarCatalogo();
+});
+
+botonSinResultadosLimpiar.addEventListener("click", () => {
+  botonLimpiarFiltros.click();
 });
 
 

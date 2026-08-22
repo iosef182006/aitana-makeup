@@ -612,6 +612,7 @@
   <div class="grid-productos" id="lista-productos"></div>
 
   <div class="ver-mas-productos-contenedor">
+    <p class="progreso-productos" id="progresoProductos" aria-live="polite"></p>
     <button type="button" class="ver-mas-productos" id="verMasProductos" hidden>
       Ver más productos
     </button>
@@ -626,6 +627,10 @@
     <p>
       Prueba con otro nombre o selecciona otra categoría.
     </p>
+
+    <button type="button" class="sin-resultados-limpiar" id="sinResultadosLimpiar">
+      Ver todos los productos
+    </button>
 
   </div>
 
@@ -991,7 +996,7 @@
     </button>
 
     <img
-      src="img/anuncio-aitana.png"
+      src="img/anuncio-aitana.webp"
       alt="Aviso de Aitana Make Up: nuevos productos próximamente en la web"
       width="1024"
       height="1536"

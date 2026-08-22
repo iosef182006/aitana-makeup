@@ -100,7 +100,10 @@ const productos = [
     imagen: "lip-gloss-aozy",
     precio: "8.00",
     agotado: false,
-    nuevo: true
+    nuevo: true,
+    detalles: [
+      "tonos-aozy-matte"
+    ]
   },
 
   {
@@ -570,6 +573,7 @@ const dimensionesImagenes = {
   "Tinta jarusa": [480, 640],
   "Tinta Samantha": [480, 640],
   "toallitas desmaquillantes": [720, 960],
+  "tonos-aozy-matte": [1219, 1280],
   "tonos-corrector-bellespa": [1280, 1040],
   "tonos-corrector-samantha": [1280, 1257],
   "tonos-ever-beauty": [1280, 1048],

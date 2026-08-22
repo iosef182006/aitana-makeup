@@ -4508,6 +4508,40 @@ body.anuncio-abierto {
   margin-bottom: 64px;
 }
 
+.banner-profesional {
+  display: block;
+  width: min(350px, 100%);
+  margin: -20px auto 56px;
+  overflow: hidden;
+  border: 1px solid rgba(224,49,109,.13);
+  border-radius: 28px;
+  background: #fff1f6;
+  box-shadow: 0 16px 42px rgba(126,37,70,.13);
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.banner-profesional img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.banner-profesional:hover {
+  box-shadow: 0 20px 48px rgba(126,37,70,.18);
+  transform: translateY(-3px);
+}
+
+.banner-profesional:focus-visible {
+  outline: 3px solid #f43170;
+  outline-offset: 4px;
+}
+
+.recien-llegados {
+  scroll-margin-top: 96px;
+}
+
 .home-premium-encabezado,
 .busca-hoy-encabezado {
   margin-bottom: 25px;
@@ -4721,6 +4755,22 @@ body.anuncio-abierto {
 @media (max-width: 768px) {
   .home-premium {
     display: none;
+  }
+
+  .banner-profesional-mobile {
+    width: min(300px, calc(100% - 32px));
+    margin: 20px auto 22px;
+    border-radius: 24px;
+    box-shadow: 0 12px 30px rgba(126,37,70,.12);
+  }
+
+  .banner-profesional-mobile:hover {
+    box-shadow: 0 12px 30px rgba(126,37,70,.12);
+    transform: none;
+  }
+
+  .recien-llegados {
+    scroll-margin-top: 76px;
   }
 
   .aitana-mobile-banner {

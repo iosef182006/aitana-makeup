@@ -4812,6 +4812,76 @@ body.anuncio-abierto {
   }
 }
 
+
+/* =====================================
+   LOGO DECORATIVO DE SOBRE AITANA
+===================================== */
+
+.nosotros .nosotros-contenedor {
+  width: 100%;
+  max-width: 1200px;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 40px;
+}
+
+.nosotros .nosotros-imagen {
+  width: 260px;
+  height: auto;
+  min-height: 0;
+  max-width: none;
+  margin: 0 auto;
+  padding: 0;
+  overflow: visible;
+  position: static;
+  transform: none;
+}
+
+.nosotros .nosotros-imagen img {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-width: 260px;
+  max-height: 260px;
+  margin: 0 auto;
+  padding: 0;
+  aspect-ratio: auto;
+  object-fit: contain;
+  object-position: center;
+  border: 4px solid #fff;
+  border-radius: 28px;
+  transform: none;
+}
+
+@media (max-width: 700px) {
+  .nosotros {
+    min-height: 0;
+    padding-top: 30px;
+    padding-bottom: 34px;
+  }
+
+  .nosotros .nosotros-contenedor {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .nosotros .nosotros-imagen {
+    width: min(170px, 45vw);
+    height: auto;
+    min-height: 0;
+    max-height: 170px;
+  }
+
+  .nosotros .nosotros-imagen img {
+    width: 100%;
+    height: auto;
+    max-width: 170px;
+    max-height: 170px;
+    border-width: 3px;
+    border-radius: 22px;
+  }
+}
+
 body.modo-actualizacion-activo {
   overflow: hidden;
 }

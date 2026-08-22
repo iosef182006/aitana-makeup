@@ -224,14 +224,20 @@ const productos = [
     nombre: "Corrector Líquido Samantha",
     categoria: "Correctores",
     imagen: "corrector liquido samantha",
-    precio: "8.00"
+    precio: "8.00",
+    detalles: [
+      "tonos-correctores"
+    ]
   },
 
   {
     nombre: "Corrector Líquido Bellespa",
     categoria: "Correctores",
     imagen: "corrector liquido bellespa",
-    precio: "8.50"
+    precio: "8.50",
+    detalles: [
+      "tonos-correctores"
+    ]
   },
 
 
@@ -558,6 +564,7 @@ const dimensionesImagenes = {
   "Tinta jarusa": [480, 640],
   "Tinta Samantha": [480, 640],
   "toallitas desmaquillantes": [720, 960],
+  "tonos-correctores": [1280, 1040],
   "tonos-gloss-revel": [900, 1600],
   "tratamiento-reparador-puntas": [960, 1280],
   "vinchas-skincare": [960, 1280]

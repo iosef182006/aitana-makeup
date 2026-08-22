@@ -602,10 +602,21 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
           : ""
         }
 
-        ${imagenHTML(
-          producto.imagen,
-          producto.nombre
-        )}
+        <button
+          type="button"
+          class="vista-rapida-trigger"
+          data-vista-rapida-index="${index}"
+          aria-label="Ver detalles de ${producto.nombre}"
+        >
+          ${imagenHTML(
+            producto.imagen,
+            producto.nombre
+          )}
+          <span class="vista-rapida-pista">
+            <i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i>
+            Vista rápida
+          </span>
+        </button>
 
         ${
           !producto.agotado
@@ -857,6 +868,127 @@ if (enviarConsultaWhatsapp) {
     window.open(url, "_blank", "noopener,noreferrer");
   });
 }
+
+
+// ======================================
+// VISTA RÁPIDA DEL PRODUCTO
+// ======================================
+
+const vistaRapidaModal =
+  document.getElementById("vistaRapidaModal");
+
+const vistaRapidaCuerpo =
+  document.getElementById("vistaRapidaCuerpo");
+
+const vistaRapidaCerrar =
+  document.getElementById("vistaRapidaCerrar");
+
+let elementoAntesVistaRapida = null;
+
+
+function cerrarVistaRapida() {
+  if (!vistaRapidaModal.classList.contains("activo")) return;
+
+  vistaRapidaModal.classList.remove("activo");
+  vistaRapidaModal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+
+  if (elementoAntesVistaRapida) {
+    elementoAntesVistaRapida.focus();
+  }
+}
+
+
+function abrirVistaRapida(index) {
+  const producto = productos[index];
+  if (!producto) return;
+
+  const mensajeWhatsapp = encodeURIComponent(
+    `Hola Aitana Make Up, quiero consultar por ${producto.nombre} - S/${producto.precio}`
+  );
+
+  vistaRapidaCuerpo.innerHTML = `
+    <div class="vista-rapida-imagen-contenedor">
+      ${imagenHTML(producto.imagen, producto.nombre, "vista-rapida-imagen")}
+      ${producto.nuevo === true ? '<span class="vista-rapida-nuevo">✨ NUEVO</span>' : ""}
+    </div>
+
+    <div class="vista-rapida-info">
+      <span class="vista-rapida-categoria">${producto.categoria}</span>
+      <h2 id="vistaRapidaTitulo">${producto.nombre}</h2>
+      <div class="vista-rapida-precio">S/${producto.precio}</div>
+      <div class="vista-rapida-stock ${producto.agotado ? "agotado" : "disponible"}">
+        <i class="fa-solid ${producto.agotado ? "fa-circle-xmark" : "fa-circle-check"}" aria-hidden="true"></i>
+        ${producto.agotado ? "Agotado" : "Disponible"}
+      </div>
+
+      <div class="vista-rapida-acciones">
+        ${producto.agotado ? `
+          <span class="vista-rapida-sin-stock">Producto agotado</span>
+        ` : `
+          <a
+            class="vista-rapida-whatsapp"
+            href="https://wa.me/${numeroWhatsapp}?text=${mensajeWhatsapp}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+            Consultar por WhatsApp
+          </a>
+          <button
+            type="button"
+            class="agregar-consulta vista-rapida-agregar"
+            data-consulta-index="${index}"
+            aria-pressed="false"
+          >
+            + Agregar a consulta
+          </button>
+        `}
+        ${producto.detalles && producto.detalles.length ? `
+          <button type="button" class="vista-rapida-tonos" data-vista-tonos-index="${index}">
+            Ver tonos o detalles
+          </button>
+        ` : ""}
+      </div>
+    </div>
+  `;
+
+  elementoAntesVistaRapida = document.activeElement;
+  vistaRapidaModal.classList.add("activo");
+  vistaRapidaModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  actualizarConsultaMultiple();
+  vistaRapidaCerrar.focus();
+}
+
+
+document.addEventListener("click", (e) => {
+  const disparador = e.target.closest("[data-vista-rapida-index]");
+
+  if (disparador) {
+    abrirVistaRapida(Number(disparador.dataset.vistaRapidaIndex));
+    return;
+  }
+
+  const botonTonos = e.target.closest("[data-vista-tonos-index]");
+
+  if (botonTonos) {
+    const index = Number(botonTonos.dataset.vistaTonosIndex);
+    cerrarVistaRapida();
+    abrirModal(index);
+  }
+});
+
+
+vistaRapidaCerrar.addEventListener("click", cerrarVistaRapida);
+
+vistaRapidaModal.addEventListener("click", (e) => {
+  if (e.target === vistaRapidaModal) cerrarVistaRapida();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") cerrarVistaRapida();
+});
 
 
 actualizarConsultaMultiple();

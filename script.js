@@ -37,7 +37,7 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Tinta Samantha",
+    nombre: "Tinta Labial Samantha",
     categoria: "Tintas labiales",
     imagen: "Tinta Samantha",
     precio: "5.00",
@@ -183,7 +183,7 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Delineadores",
+    nombre: "Lápiz Delineador para Ojos, Labios y Cejas",
     categoria: "Ojos y labios",
     imagen: "delineadores",
     precio: "3.00"
@@ -361,6 +361,15 @@ const productos = [
   },
 
   {
+    nombre: "Mascarillas Hidratantes Faciales",
+    categoria: "Cuidado facial",
+    imagen: "mascarillas-hidratantes-faciales",
+    precio: "3.50",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
     nombre: "Mascarilla Hidratante de Limpieza Profunda Flower Secret",
     categoria: "Cuidado facial",
     imagen: "mascarilla-limpieza-flower-secret",
@@ -382,7 +391,7 @@ const productos = [
     nombre: "Crema de Arroz para Manos Bioaqua",
     categoria: "Cuidado facial",
     imagen: "crema-manos-arroz-bioaqua",
-    precio: "3.50",
+    precio: "3.00",
     agotado: false,
     nuevo: true
   },
@@ -455,6 +464,33 @@ const productos = [
     categoria: "Accesorios",
     imagen: "ganchos hawaianos",
     precio: "3.00"
+  },
+
+  {
+    nombre: "Ligas para el Cabello Set de 6",
+    categoria: "Accesorios",
+    imagen: "ligas-cabello-set-6",
+    precio: "2.00",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Peine para el Cabello",
+    categoria: "Accesorios",
+    imagen: "peine-cabello",
+    precio: "8.50",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Peine Desenredante",
+    categoria: "Accesorios",
+    imagen: "peine-desenredante",
+    precio: "7.00",
+    agotado: false,
+    nuevo: true
   }
 
 ];
@@ -503,13 +539,17 @@ const dimensionesImagenes = {
   "labial-matte-ever-beauty": [960, 1280],
   "labial-waterproof-super-stay": [1044, 1280],
   "lapiz-labios-ushas": [960, 1280],
+  "ligas-cabello-set-6": [1200, 1600],
   "lip-gloss-3d-plump-lips": [960, 1280],
   "lip-gloss-aozy": [960, 1280],
   "magic box 7 en 1": [576, 768],
   "mascarillas faciales bioaqua": [672, 896],
+  "mascarillas-hidratantes-faciales": [960, 1280],
   "mascarilla-colageno-ojeras": [960, 1280],
   "mascarilla-limpieza-flower-secret": [960, 1280],
   "paleta gliter": [576, 768],
+  "peine-cabello": [960, 1280],
+  "peine-desenredante": [960, 1280],
   "perfiladores": [672, 896],
   "polvo compacto flower secret": [466, 640],
   "polvo translucido banana jarusa": [480, 640],

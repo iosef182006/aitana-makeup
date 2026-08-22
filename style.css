@@ -4655,6 +4655,109 @@ body.anuncio-abierto {
   }
 }
 
+
+/* =====================================
+   SEGUNDA ETAPA: HOME MÓVIL COMPACTO
+===================================== */
+
+.revision-barra-resumen {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .recien-llegados-mobile-slot {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .recien-llegados-mobile-slot .recien-llegados {
+    width: 100%;
+    padding: 26px 16px 5px;
+  }
+
+  .recien-llegados-encabezado {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .recien-llegados-encabezado h2 {
+    max-width: 100%;
+    margin: 5px 0;
+    font-size: clamp(18px, 5vw, 22px);
+    letter-spacing: -.025em;
+    line-height: 1.12;
+    white-space: nowrap;
+  }
+
+  .recien-llegados-encabezado p {
+    font-size: 13px;
+  }
+
+  .ver-todos-nuevos {
+    padding: 8px 13px;
+    font-size: 12px;
+  }
+
+  .recien-llegados-lista {
+    padding-bottom: 12px;
+  }
+
+  .busca-hoy-mobile {
+    margin-top: 18px;
+    margin-bottom: 2px;
+  }
+
+  .busca-hoy-mobile .busca-hoy-encabezado {
+    margin-bottom: 10px;
+  }
+
+  .busca-hoy-mobile .busca-hoy-card {
+    min-height: 64px;
+    padding: 8px 11px;
+    gap: 9px;
+    border-radius: 17px;
+  }
+
+  .busca-hoy-mobile .busca-hoy-icono {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+    font-size: 18px;
+  }
+
+  .busca-hoy-mobile .busca-hoy-card b {
+    font-size: 13px;
+  }
+
+  .busca-hoy-mobile .busca-hoy-card small {
+    font-size: 10px;
+  }
+
+  .aitana-mobile-products {
+    margin-top: 7px;
+    padding-top: 15px;
+  }
+
+  .aitana-mobile-products-carousel {
+    padding-bottom: 11px;
+  }
+
+  .aitana-mobile-cta {
+    margin-bottom: 4px;
+  }
+
+  .beneficios-home {
+    margin-top: 12px;
+    margin-bottom: 0;
+  }
+
+  .catalogo-panel {
+    padding-top: 28px;
+  }
+}
+
 body.modo-actualizacion-activo {
   overflow: hidden;
 }
@@ -4849,6 +4952,10 @@ html.ruta-revision:not(.revision-autorizada) body > :not(#revisionAcceso) {
   font-size: 13px;
 }
 
+.revision-barra-resumen {
+  min-width: 0;
+}
+
 .revision-barra strong {
   color: #c70d52;
   letter-spacing: .04em;
@@ -4876,14 +4983,31 @@ html.ruta-revision:not(.revision-autorizada) body > :not(#revisionAcceso) {
   }
 
   .revision-barra {
-    padding: 10px 14px;
-    flex-wrap: wrap;
-    gap: 7px 16px;
+    min-height: 38px;
+    padding: 5px 10px;
+    flex-wrap: nowrap;
+    gap: 8px;
+    justify-content: space-between;
+    font-size: 10px;
     text-align: center;
   }
 
-  .revision-barra strong {
-    flex-basis: 100%;
+  .revision-barra-resumen {
+    flex: 1;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1px 5px;
+    line-height: 1.25;
+  }
+
+  .revision-barra-resumen strong {
+    white-space: nowrap;
+  }
+
+  .revision-barra button {
+    flex: 0 0 auto;
+    padding: 5px 9px;
+    font-size: 10px;
   }
 }
 

@@ -146,7 +146,7 @@
     }
     finally {
       cerrarSesion.disabled = false;
-      cerrarSesion.textContent = "Cerrar sesión";
+      cerrarSesion.textContent = "Salir";
       mostrarLogin();
     }
   });

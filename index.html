@@ -97,10 +97,12 @@
 </section>
 
 <aside class="revision-barra" id="revisionBarra" aria-label="Estado del modo revisión" hidden>
-  <strong>🌸 MODO REVISIÓN AITANA</strong>
-  <span>Catálogo actual: <b>44 productos</b></span>
-  <span>Productos nuevos: <b>12</b></span>
-  <button type="button" id="revisionCerrarSesion">Cerrar sesión</button>
+  <div class="revision-barra-resumen">
+    <strong>🌸 MODO REVISIÓN</strong>
+    <span>· 44 productos</span>
+    <span>· 12 nuevos</span>
+  </div>
+  <button type="button" id="revisionCerrarSesion">Salir</button>
 </aside>
 
 <div
@@ -292,6 +294,8 @@
       </div>
     </div>
 
+    <div class="recien-llegados-mobile-slot" id="recienLlegadosMobileSlot"></div>
+
     <section class="busca-hoy busca-hoy-mobile" aria-labelledby="buscaHoyMobileTitulo">
       <div class="busca-hoy-encabezado">
         <span>DESCUBRE</span>
@@ -402,14 +406,6 @@
   </section>
 </section>
 
-<section class="beneficios-home" aria-label="Beneficios de comprar en Aitana">
-  <div><i class="fa-solid fa-heart" aria-hidden="true"></i><span><b>Belleza a tu alcance</b><small>Favoritos a precios lindos</small></span></div>
-  <div><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span><b>Atención por WhatsApp</b><small>Consulta fácil y rápido</small></span></div>
-  <div><i class="fa-solid fa-truck-fast" aria-hidden="true"></i><span><b>Envíos</b><small>Coordinamos contigo</small></span></div>
-  <div><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span><b>Atención personalizada</b><small>Te ayudamos a elegir</small></span></div>
-</section>
-
-
 <section class="productos" id="productos">
 
   <section class="recien-llegados" aria-labelledby="tituloRecienLlegados">
@@ -450,6 +446,13 @@
     <div class="recien-llegados-indicador" aria-hidden="true">
       <span id="recienLlegadosProgreso"></span>
     </div>
+  </section>
+
+  <section class="beneficios-home" aria-label="Beneficios de comprar en Aitana">
+    <div><i class="fa-solid fa-heart" aria-hidden="true"></i><span><b>Belleza a tu alcance</b><small>Favoritos a precios lindos</small></span></div>
+    <div><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span><b>Atención por WhatsApp</b><small>Consulta fácil y rápido</small></span></div>
+    <div><i class="fa-solid fa-truck-fast" aria-hidden="true"></i><span><b>Envíos</b><small>Coordinamos contigo</small></span></div>
+    <div><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span><b>Atención personalizada</b><small>Te ayudamos a elegir</small></span></div>
   </section>
 
   <div class="catalogo-panel">

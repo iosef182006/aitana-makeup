@@ -1990,6 +1990,21 @@ const productosDestacadosMobile = [
 function ajustarMobile() {
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
   const home = document.querySelector(".aitana-mobile-home");
+  const recienLlegados = document.querySelector(".recien-llegados");
+  const recienLlegadosMobileSlot =
+    document.getElementById("recienLlegadosMobileSlot");
+  const productosSeccion = document.getElementById("productos");
+  const catalogoPanel = document.querySelector(".catalogo-panel");
+
+  if (recienLlegados && recienLlegadosMobileSlot && productosSeccion && catalogoPanel) {
+    if (isMobile) {
+      recienLlegadosMobileSlot.appendChild(recienLlegados);
+    }
+    else {
+      productosSeccion.insertBefore(recienLlegados, productosSeccion.firstElementChild);
+    }
+  }
+
   if (home) {
     home.style.display = isMobile ? "block" : "none";
   }

@@ -66,7 +66,7 @@ const productos = [
     categoria: "Lip Gloss",
     imagen: "Gloss dup dior",
     precio: "8.00",
-    agotado: false
+    agotado: true
   },
 
   {
@@ -398,7 +398,7 @@ const productos = [
     categoria: "Cuidado facial",
     imagen: "mascarilla-limpieza-flower-secret",
     precio: "3.00",
-    agotado: false,
+    agotado: true,
     nuevo: true
   },
 
@@ -434,7 +434,7 @@ const productos = [
     categoria: "Cuidado facial",
     imagen: "mascarilla-colageno-ojeras",
     precio: "3.00",
-    agotado: false,
+    agotado: true,
     nuevo: true
   },
 
@@ -504,7 +504,7 @@ const productos = [
     categoria: "Accesorios",
     imagen: "peine-cabello",
     precio: "8.50",
-    agotado: false,
+    agotado: true,
     nuevo: true
   },
 
@@ -755,9 +755,9 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
             producto.agotado
             ?
             `
-            <span class="boton-agotado">
+            <button type="button" class="boton-agotado" disabled>
               Producto agotado
-            </span>
+            </button>
             `
             :
             `
@@ -994,7 +994,7 @@ function abrirVistaRapida(index) {
 
       <div class="vista-rapida-acciones">
         ${producto.agotado ? `
-          <span class="vista-rapida-sin-stock">Producto agotado</span>
+          <button type="button" class="vista-rapida-sin-stock" disabled>Producto agotado</button>
         ` : `
           <a
             class="vista-rapida-whatsapp"

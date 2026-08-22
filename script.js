@@ -2411,7 +2411,7 @@ window.addEventListener("scroll", () => {
 // Anuncio de bienvenida: se muestra una sola vez por sesión.
 const anuncioAitana = document.getElementById("anuncioAitana");
 const cerrarAnuncio = document.getElementById("cerrarAnuncio");
-const claveAnuncioVisto = "aitanaAnuncioVisto";
+const claveAnuncioVisto = "aitanaBannerNuevosVisto";
 let focoAntesDelAnuncio = null;
 
 function mostrarAnuncioAitana() {

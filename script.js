@@ -1088,6 +1088,12 @@ const botonesCategoria =
 const botonVerTodosNuevos =
   document.getElementById("verTodosNuevos");
 
+const botonLimpiarBusqueda =
+  document.getElementById("limpiarBusqueda");
+
+const botonLimpiarFiltros =
+  document.getElementById("limpiarFiltros");
+
 
 let categoriaSeleccionada = "Todos";
 
@@ -1204,6 +1210,18 @@ function actualizarCatalogo() {
       ? "block"
       : "none";
 
+
+  const hayBusqueda =
+    buscadorCatalogo.value.trim().length > 0;
+
+  const hayFiltrosActivos =
+    hayBusqueda ||
+    categoriaSeleccionada !== "Todos" ||
+    stockSeleccionado !== "todos";
+
+  botonLimpiarBusqueda.hidden = !hayBusqueda;
+  botonLimpiarFiltros.hidden = !hayFiltrosActivos;
+
 }
 
 
@@ -1214,6 +1232,13 @@ buscadorCatalogo.addEventListener(
   "input",
   actualizarCatalogo
 );
+
+
+botonLimpiarBusqueda.addEventListener("click", () => {
+  buscadorCatalogo.value = "";
+  actualizarCatalogo();
+  buscadorCatalogo.focus();
+});
 
 
 
@@ -1239,8 +1264,39 @@ botonesCategoria.forEach(boton => {
 
     actualizarCatalogo();
 
+    if (window.matchMedia("(max-width: 700px)").matches) {
+      boton.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center"
+      });
+    }
+
   });
 
+});
+
+
+botonLimpiarFiltros.addEventListener("click", () => {
+  buscadorCatalogo.value = "";
+  categoriaSeleccionada = "Todos";
+  stockSeleccionado = "todos";
+
+  botonesCategoria.forEach(boton => {
+    boton.classList.toggle(
+      "activo",
+      boton.dataset.categoria === "Todos"
+    );
+  });
+
+  botonesStock.forEach(boton => {
+    boton.classList.toggle(
+      "activo",
+      boton.dataset.stock === "todos"
+    );
+  });
+
+  actualizarCatalogo();
 });
 
 
@@ -1389,8 +1445,66 @@ if (botonVerTodosNuevos) {
   });
 }
 
+
+const botonRecienAnterior =
+  document.getElementById("recienLlegadosAnterior");
+
+const botonRecienSiguiente =
+  document.getElementById("recienLlegadosSiguiente");
+
+const progresoRecienLlegados =
+  document.getElementById("recienLlegadosProgreso");
+
+
+function actualizarCarruselRecientes() {
+  if (!contenedorRecienLlegados) return;
+
+  const maximoScroll =
+    contenedorRecienLlegados.scrollWidth -
+    contenedorRecienLlegados.clientWidth;
+
+  const progreso = maximoScroll > 0
+    ? contenedorRecienLlegados.scrollLeft / maximoScroll
+    : 0;
+
+  progresoRecienLlegados.style.transform =
+    `scaleX(${Math.max(.18, progreso)})`;
+
+  botonRecienAnterior.disabled =
+    contenedorRecienLlegados.scrollLeft <= 2;
+
+  botonRecienSiguiente.disabled =
+    contenedorRecienLlegados.scrollLeft >= maximoScroll - 2;
+}
+
+
+function desplazarRecienLlegados(direccion) {
+  contenedorRecienLlegados.scrollBy({
+    left: direccion * contenedorRecienLlegados.clientWidth * .9,
+    behavior: "smooth"
+  });
+}
+
+
+botonRecienAnterior.addEventListener("click", () => {
+  desplazarRecienLlegados(-1);
+});
+
+botonRecienSiguiente.addEventListener("click", () => {
+  desplazarRecienLlegados(1);
+});
+
+contenedorRecienLlegados.addEventListener(
+  "scroll",
+  actualizarCarruselRecientes,
+  { passive: true }
+);
+
+window.addEventListener("resize", actualizarCarruselRecientes);
+
 ordenarCatalogo();
 actualizarCatalogo();
+actualizarCarruselRecientes();
 
 
 
@@ -2015,6 +2129,30 @@ document.querySelectorAll(".aitana-mobile-cat").forEach(boton => {
     }
   });
 });
+
+
+// Atajos visuales del Home → reutilizan filtros reales del catálogo
+document
+  .querySelectorAll("[data-descubrimiento-categoria]")
+  .forEach(boton => {
+    boton.addEventListener("click", () => {
+      const categoria = boton.dataset.descubrimientoCategoria;
+      const filtroReal = document.querySelector(
+        '.filtro[data-categoria="' + categoria + '"]'
+      );
+      const stockTodos = document.querySelector(
+        '.stock-filtro[data-stock="todos"]'
+      );
+
+      if (filtroReal) filtroReal.click();
+      if (stockTodos) stockTodos.click();
+
+      document.getElementById("productos")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+  });
 
 // Scrollspy: mantener la barra inferior móvil sincronizada
 let syncNavPendiente = false;

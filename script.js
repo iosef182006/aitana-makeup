@@ -2162,7 +2162,7 @@ document
       if (filtroReal) filtroReal.click();
       if (stockTodos) stockTodos.click();
 
-      document.getElementById("productos")?.scrollIntoView({
+      document.getElementById("catalogoPrincipal")?.scrollIntoView({
         behavior: "smooth",
         block: "start"
       });

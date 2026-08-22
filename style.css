@@ -2175,6 +2175,7 @@ button:disabled {
   max-width: 1500px;
   margin: 0 auto;
   padding: 55px 4% 35px;
+  scroll-margin-top: 105px;
 }
 
 
@@ -2424,6 +2425,7 @@ button:disabled {
 
   .catalogo-panel {
     padding: 40px 18px 25px;
+    scroll-margin-top: 72px;
   }
 
 

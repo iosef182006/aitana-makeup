@@ -1,4 +1,4 @@
-const MODO_ACTUALIZACION = true;
+const MODO_ACTUALIZACION = false;
 const numeroWhatsapp = "51982797861";
 
 const esRutaRevision =

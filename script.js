@@ -171,7 +171,10 @@ const productos = [
     imagen: "labial-waterproof-super-stay",
     precio: "7.00",
     agotado: false,
-    nuevo: true
+    nuevo: true,
+    detalles: [
+      "tonos-labial-waterproof"
+    ]
   },
 
   {
@@ -589,6 +592,7 @@ const dimensionesImagenes = {
   "tonos-ever-beauty": [1280, 1048],
   "tonos-gloss-3d": [1280, 966],
   "tonos-gloss-revel": [900, 1600],
+  "tonos-labial-waterproof": [1242, 1266],
   "tratamiento-reparador-puntas": [960, 1280],
   "vinchas-skincare": [960, 1280]
 };

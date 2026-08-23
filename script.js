@@ -37,7 +37,7 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Tinta Labial Samantha",
+    nombre: "Tinta para Labios Samantha",
     categoria: "Tintas labiales",
     imagen: "Tinta Samantha",
     precio: "5.00",
@@ -47,7 +47,7 @@ const productos = [
   },
 
   {
-    nombre: "Tinta Jarusa",
+    nombre: "Tinta para Labios The Game L Jarusa",
     categoria: "Tintas labiales",
     imagen: "Tinta jarusa",
     precio: "4.00",
@@ -62,7 +62,7 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Gloss Dup Dior",
+    nombre: "Lip Gloss Dup Dior",
     categoria: "Lip Gloss",
     imagen: "Gloss dup dior",
     precio: "8.00",
@@ -70,14 +70,14 @@ const productos = [
   },
 
   {
-    nombre: "Gloss Mirror",
+    nombre: "Lip Gloss Mirror Girl",
     categoria: "Lip Gloss",
     imagen: "Gloss mirror",
     precio: "4.00"
   },
 
   {
-    nombre: "Gloss Conejo",
+    nombre: "Lip Gloss Conejo",
     categoria: "Lip Gloss",
     imagen: "Gloss conejo",
     precio: "6.00",
@@ -85,7 +85,7 @@ const productos = [
   },
 
   {
-    nombre: "Gloss Terciopelo Revel",
+    nombre: "Lip Gloss Terciopelo Revel",
     categoria: "Lip Gloss",
     imagen: "Gloss terciopelo revel",
     precio: "8.00",
@@ -133,7 +133,7 @@ const productos = [
   },
 
   {
-    nombre: "Labial Líquido Matte",
+    nombre: "Labial Líquido Matte Lofshe",
     categoria: "Labiales",
     imagen: "Labial liquido matte",
     precio: "8.00",
@@ -144,7 +144,7 @@ const productos = [
   },
 
   {
-    nombre: "Labial Corazón Matte",
+    nombre: "Labial Corazón Mate Crazy Girl",
     categoria: "Labiales",
     imagen: "Labial corazon matte",
     precio: "8.00",
@@ -155,7 +155,7 @@ const productos = [
   },
 
   {
-    nombre: "Labial Osito",
+    nombre: "Labial Osito Revel",
     categoria: "Labiales",
     imagen: "Labial osito",
     precio: "6.50",
@@ -204,7 +204,7 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Lápiz Delineador para Ojos, Labios y Cejas",
+    nombre: "Lápiz Delineador para Ojos, Labios y Cejas Magic Shop",
     categoria: "Ojos y labios",
     imagen: "delineadores",
     precio: "3.00"
@@ -216,21 +216,21 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Rubor Líquido",
+    nombre: "Rubor Líquido AOZY",
     categoria: "Rostro",
     imagen: "rubor liquido",
     precio: "8.00"
   },
 
   {
-    nombre: "Iluminador",
+    nombre: "Iluminador Compacto Revel",
     categoria: "Rostro",
     imagen: "iluminador",
     precio: "9.00"
   },
 
   {
-    nombre: "Iluminador y Rubor 2 en 1",
+    nombre: "Rubor + Iluminador Compacto Revel",
     categoria: "Rostro",
     imagen: "iluminador y rubor 2 en 1",
     precio: "10.00"
@@ -242,7 +242,7 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Corrector Líquido Samantha",
+    nombre: "Corrector Líquido Matte Waterproof Samantha",
     categoria: "Correctores",
     imagen: "corrector liquido samantha",
     precio: "8.00",
@@ -252,7 +252,7 @@ const productos = [
   },
 
   {
-    nombre: "Corrector Líquido Bellespa",
+    nombre: "Corrector Matte Bellespa",
     categoria: "Correctores",
     imagen: "corrector liquido bellespa",
     precio: "8.50",
@@ -267,7 +267,7 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Bálsamo Dup Nivea",
+    nombre: "Bálsamo Dup de Nivea",
     categoria: "Bálsamos",
     imagen: "belsamo dup  nivea",
     precio: "6.00"
@@ -310,7 +310,7 @@ const productos = [
   },
 
   {
-    nombre: "Concealer Revel",
+    nombre: "Contorno en Crema Revel",
     categoria: "Rostro",
     imagen: "conncealer revel",
     precio: "8.00"
@@ -322,14 +322,14 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Beauty Blender",
+    nombre: "Beauty Blenders",
     categoria: "Accesorios",
     imagen: "beauty blender",
     precio: "3.50"
   },
 
   {
-    nombre: "Magic Box 7 en 1",
+    nombre: "Magic Box 7 en 1 (Blenders)",
     categoria: "Accesorios",
     imagen: "magic box 7 en 1",
     precio: "8.00"
@@ -341,7 +341,7 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Brocha para Cejas",
+    nombre: "Brocha para Ceja 2 en 1",
     categoria: "Brochas",
     imagen: "brocha para cejas",
     precio: "3.00",
@@ -362,14 +362,14 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Disco Revel",
+    nombre: "Paletas de Sombras Revel",
     categoria: "Ojos y labios",
     imagen: "disco revel",
     precio: "10.00"
   },
 
   {
-    nombre: "Paleta Glitter",
+    nombre: "Paleta Gliter Flower",
     categoria: "Ojos y labios",
     imagen: "paleta gliter",
     precio: "5.00"
@@ -381,7 +381,7 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Mascarillas Faciales Bioaqua",
+    nombre: "Mascarilla Bioaqua",
     categoria: "Cuidado facial",
     imagen: "mascarillas faciales bioaqua",
     precio: "3.50"
@@ -447,14 +447,14 @@ const productos = [
   // ==========================
 
   {
-    nombre: "Perfiladores",
+    nombre: "Set de 3 Perfiladores",
     categoria: "Accesorios",
     imagen: "perfiladores",
     precio: "3.50"
   },
 
   {
-    nombre: "Rizadores",
+    nombre: "Rizadores de Pestañas",
     categoria: "Accesorios",
     imagen: "rizadores",
     precio: "6.00"
@@ -479,7 +479,7 @@ const productos = [
   },
 
   {
-     nombre: "Toallitas Desmaquillantes",
+     nombre: "Toallitas Desmaquillantes Madison",
      categoria: "Cuidado facial",
      imagen: "toallitas desmaquillantes",
      precio: "3.50",
@@ -487,7 +487,7 @@ const productos = [
   },
 
   {
-    nombre: "Ganchos Hawaianos",
+    nombre: "Gancho Hawaiano",
     categoria: "Accesorios",
     imagen: "ganchos hawaianos",
     precio: "3.00"
@@ -2236,10 +2236,10 @@ if (formularioOpinion) {
 // ======================================
 
 const productosDestacadosMobile = [
-  "Gloss Terciopelo Revel",
-  "Labial Osito",
-  "Iluminador",
-  "Paleta Glitter"
+  "Lip Gloss Terciopelo Revel",
+  "Labial Osito Revel",
+  "Iluminador Compacto Revel",
+  "Paleta Gliter Flower"
 ];
 
 function ajustarMobile() {

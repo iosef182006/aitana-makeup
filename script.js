@@ -47,7 +47,7 @@ const productos = [
   },
 
   {
-    nombre: "Tinta para Labios The Game L Jarusa",
+    nombre: "Tinta para Labios The Game Jarusa",
     categoria: "Tintas labiales",
     imagen: "Tinta jarusa",
     precio: "4.00",

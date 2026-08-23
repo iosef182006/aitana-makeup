@@ -513,7 +513,7 @@ const productos = [
   },
 
   {
-    nombre: "Peine Desenredante",
+    nombre: "Cepillo Desenredante",
     categoria: "Accesorios",
     imagen: "peine-desenredante",
     precio: "7.00",

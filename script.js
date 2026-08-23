@@ -51,6 +51,7 @@ const productos = [
     categoria: "Tintas labiales",
     imagen: "Tinta jarusa",
     precio: "4.00",
+    agotado: true,
     detalles: [
       "Codigo 6"
     ]
@@ -353,7 +354,7 @@ const productos = [
     categoria: "Brochas",
     imagen: "juego de 6 brochas para ojos",
     precio: "10.00",
-    agotado: false
+    agotado: true
   },
 
 
@@ -516,7 +517,7 @@ const productos = [
     categoria: "Accesorios",
     imagen: "peine-desenredante",
     precio: "7.00",
-    agotado: false,
+    agotado: true,
     nuevo: true
   }
 

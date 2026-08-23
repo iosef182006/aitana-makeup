@@ -636,16 +636,32 @@ const contenedorRecienLlegados =
   document.getElementById("lista-recien-llegados");
 
 
+function productoTieneTonos(producto) {
+  return Boolean(
+    producto.detalles &&
+    producto.detalles.length > 0
+  );
+}
+
+
+function crearMensajeProducto(producto) {
+  const pregunta = productoTieneTonos(producto)
+    ? "¿Podrían confirmarme su disponibilidad y qué tonos tienen disponibles?"
+    : "¿Podrían confirmarme si está disponible?";
+
+  return `Hola, Aitana Make Up 💕 Me interesa *${producto.nombre}* (S/ ${producto.precio}). ${pregunta} Gracias 😊`;
+}
+
+
 function crearTarjetaProducto(producto, index, claseAdicional = "") {
 
     const tieneDetalles =
-      producto.detalles &&
-      producto.detalles.length > 0;
+      productoTieneTonos(producto);
 
 
     const mensajeWhatsapp =
       encodeURIComponent(
-        `Hola Aitana Make Up, quiero consultar por ${producto.nombre} - S/${producto.precio}`
+        crearMensajeProducto(producto)
       );
 
 
@@ -899,14 +915,19 @@ function alternarProductoConsulta(index) {
 
 function crearMensajeConsulta() {
 
-  const lineasProductos = [...productosConsulta]
-    .map(index => {
-      const producto = productos[index];
-      return `• ${producto.nombre} — S/${producto.precio}`;
-    })
+  const productosSeleccionados = [...productosConsulta]
+    .map(index => productos[index])
+    .filter(producto => producto && !producto.agotado);
+
+  const lineasProductos = productosSeleccionados
+    .map(producto => `• *${producto.nombre}* — S/ ${producto.precio}`)
     .join("\n");
 
-  return `Hola Aitana Make Up, quiero consultar por:\n\n${lineasProductos}\n\n¿Están disponibles?`;
+  const preguntaTonos = productosSeleccionados.some(productoTieneTonos)
+    ? "¿Podrían confirmarme su disponibilidad? En los productos que tienen tonos, quisiera saber cuáles están disponibles."
+    : "¿Podrían confirmarme si están disponibles?";
+
+  return `Hola, Aitana Make Up 💕 Quisiera consultar por:\n\n${lineasProductos}\n\n${preguntaTonos} Gracias 😊`;
 
 }
 
@@ -978,7 +999,7 @@ function abrirVistaRapida(index) {
   if (!producto) return;
 
   const mensajeWhatsapp = encodeURIComponent(
-    `Hola Aitana Make Up, quiero consultar por ${producto.nombre} - S/${producto.precio}`
+    crearMensajeProducto(producto)
   );
 
   vistaRapidaCuerpo.innerHTML = `
@@ -2299,8 +2320,7 @@ function renderizarMobileProductos() {
     const hrefWA =
       "https://wa.me/" + numeroWhatsapp +
       "?text=" + encodeURIComponent(
-        "Hola Aitana Make Up, quiero consultar por " +
-        producto.nombre + " - S/" + producto.precio
+        crearMensajeProducto(producto)
       );
 
     tarjeta.innerHTML = `

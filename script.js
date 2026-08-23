@@ -415,7 +415,7 @@ const productos = [
     nombre: "Crema de Arroz para Manos Bioaqua",
     categoria: "Cuidado facial",
     imagen: "crema-manos-arroz-bioaqua",
-    precio: "3.00",
+    precio: "3.50",
     agotado: false,
     nuevo: true
   },

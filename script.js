@@ -345,7 +345,7 @@ const productos = [
     categoria: "Brochas",
     imagen: "brocha para cejas",
     precio: "3.00",
-    agotado: true
+    agotado: false
   },
 
   {
@@ -353,7 +353,7 @@ const productos = [
     categoria: "Brochas",
     imagen: "juego de 6 brochas para ojos",
     precio: "10.00",
-    agotado: true
+    agotado: false
   },
 
 

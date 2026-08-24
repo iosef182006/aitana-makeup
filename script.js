@@ -2288,6 +2288,12 @@ const productosDestacadosMobile = [
   "Paleta Gliter Flower"
 ];
 
+document.querySelectorAll("[data-pwa-abrir]").forEach(boton => {
+  boton.addEventListener("click", () => {
+    document.getElementById(boton.dataset.pwaAbrir)?.click();
+  });
+});
+
 function ajustarMobile() {
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
   const home = document.querySelector(".aitana-mobile-home");

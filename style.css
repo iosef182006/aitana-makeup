@@ -2995,6 +2995,10 @@ footer {
   display: none;
 }
 
+.pwa-header-actions {
+  display: none;
+}
+
 @media (max-width: 768px) {
 
   html {
@@ -3958,6 +3962,223 @@ body.anuncio-abierto {
   .anuncio-overlay,
   .anuncio-modal {
     transition: none;
+  }
+}
+
+/* Experiencia compacta exclusiva de la PWA instalada. */
+@media (max-width: 768px) {
+  html.modo-standalone body {
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px));
+  }
+
+  html.modo-standalone .header {
+    width: 100%;
+    height: calc(52px + env(safe-area-inset-top, 0px));
+    margin: 0;
+    padding: env(safe-area-inset-top, 0px) 10px 0;
+    border-bottom: 1px solid rgba(236, 191, 208, .58);
+    box-shadow: 0 2px 9px rgba(82, 28, 48, .045);
+  }
+
+  html.modo-standalone .menu-toggle {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 21px;
+    transition: transform .18s ease, background-color .18s ease;
+  }
+
+  html.modo-standalone .menu-toggle:active {
+    background: #f9e4ec;
+    transform: scale(.94);
+  }
+
+  html.modo-standalone .logo::before {
+    font-size: 19px;
+  }
+
+  html.modo-standalone .logo::after {
+    font-size: 7px;
+    letter-spacing: .18em;
+  }
+
+  html.modo-standalone .header-whatsapp {
+    display: none;
+  }
+
+  html.modo-standalone .pwa-header-actions {
+    order: 2;
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+    gap: 3px;
+  }
+
+  html.modo-standalone .pwa-header-actions[hidden] {
+    display: flex;
+  }
+
+  html.modo-standalone .pwa-header-actions button {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: #7a485a;
+    font-size: 18px;
+    transition: color .18s ease, background-color .18s ease, transform .18s ease;
+  }
+
+  html.modo-standalone .pwa-header-actions button:active {
+    background: #fce8f0;
+    color: #f63372;
+    transform: scale(.92);
+  }
+
+  html.modo-standalone .header nav {
+    top: calc(52px + env(safe-area-inset-top, 0px));
+  }
+
+  html.modo-standalone .aitana-mobile-search {
+    height: 42px;
+    margin: 6px 12px 5px;
+    padding: 0 14px;
+    border: 1px solid #f1e0e7;
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(83, 30, 50, .04);
+  }
+
+  html.modo-standalone .aitana-mobile-banner {
+    display: none;
+  }
+
+  html.modo-standalone .aitana-mobile-categoria-titulo {
+    margin: 8px 14px 5px;
+    font-size: 16px;
+  }
+
+  html.modo-standalone .aitana-mobile-categories {
+    justify-content: flex-start;
+    margin: 0;
+    padding: 2px 12px 6px;
+    gap: 7px;
+    scroll-snap-type: x proximity;
+  }
+
+  html.modo-standalone .aitana-mobile-cat {
+    min-width: 59px;
+    scroll-snap-align: start;
+  }
+
+  html.modo-standalone .aitana-mobile-cat-circle,
+  html.modo-standalone .aitana-mobile-cat-circle img {
+    width: 52px;
+    height: 52px;
+  }
+
+  html.modo-standalone .recien-llegados-mobile-slot .recien-llegados {
+    padding: 13px 14px 2px;
+  }
+
+  html.modo-standalone .recien-llegados-encabezado {
+    margin-bottom: 8px;
+    gap: 6px;
+  }
+
+  html.modo-standalone .recien-llegados-encabezado h2 {
+    margin: 2px 0;
+    font-size: 18px;
+  }
+
+  html.modo-standalone .recien-llegados-encabezado p {
+    font-size: 11px;
+  }
+
+  html.modo-standalone .ver-todos-nuevos {
+    padding: 7px 11px;
+    font-size: 11px;
+  }
+
+  html.modo-standalone .recien-llegados-lista {
+    gap: 10px;
+    margin-right: -14px;
+    padding: 2px 14px 9px 0;
+    scroll-snap-type: x mandatory;
+  }
+
+  html.modo-standalone .recien-llegados-lista .producto-reciente {
+    flex-basis: 82%;
+    scroll-snap-align: start;
+  }
+
+  html.modo-standalone .recien-llegados-lista .producto-reciente .producto-imagen {
+    height: 150px;
+  }
+
+  html.modo-standalone .recien-llegados-lista .producto-reciente .producto-info {
+    padding: 9px 10px 11px;
+  }
+
+  html.modo-standalone .busca-hoy-mobile {
+    margin-top: 12px;
+  }
+
+  html.modo-standalone .aitana-mobile-products {
+    margin-top: 3px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  html.modo-standalone .aitana-mobile-cta,
+  html.modo-standalone .beneficios-home {
+    margin-top: 8px;
+    margin-bottom: 2px;
+  }
+
+  html.modo-standalone .aitana-mobile-bottom-nav {
+    height: calc(52px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-top: 1px solid rgba(225, 194, 206, .7);
+    box-shadow: 0 -3px 14px rgba(65, 24, 39, .055);
+  }
+
+  html.modo-standalone .aitana-mobile-bottom-link {
+    min-height: 44px;
+    padding: 3px 3px 4px;
+    gap: 1px;
+    border-radius: 12px;
+    transition: color .18s ease, background-color .18s ease, transform .18s ease;
+  }
+
+  html.modo-standalone .aitana-mobile-bottom-link i {
+    font-size: 17px;
+  }
+
+  html.modo-standalone .aitana-mobile-bottom-link:active {
+    background: #fff0f5;
+    transform: scale(.94);
+  }
+
+  html.modo-standalone .whatsapp-flotante {
+    right: 13px;
+    bottom: calc(62px + env(safe-area-inset-bottom, 0px));
+    width: 44px;
+    height: 44px;
+  }
+
+  html.modo-standalone body.consulta-multiple-activa .whatsapp-flotante {
+    bottom: calc(132px + env(safe-area-inset-bottom, 0px));
+  }
+
+  html.modo-standalone .consulta-multiple-panel {
+    bottom: calc(62px + env(safe-area-inset-bottom, 0px));
+  }
+
+  html.modo-standalone body.consulta-multiple-activa .volver-arriba {
+    bottom: calc(132px + env(safe-area-inset-bottom, 0px));
   }
 }
 

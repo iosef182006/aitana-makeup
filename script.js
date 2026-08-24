@@ -2294,6 +2294,27 @@ document.querySelectorAll("[data-pwa-abrir]").forEach(boton => {
   });
 });
 
+const entregasSeccionPwa = document.getElementById("entregas");
+const entregasPadreOriginal = entregasSeccionPwa?.parentNode;
+const entregasSiguienteOriginal = entregasSeccionPwa?.nextSibling;
+
+function ajustarEntregasPwa(isMobile) {
+  if (!entregasSeccionPwa || !entregasPadreOriginal) return;
+
+  const buscaHoyMobile = document.querySelector(".busca-hoy-mobile");
+  const mostrarAntesEnPwa = isMobile && estaEnModoStandalone();
+
+  if (mostrarAntesEnPwa && buscaHoyMobile) {
+    buscaHoyMobile.before(entregasSeccionPwa);
+    return;
+  }
+
+  entregasPadreOriginal.insertBefore(
+    entregasSeccionPwa,
+    entregasSiguienteOriginal
+  );
+}
+
 function ajustarMobile() {
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
   const home = document.querySelector(".aitana-mobile-home");
@@ -2315,6 +2336,8 @@ function ajustarMobile() {
   if (home) {
     home.style.display = isMobile ? "block" : "none";
   }
+
+  ajustarEntregasPwa(isMobile);
 
   const heroViejo = document.querySelectorAll(".hero-texto, .hero-imagen");
   if (home) {

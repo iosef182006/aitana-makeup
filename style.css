@@ -2999,6 +2999,11 @@ footer {
   display: none;
 }
 
+.pwa-entregas-ver,
+.entregas-texto-pwa {
+  display: none;
+}
+
 @media (max-width: 768px) {
 
   html {
@@ -6472,5 +6477,95 @@ body.splash-aitana-activa {
     font-size: 17px;
     line-height: 20px;
     text-align: center;
+  }
+
+  html.modo-standalone .entregas-aitana {
+    scroll-margin-top: calc(58px + env(safe-area-inset-top, 0px));
+    padding: 12px 0 10px;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(255, 188, 216, .22), transparent 31%),
+      linear-gradient(180deg, #fff8fb 0%, #fdebf3 52%, #fff8fb 100%);
+  }
+
+  html.modo-standalone .entregas-encabezado {
+    margin: 0 14px 9px;
+  }
+
+  html.modo-standalone .entregas-encabezado .catalogo-mini {
+    font-size: 9px;
+  }
+
+  html.modo-standalone .entregas-encabezado h2 {
+    margin: 3px 0;
+    font-size: 22px;
+    line-height: 1.08;
+  }
+
+  html.modo-standalone .entregas-encabezado p {
+    font-size: 12px;
+  }
+
+  html.modo-standalone .entregas-texto-web {
+    display: none;
+  }
+
+  html.modo-standalone .entregas-texto-pwa[hidden] {
+    display: inline;
+  }
+
+  html.modo-standalone .entregas-galeria {
+    grid-auto-columns: 76vw;
+    gap: 10px;
+    padding: 0 14px 5px;
+    scroll-padding-left: 14px;
+  }
+
+  html.modo-standalone .entrega-tarjeta {
+    padding: 6px;
+    border-radius: 20px;
+  }
+
+  html.modo-standalone .entrega-foto {
+    height: clamp(245px, 68vw, 285px);
+    border-radius: 15px;
+  }
+
+  html.modo-standalone .entrega-badge {
+    bottom: 8px;
+    padding: 6px 10px;
+    font-size: 9px;
+  }
+
+  html.modo-standalone .entregas-proximas {
+    margin: 3px 14px 5px;
+  }
+
+  html.modo-standalone .entregas-proximas > span:last-child,
+  html.modo-standalone .entregas-confianza {
+    display: none;
+  }
+
+  html.modo-standalone .pwa-entregas-ver[hidden] {
+    display: inline-flex;
+    min-height: 44px;
+    padding: 8px 15px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #edb8ca;
+    border-radius: 999px;
+    color: #bd2457;
+    background: rgba(255, 255, 255, .82);
+    font-size: 11px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  html.modo-standalone .pwa-entregas-ver:active {
+    background: #ffe8f0;
+    transform: scale(.96);
+  }
+
+  html.modo-standalone .entregas-aitana + .busca-hoy-mobile {
+    margin-top: 10px;
   }
 }

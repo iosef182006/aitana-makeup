@@ -718,8 +718,14 @@
   <div class="entregas-contenedor">
     <div class="entregas-encabezado">
       <span class="catalogo-mini">PEDIDOS ENTREGADOS</span>
-      <h2 id="titulo-entregas">Clientes felices, pedidos entregados 💕</h2>
-      <p>Gracias por confiar en Aitana Make Up</p>
+      <h2 id="titulo-entregas">
+        <span class="entregas-texto-web">Clientes felices, pedidos entregados 💕</span>
+        <span class="entregas-texto-pwa" hidden>Clientes felices 💕</span>
+      </h2>
+      <p>
+        <span class="entregas-texto-web">Gracias por confiar en Aitana Make Up</span>
+        <span class="entregas-texto-pwa" hidden>Pedidos reales que ya llegaron</span>
+      </p>
     </div>
 
     <div class="entregas-galeria" id="entregasGaleria" aria-label="Entregas reales de Aitana Make Up">
@@ -763,6 +769,8 @@
       <span>📦 Envíos a todo el Perú</span>
       <span>💬 Pedidos coordinados por WhatsApp</span>
     </div>
+
+    <a class="pwa-entregas-ver" href="#entregasGaleria" hidden>Ver entregas</a>
   </div>
 </section>
 

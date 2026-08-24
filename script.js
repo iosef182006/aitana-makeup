@@ -346,7 +346,7 @@ const productos = [
     categoria: "Brochas",
     imagen: "brocha para cejas",
     precio: "3.00",
-    agotado: false
+    agotado: true
   },
 
   {

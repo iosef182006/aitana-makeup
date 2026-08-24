@@ -3959,15 +3959,10 @@ body.anuncio-abierto {
 
 /* Entregas reales: sección independiente del catálogo */
 .entregas-aitana {
-  display: none;
   padding: clamp(64px, 8vw, 105px) 20px;
   background:
     radial-gradient(circle at 12% 12%, rgba(255, 182, 213, 0.3), transparent 32%),
     linear-gradient(180deg, #fff 0%, #fff7fb 100%);
-}
-
-html.ruta-revision.revision-autorizada .entregas-aitana {
-  display: block;
 }
 
 .entregas-contenedor {

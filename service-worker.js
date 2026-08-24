@@ -1,4 +1,4 @@
-const CACHE_VERSION = "aitana-pwa-v1";
+const CACHE_VERSION = "aitana-pwa-v2";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const NETWORK_CACHE = `${CACHE_VERSION}-network`;
 
@@ -45,6 +45,12 @@ self.addEventListener("activate", event => {
   );
 });
 
+self.addEventListener("message", event => {
+  if (event.data?.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
 async function networkFirst(request) {
   const cache = await caches.open(NETWORK_CACHE);
 
@@ -53,20 +59,26 @@ async function networkFirst(request) {
     if (response && response.ok) await cache.put(request, response.clone());
     return response;
   } catch (error) {
-    const cached = await caches.match(request);
+    const cached = await cache.match(request);
     if (cached) return cached;
-    if (request.mode === "navigate") return caches.match("/index.html");
+
+    const staticCache = await caches.open(STATIC_CACHE);
+    const staticFallback = request.mode === "navigate"
+      ? await staticCache.match("/index.html")
+      : await staticCache.match(request);
+
+    if (staticFallback) return staticFallback;
     throw error;
   }
 }
 
 async function cacheFirstIcon(request) {
-  const cached = await caches.match(request);
+  const cache = await caches.open(STATIC_CACHE);
+  const cached = await cache.match(request);
   if (cached) return cached;
 
   const response = await fetch(request);
   if (response && response.ok) {
-    const cache = await caches.open(STATIC_CACHE);
     await cache.put(request, response.clone());
   }
   return response;

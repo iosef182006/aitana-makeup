@@ -524,9 +524,40 @@ const productos = [
 ];
 
 
+const CONSULTA_ACTUALIZACION_KEY = "aitana-consulta-actualizacion";
 const productosConsulta = new Set();
 const FAVORITOS_STORAGE_KEY = "aitana-favoritos";
 const productosFavoritos = new Set();
+
+try {
+  let consultaTemporal = "";
+  try {
+    consultaTemporal = sessionStorage.getItem(CONSULTA_ACTUALIZACION_KEY) || "";
+  } catch (error) {
+    // Se intenta recuperar desde localStorage.
+  }
+  if (!consultaTemporal) {
+    try {
+      consultaTemporal = localStorage.getItem(CONSULTA_ACTUALIZACION_KEY) || "";
+    } catch (error) {
+      // La pÃ¡gina continÃºa sin restauraciÃ³n si el almacenamiento estÃ¡ bloqueado.
+    }
+  }
+
+  const consultaGuardadaParaActualizar = JSON.parse(consultaTemporal || "[]");
+
+  if (Array.isArray(consultaGuardadaParaActualizar)) {
+    consultaGuardadaParaActualizar.forEach(nombre => {
+      const index = productos.findIndex(producto => producto.nombre === nombre);
+      if (index >= 0) productosConsulta.add(index);
+    });
+  }
+
+  try { sessionStorage.removeItem(CONSULTA_ACTUALIZACION_KEY); } catch (error) {}
+  try { localStorage.removeItem(CONSULTA_ACTUALIZACION_KEY); } catch (error) {}
+} catch (error) {
+  // La consulta solo se restaura si el almacenamiento temporal estÃ¡ disponible.
+}
 
 try {
   const favoritosGuardados = JSON.parse(localStorage.getItem(FAVORITOS_STORAGE_KEY) || "[]");
@@ -2597,11 +2628,18 @@ document.addEventListener("DOMContentLoaded", mostrarAnuncioAitana);
 const pwaIosAviso = document.getElementById("pwaIosAviso");
 const pwaIosEntendido = document.getElementById("pwaIosEntendido");
 const pwaAndroidInstalar = document.getElementById("pwaAndroidInstalar");
+const pwaActualizacionAviso = document.getElementById("pwaActualizacionAviso");
+const pwaActualizarAhora = document.getElementById("pwaActualizarAhora");
 const PWA_IOS_AVISO_KEY = "aitana-pwa-ios-aviso-cerrado";
+const PWA_UPDATE_RELOAD_KEY = "aitana-pwa-actualizacion-recarga";
+const PWA_UPDATE_INTERVALO = 30 * 60 * 1000;
+const PWA_UPDATE_MINIMO = 5 * 60 * 1000;
 const aitanaSplash = document.getElementById("aitanaSplash");
 let eventoInstalacionPwa = null;
 let splashAitanaActiva = false;
 let splashAitanaOcultaDesde = 0;
+let recargaActualizacionEnCurso = false;
+let ultimaComprobacionPwa = 0;
 
 function estaEnModoStandalone() {
   return window.matchMedia("(display-mode: standalone)").matches ||
@@ -2747,10 +2785,135 @@ document.addEventListener("DOMContentLoaded", () => {
   window.setTimeout(mostrarAvisoIosPwa, 1200);
 });
 
+function guardarConsultaParaActualizacion() {
+  if (!productosConsulta.size) return true;
+
+  const nombres = [...productosConsulta]
+    .map(index => productos[index]?.nombre)
+    .filter(Boolean);
+  const contenido = JSON.stringify(nombres);
+  let guardado = false;
+
+  try {
+    sessionStorage.setItem(CONSULTA_ACTUALIZACION_KEY, contenido);
+    guardado = true;
+  } catch (error) {
+    // Se intenta tambiÃ©n con localStorage como respaldo.
+  }
+
+  try {
+    localStorage.setItem(CONSULTA_ACTUALIZACION_KEY, contenido);
+    guardado = true;
+  } catch (error) {
+    // Si ambos almacenamientos fallan, no se fuerza la recarga.
+  }
+
+  return guardado;
+}
+
+function hayActividadImportanteParaActualizar() {
+  const activo = document.activeElement;
+  const estaEscribiendo = activo?.matches?.(
+    "input, textarea, select, [contenteditable='true']"
+  );
+  const interfazActiva = document.querySelector(
+    ".mobile-sheet.activo, .vista-rapida-modal.activo, .modal.activo, .entrega-modal.activo, .header nav.abierto, form:focus-within"
+  );
+
+  return productosConsulta.size > 0 || Boolean(estaEscribiendo) || Boolean(interfazActiva);
+}
+
+function mostrarActualizacionPwa() {
+  if (!pwaActualizacionAviso || !estaEnModoStandalone() || esRutaRevision) return;
+  pwaActualizacionAviso.hidden = false;
+}
+
+function recargarConActualizacion() {
+  if (recargaActualizacionEnCurso || !guardarConsultaParaActualizacion()) {
+    mostrarActualizacionPwa();
+    return;
+  }
+
+  recargaActualizacionEnCurso = true;
+  try {
+    sessionStorage.setItem(PWA_UPDATE_RELOAD_KEY, String(Date.now()));
+  } catch (error) {
+    // La bandera en memoria tambiÃ©n evita una segunda recarga en esta carga.
+  }
+  window.location.reload();
+}
+
+function gestionarControladorPwaNuevo() {
+  let recargaReciente = false;
+  try {
+    recargaReciente = Date.now() - Number(sessionStorage.getItem(PWA_UPDATE_RELOAD_KEY) || 0) < 15000;
+  } catch (error) {
+    // Sin sessionStorage se conserva la protecciÃ³n en memoria.
+  }
+
+  if (recargaReciente || recargaActualizacionEnCurso) return;
+
+  if (hayActividadImportanteParaActualizar()) {
+    mostrarActualizacionPwa();
+  } else {
+    recargarConActualizacion();
+  }
+}
+
+pwaActualizarAhora?.addEventListener("click", recargarConActualizacion);
+
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/service-worker.js", { scope: "/" }).catch(() => {
+  window.addEventListener("load", async () => {
+    const controladorInicial = navigator.serviceWorker.controller;
+
+    try {
+      const registro = await navigator.serviceWorker.register("/service-worker.js", {
+        scope: "/",
+        updateViaCache: "none"
+      });
+
+      if (!esRutaRevision && estaEnModoStandalone()) {
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          if (!controladorInicial) return;
+          gestionarControladorPwaNuevo();
+        });
+
+        const activarWorkerNuevo = worker => {
+          if (worker?.state === "installed" && navigator.serviceWorker.controller) {
+            worker.postMessage({ type: "SKIP_WAITING" });
+          }
+        };
+
+        registro.addEventListener("updatefound", () => {
+          const workerNuevo = registro.installing;
+          workerNuevo?.addEventListener("statechange", () => activarWorkerNuevo(workerNuevo));
+        });
+
+        if (registro.waiting && navigator.serviceWorker.controller) {
+          registro.waiting.postMessage({ type: "SKIP_WAITING" });
+        }
+
+        const comprobarActualizacion = async ({ forzar = false } = {}) => {
+          if (document.visibilityState !== "visible") return;
+          const ahora = Date.now();
+          if (!forzar && ahora - ultimaComprobacionPwa < PWA_UPDATE_MINIMO) return;
+          ultimaComprobacionPwa = ahora;
+          try {
+            await registro.update();
+          } catch (error) {
+            // La aplicaciÃ³n continÃºa con normalidad si no hay conexiÃ³n.
+          }
+        };
+
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") comprobarActualizacion();
+        });
+
+        window.setInterval(comprobarActualizacion, PWA_UPDATE_INTERVALO);
+        comprobarActualizacion({ forzar: true });
+      }
+    } catch (error) {
       // La web sigue funcionando normalmente si el navegador no permite el registro.
-    });
+    }
   });
 }

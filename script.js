@@ -2566,6 +2566,8 @@ const pwaIosEntendido = document.getElementById("pwaIosEntendido");
 const pwaAndroidInstalar = document.getElementById("pwaAndroidInstalar");
 const PWA_IOS_AVISO_KEY = "aitana-pwa-ios-aviso-cerrado";
 const PWA_SPLASH_KEY = "aitanaSplashUltimaVez";
+const PWA_SPLASH_VERSION_KEY = "aitanaSplashVersion";
+const PWA_SPLASH_VERSION = "2";
 const PWA_SPLASH_INTERVALO = 4 * 60 * 60 * 1000;
 const aitanaSplash = document.getElementById("aitanaSplash");
 let eventoInstalacionPwa = null;
@@ -2593,6 +2595,11 @@ function mostrarSplashPwa() {
   const ahora = Date.now();
 
   try {
+    if (localStorage.getItem(PWA_SPLASH_VERSION_KEY) !== PWA_SPLASH_VERSION) {
+      localStorage.removeItem(PWA_SPLASH_KEY);
+      localStorage.setItem(PWA_SPLASH_VERSION_KEY, PWA_SPLASH_VERSION);
+    }
+
     const ultimaVez = Number(localStorage.getItem(PWA_SPLASH_KEY)) || 0;
     if (ahora - ultimaVez < PWA_SPLASH_INTERVALO) return;
     localStorage.setItem(PWA_SPLASH_KEY, String(ahora));

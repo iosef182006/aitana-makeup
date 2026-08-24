@@ -3957,6 +3957,84 @@ body.anuncio-abierto {
   }
 }
 
+/* Entregas reales: sección independiente del catálogo */
+.entregas-aitana {
+  display: none;
+  padding: clamp(64px, 8vw, 105px) 20px;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255, 182, 213, 0.3), transparent 32%),
+    linear-gradient(180deg, #fff 0%, #fff7fb 100%);
+}
+
+html.ruta-revision.revision-autorizada .entregas-aitana {
+  display: block;
+}
+
+.entregas-contenedor {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+}
+
+.entregas-encabezado {
+  max-width: 650px;
+  margin: 0 auto 34px;
+  text-align: center;
+}
+
+.entregas-encabezado h2 {
+  margin: 8px 0 10px;
+  color: #2f2028;
+  font-size: clamp(30px, 5vw, 48px);
+  line-height: 1.08;
+}
+
+.entregas-encabezado p {
+  margin: 0;
+  color: #725e69;
+  font-size: clamp(15px, 2vw, 18px);
+}
+
+.entregas-galeria {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 3vw, 30px);
+  align-items: stretch;
+}
+
+.entrega-foto {
+  min-height: 560px;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(160, 79, 118, 0.14);
+  border-radius: 28px;
+  background: #f8eaf1;
+  box-shadow: 0 20px 50px rgba(91, 43, 66, 0.14);
+}
+
+.entrega-foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 700px) {
+  .entregas-aitana {
+    padding-inline: 15px;
+  }
+
+  .entregas-galeria {
+    grid-template-columns: 1fr;
+  }
+
+  .entrega-foto {
+    min-height: 0;
+    aspect-ratio: 3 / 4;
+    border-radius: 22px;
+  }
+}
+
 /* Modo actualización: cambiar MODO_ACTUALIZACION en script.js para activarlo. */
 
 

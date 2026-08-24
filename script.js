@@ -333,7 +333,7 @@ const productos = [
     nombre: "Magic Box 7 en 1 (Blenders)",
     categoria: "Accesorios",
     imagen: "magic box 7 en 1",
-    precio: "8.00"
+    precio: "9.00"
   },
 
 
@@ -517,7 +517,7 @@ const productos = [
     categoria: "Accesorios",
     imagen: "peine-desenredante",
     precio: "7.00",
-    agotado: true,
+    agotado: false,
     nuevo: true
   }
 

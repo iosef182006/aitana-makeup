@@ -5919,7 +5919,7 @@ body.splash-aitana-activa {
 
 .aitana-splash {
   position: fixed;
-  z-index: 10000;
+  z-index: 10010;
   inset: 0;
   display: grid;
   min-height: 100dvh;

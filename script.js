@@ -2512,7 +2512,11 @@ const claveAnuncioVisto = "aitanaBannerNuevosVisto";
 let focoAntesDelAnuncio = null;
 
 function mostrarAnuncioAitana() {
-  if (!anuncioAitana || sessionStorage.getItem(claveAnuncioVisto)) return;
+  if (
+    !anuncioAitana ||
+    estaEnModoStandalone() ||
+    sessionStorage.getItem(claveAnuncioVisto)
+  ) return;
 
   focoAntesDelAnuncio = document.activeElement;
   anuncioAitana.hidden = false;

@@ -1187,31 +1187,6 @@ body {
 }
 
 
-/* NOSOTROS */
-
-.nosotros {
-  min-height: 360px;
-  padding: 65px 10%;
-  background: #f9e4ea;
-  display: flex;
-  align-items: center;
-}
-
-.nosotros div {
-  max-width: 600px;
-}
-
-.nosotros h2 {
-  font-size: 42px;
-  margin-bottom: 20px;
-}
-
-.nosotros p {
-  line-height: 1.8;
-  color: #666;
-}
-
-
 /* Anclas con offset por el header fijo */
 html {
   scroll-behavior: smooth;
@@ -1219,29 +1194,11 @@ html {
 
 #inicio,
 #productos,
-#nosotros,
-#opiniones,
+#entregas,
 #contacto {
   scroll-margin-top: 100px;
 }
 
-
-/* CONTACTO */
-
-.opiniones {
-  padding: 100px 20px;
-  text-align: center;
-}
-
-.opiniones h2 {
-  font-size: 42px;
-  margin-bottom: 15px;
-}
-
-.opiniones p {
-  color: #666;
-  margin-bottom: 30px;
-}
 
 .contacto-whatsapp {
   display: flex;
@@ -2051,12 +2008,6 @@ footer p {
 
 /* ===== MEJORA SECCIÓN FINAL ===== */
 
-/* ¿Te gustó algún producto? */
-.opiniones {
-  background: linear-gradient(135deg, #fff1f5 0%, #ffe1ea 100%);
-  padding: 70px 20px;
-}
-
 /* Botones del CTA */
 .btn-principal {
   background: #f63372;
@@ -2119,7 +2070,6 @@ footer p {
 
 
 /* Detalle rosa en los títulos */
-.opiniones h2::after,
 .redes h2::after {
   content: "";
   display: block;
@@ -2233,154 +2183,6 @@ footer p {
 }
 
 
-/* ============================
-   FORMULARIO DE OPINIONES
-============================ */
-
-.opiniones {
-  text-align: center;
-}
-
-.contacto-contenedor {
-  max-width: 960px;
-  margin: 0 auto;
-
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-
-  align-items: center;
-
-  text-align: left;
-}
-
-.contacto-info {
-  text-align: center;
-}
-
-.contacto-info h2 {
-  font-size: 34px;
-  color: #222;
-  margin: 10px 0 14px;
-}
-
-.contacto-info p {
-  color: #6d4a55;
-  line-height: 1.7;
-  max-width: 380px;
-  margin: 0 auto;
-}
-
-.formulario-opinion {
-  background: #fff;
-  border-radius: 24px;
-  padding: 30px 28px;
-
-  box-shadow: 0 14px 40px rgba(214, 96, 135, .18);
-
-  text-align: left;
-}
-
-.campo-calificacion {
-  margin-bottom: 20px;
-}
-
-.campo-calificacion label,
-.campo label {
-  display: block;
-  font-weight: 700;
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.estrellas {
-  display: flex;
-  gap: 8px;
-}
-
-.estrellas i {
-  font-size: 30px;
-  color: #e5d5da;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.estrellas i:hover {
-  transform: scale(1.1);
-}
-
-.estrellas i:hover,
-.estrellas i.seleccionada {
-  color: #f5316f;
-}
-
-.campo {
-  margin-bottom: 18px;
-}
-
-.campo textarea {
-  width: 100%;
-
-  border: 1px solid #ead4db;
-  border-radius: 14px;
-
-  padding: 12px 14px;
-
-  font-size: 15px;
-  font-family: inherit;
-  color: #333;
-
-  outline: none;
-
-  resize: vertical;
-
-  background: #fffafb;
-
-  transition: .2s;
-}
-
-.campo textarea:focus {
-  border-color: #f5316f;
-  background: #fff;
-}
-
-.btn-opinion {
-  width: 100%;
-
-  border: none !important;
-  outline: none;
-  box-shadow: none;
-
-  border-radius: 30px;
-
-  background: #f63372;
-  color: #fff;
-
-  font-size: 16px;
-  font-weight: 700;
-
-  padding: 14px 20px;
-
-  cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-
-  transition: .2s;
-}
-
-.btn-opinion:focus {
-  outline: none;
-}
-
-.btn-opinion:hover {
-  background: #db205d;
-  transform: translateY(-2px);
-}
-
 button:disabled {
   opacity: .6;
   cursor: not-allowed;
@@ -2393,32 +2195,6 @@ button:disabled {
   font-weight: 600;
   color: #9a9a9a;
 }
-
-.mensaje-formulario {
-  margin: 14px 0 0;
-  font-weight: 700;
-  color: #1eb56b;
-  text-align: center;
-}
-
-.mensaje-formulario.error {
-  color: #e63962;
-  font-weight: 600;
-}
-
-@media (max-width: 900px) {
-
-  .contacto-contenedor {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
-  .contacto-info h2 {
-    font-size: 28px;
-  }
-
-}
-
 
 /* =====================================
    CATÁLOGO PROFESIONAL
@@ -2729,96 +2505,6 @@ button:disabled {
 
 
 /* =====================================
-   NOSOTROS REDISEÑADO
-===================================== */
-
-.nosotros {
-  min-height: 360px;
-  padding: 65px 6%;
-  background: #f9e4ea;
-  display: flex;
-  align-items: center;
-}
-
-.nosotros-contenedor {
-  max-width: 1200px;
-  margin: 0 auto;
-
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  align-items: center;
-  gap: 50px;
-}
-
-.nosotros-imagen img {
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-
-  display: block;
-  margin: 0 auto;
-
-  border-radius: 50%;
-  border: 6px solid #fff;
-  box-shadow: 0 14px 40px rgba(214, 96, 135, .25);
-}
-
-.nosotros-texto h2 {
-  font-size: 38px;
-  color: #222;
-  margin: 10px 0 16px;
-}
-
-.nosotros-texto h2::after {
-  content: "";
-  display: block;
-  width: 55px;
-  height: 4px;
-  background: #f5316f;
-  border-radius: 10px;
-  margin-top: 12px;
-}
-
-.nosotros-texto p {
-  color: #666;
-  line-height: 1.8;
-  max-width: 480px;
-}
-
-.nosotros-lista {
-  list-style: none;
-  padding: 0;
-  margin: 22px 0 0;
-  display: grid;
-  gap: 12px;
-}
-
-.nosotros-lista li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  color: #333;
-}
-
-.nosotros-lista i {
-  width: 26px;
-  height: 26px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-  background: #f63372;
-  color: #fff;
-  font-size: 13px;
-}
-
-
-/* =====================================
    CONTACTO: ¿NECESITAS AYUDA?
 ===================================== */
 
@@ -3004,26 +2690,6 @@ footer {
 /* MOBILE MÍNIMO (se afina en la etapa final) */
 
 @media (max-width: 700px) {
-
-  .nosotros-contenedor {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    text-align: center;
-  }
-
-  .nosotros-texto h2::after {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .nosotros-lista {
-    justify-items: center;
-  }
-
-  .nosotros-lista li {
-    text-align: left;
-  }
-
   .ayuda-tarjetas {
     grid-template-columns: 1fr;
   }
@@ -3157,38 +2823,6 @@ footer {
 
   .catalogo-encabezado h2 {
     font-size: 30px;
-  }
-
-  .nosotros {
-    padding: 46px 6%;
-  }
-
-  .nosotros-imagen img {
-    max-width: 200px;
-  }
-
-  .nosotros-texto h2 {
-    font-size: 30px;
-  }
-
-  .opiniones {
-    padding: 55px 16px;
-  }
-
-  .formulario-opinion {
-    padding: 24px 18px;
-  }
-
-  .estrellas {
-    gap: 10px;
-  }
-
-  .estrellas i {
-    font-size: 34px;
-  }
-
-  .contacto-info h2 {
-    font-size: 26px;
   }
 
   .ayuda {
@@ -3957,77 +3591,256 @@ body.anuncio-abierto {
   }
 }
 
-/* Entregas reales: sección independiente del catálogo */
+/* Entregas reales / prueba social */
 .entregas-aitana {
-  padding: clamp(64px, 8vw, 105px) 20px;
+  scroll-margin-top: 100px;
+  padding: clamp(52px, 6vw, 78px) 20px clamp(58px, 6vw, 82px);
+  overflow: hidden;
   background:
-    radial-gradient(circle at 12% 12%, rgba(255, 182, 213, 0.3), transparent 32%),
-    linear-gradient(180deg, #fff 0%, #fff7fb 100%);
+    radial-gradient(circle at 10% 20%, rgba(255, 188, 216, .28), transparent 28%),
+    radial-gradient(circle at 90% 80%, rgba(245, 125, 177, .12), transparent 30%),
+    linear-gradient(180deg, #fff7fb 0%, #fdebf3 48%, #fff8fb 100%);
 }
 
 .entregas-contenedor {
-  width: min(1080px, 100%);
+  width: min(980px, 100%);
   margin: 0 auto;
-}
-
-.entregas-encabezado {
-  max-width: 650px;
-  margin: 0 auto 34px;
   text-align: center;
 }
 
+.entregas-encabezado {
+  max-width: 700px;
+  margin: 0 auto 28px;
+}
+
 .entregas-encabezado h2 {
-  margin: 8px 0 10px;
-  color: #2f2028;
-  font-size: clamp(30px, 5vw, 48px);
-  line-height: 1.08;
+  margin: 8px 0 9px;
+  color: #35222c;
+  font-size: clamp(29px, 4vw, 43px);
+  line-height: 1.12;
 }
 
 .entregas-encabezado p {
   margin: 0;
-  color: #725e69;
-  font-size: clamp(15px, 2vw, 18px);
+  color: #755463;
+  font-size: clamp(15px, 1.7vw, 18px);
 }
 
 .entregas-galeria {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(18px, 3vw, 30px);
-  align-items: stretch;
+  grid-template-columns: repeat(2, minmax(0, 340px));
+  justify-content: center;
+  gap: clamp(18px, 3vw, 28px);
+  width: min(740px, 100%);
+  margin: 0 auto;
+}
+
+.entrega-tarjeta {
+  min-width: 0;
+  margin: 0;
+  padding: 8px;
+  border: 1px solid rgba(212, 112, 153, .18);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: 0 14px 36px rgba(168, 71, 113, .12);
 }
 
 .entrega-foto {
-  min-height: 560px;
-  margin: 0;
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 430px;
+  padding: 0;
   overflow: hidden;
-  border: 1px solid rgba(160, 79, 118, 0.14);
-  border-radius: 28px;
-  background: #f8eaf1;
-  box-shadow: 0 20px 50px rgba(91, 43, 66, 0.14);
+  border: 0;
+  border-radius: 19px;
+  background: #fff8fb;
+  cursor: zoom-in;
 }
 
 .entrega-foto img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 
-@media (max-width: 700px) {
+.entrega-badge {
+  position: absolute;
+  left: 50%;
+  bottom: 13px;
+  transform: translateX(-50%);
+  width: max-content;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, .8);
+  border-radius: 999px;
+  color: #8c3158;
+  background: rgba(255, 255, 255, .92);
+  box-shadow: 0 7px 20px rgba(95, 39, 63, .16);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  backdrop-filter: blur(8px);
+}
+
+.entregas-proximas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin: 18px 0 14px;
+  color: #866372;
+  font-size: 14px;
+}
+
+.entregas-indicadores {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.entregas-indicadores i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d9aebe;
+  transition: width .2s ease, background .2s ease;
+}
+
+.entregas-indicadores i.activo {
+  width: 18px;
+  border-radius: 99px;
+  background: #ef4f91;
+}
+
+.entregas-confianza {
+  display: flex;
+  justify-content: center;
+  gap: 10px 28px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 16px;
+  padding: 13px 22px;
+  border: 1px solid rgba(227, 129, 170, .18);
+  border-radius: 16px;
+  color: #61404f;
+  background: rgba(255, 255, 255, .72);
+  box-shadow: 0 8px 24px rgba(162, 76, 112, .08);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.entregas-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, #f25b98, #e9397f);
+  box-shadow: 0 12px 26px rgba(224, 53, 121, .22);
+  text-decoration: none;
+  font-weight: 800;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.entregas-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(224, 53, 121, .28);
+}
+
+.entrega-modal {
+  position: fixed;
+  z-index: 10050;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: 24px;
+  background: rgba(28, 15, 22, .88);
+  backdrop-filter: blur(8px);
+}
+
+.entrega-modal.activo { display: grid; }
+
+.entrega-modal img {
+  display: block;
+  max-width: min(92vw, 920px);
+  max-height: 88vh;
+  border: 7px solid #fff;
+  border-radius: 20px;
+  object-fit: contain;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .35);
+}
+
+.entrega-modal-cerrar {
+  position: fixed;
+  z-index: 1;
+  top: 18px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, .55);
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(255, 255, 255, .14);
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+body.entrega-modal-abierto { overflow: hidden; }
+
+@media (max-width: 768px) {
   .entregas-aitana {
-    padding-inline: 15px;
+    padding: 46px 0 54px;
   }
+
+  .entregas-encabezado,
+  .entregas-proximas,
+  .entregas-confianza,
+  .entregas-cta {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+
+  .entregas-encabezado { margin-bottom: 22px; }
 
   .entregas-galeria {
-    grid-template-columns: 1fr;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 82vw;
+    justify-content: start;
+    gap: 14px;
+    width: 100%;
+    padding: 0 16px 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 16px;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
   }
 
-  .entrega-foto {
-    min-height: 0;
-    aspect-ratio: 3 / 4;
-    border-radius: 22px;
+  .entregas-galeria::-webkit-scrollbar { display: none; }
+  .entrega-tarjeta { scroll-snap-align: start; border-radius: 23px; }
+  .entrega-foto { height: clamp(390px, 112vw, 470px); border-radius: 17px; }
+
+  .entregas-proximas {
+    margin-top: 8px;
+    margin-bottom: 13px;
   }
+
+  .entregas-confianza {
+    width: auto;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    padding: 12px 15px;
+  }
+
+  .entregas-cta { display: flex; }
+  .entrega-modal { padding: 14px; }
+  .entrega-modal img { max-width: 96vw; max-height: 84vh; border-width: 4px; border-radius: 15px; }
 }
 
 /* Modo actualización: cambiar MODO_ACTUALIZACION en script.js para activarlo. */
@@ -5175,75 +4988,6 @@ body.anuncio-abierto {
   }
 }
 
-
-/* =====================================
-   LOGO DECORATIVO DE SOBRE AITANA
-===================================== */
-
-.nosotros .nosotros-contenedor {
-  width: 100%;
-  max-width: 1200px;
-  grid-template-columns: 280px minmax(0, 1fr);
-  gap: 40px;
-}
-
-.nosotros .nosotros-imagen {
-  width: 260px;
-  height: auto;
-  min-height: 0;
-  max-width: none;
-  margin: 0 auto;
-  padding: 0;
-  overflow: visible;
-  position: static;
-  transform: none;
-}
-
-.nosotros .nosotros-imagen img {
-  display: block;
-  width: 100%;
-  height: auto;
-  min-height: 0;
-  max-width: 260px;
-  max-height: 260px;
-  margin: 0 auto;
-  padding: 0;
-  aspect-ratio: auto;
-  object-fit: contain;
-  object-position: center;
-  border: 4px solid #fff;
-  border-radius: 28px;
-  transform: none;
-}
-
-@media (max-width: 700px) {
-  .nosotros {
-    min-height: 0;
-    padding-top: 30px;
-    padding-bottom: 34px;
-  }
-
-  .nosotros .nosotros-contenedor {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .nosotros .nosotros-imagen {
-    width: min(170px, 45vw);
-    height: auto;
-    min-height: 0;
-    max-height: 170px;
-  }
-
-  .nosotros .nosotros-imagen img {
-    width: 100%;
-    height: auto;
-    max-width: 170px;
-    max-height: 170px;
-    border-width: 3px;
-    border-radius: 22px;
-  }
-}
 
 body.modo-actualizacion-activo {
   overflow: hidden;

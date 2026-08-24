@@ -1907,8 +1907,7 @@ function actualizarScrollspy() {
   const secciones = [
     "inicio",
     "productos",
-    "nosotros",
-    "opiniones",
+    "entregas",
     "contacto"
   ];
 
@@ -2002,253 +2001,55 @@ window.addEventListener("load", () => {
 
 
 // ======================================
-// FORMULARIO DE OPINIONES
+// ENTREGAS REALES: CARRUSEL Y VISOR
 // ======================================
 
-const estrellas =
-  document.querySelectorAll(".estrellas i");
+const entregasGaleria = document.getElementById("entregasGaleria");
+const entregaModal = document.getElementById("entregaModal");
+const entregaModalImagen = document.getElementById("entregaModalImagen");
+const entregaModalCerrar = document.getElementById("entregaModalCerrar");
+const entregasIndicadores = document.querySelectorAll(".entregas-indicadores i");
+let entregaDisparadorActivo = null;
 
-const calificacionInput =
-  document.getElementById("calificacion");
-
-const formularioOpinion =
-  document.querySelector(".formulario-opinion");
-
-const mensajeFormulario =
-  document.getElementById("mensajeFormulario");
-
-
-function pintarEstrellas(valor) {
-
-  estrellas.forEach(estrella => {
-
-    const numero =
-      parseInt(estrella.dataset.valor);
-
-    if(numero <= valor){
-
-      estrella.classList.add("seleccionada");
-
-    }
-    else {
-
-      estrella.classList.remove("seleccionada");
-
-    }
-
-    const seleccionada = numero === valor;
-    estrella.setAttribute("aria-checked", String(seleccionada));
-    estrella.tabIndex = seleccionada || (valor === 0 && numero === 1) ? 0 : -1;
-
-  });
-
+function cerrarEntregaModal() {
+  if (!entregaModal) return;
+  entregaModal.classList.remove("activo");
+  entregaModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("entrega-modal-abierto");
+  entregaModalImagen.removeAttribute("src");
+  if (entregaDisparadorActivo) entregaDisparadorActivo.focus();
 }
 
-
-estrellas.forEach(estrella => {
-
-  estrella.addEventListener("click", () => {
-
-    const valor =
-      parseInt(estrella.dataset.valor);
-
-    calificacionInput.value = valor;
-
-    pintarEstrellas(valor);
-
+if (entregasGaleria && entregaModal && entregaModalImagen) {
+  entregasGaleria.addEventListener("click", (evento) => {
+    const disparador = evento.target.closest("[data-entrega-imagen]");
+    if (!disparador) return;
+    entregaDisparadorActivo = disparador;
+    entregaModalImagen.src = disparador.dataset.entregaImagen;
+    entregaModalImagen.alt = disparador.querySelector("img")?.alt || "Entrega real de Aitana Make Up";
+    entregaModal.classList.add("activo");
+    entregaModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("entrega-modal-abierto");
+    entregaModalCerrar?.focus();
   });
 
-  estrella.addEventListener("keydown", (e) => {
-    const valorActual = parseInt(estrella.dataset.valor);
-    let nuevoValor = valorActual;
+  entregasGaleria.addEventListener("scroll", () => {
+    const tarjetas = [...entregasGaleria.querySelectorAll(".entrega-tarjeta")];
+    if (!tarjetas.length) return;
+    const indice = tarjetas.reduce((mejor, tarjeta, actual) =>
+      Math.abs(tarjeta.offsetLeft - entregasGaleria.scrollLeft) <
+      Math.abs(tarjetas[mejor].offsetLeft - entregasGaleria.scrollLeft) ? actual : mejor, 0);
+    entregasIndicadores.forEach((punto, actual) => punto.classList.toggle("activo", actual === indice));
+  }, { passive: true });
+}
 
-    if (e.key === "ArrowRight" || e.key === "ArrowUp") {
-      nuevoValor = Math.min(5, valorActual + 1);
-    } else if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
-      nuevoValor = Math.max(1, valorActual - 1);
-    } else if (e.key !== "Enter" && e.key !== " ") {
-      return;
-    }
-
-    e.preventDefault();
-    calificacionInput.value = nuevoValor;
-    pintarEstrellas(nuevoValor);
-    estrellas[nuevoValor - 1].focus();
-  });
-
+entregaModalCerrar?.addEventListener("click", cerrarEntregaModal);
+entregaModal?.addEventListener("click", (evento) => {
+  if (evento.target === entregaModal) cerrarEntregaModal();
 });
-
-
-if (formularioOpinion) {
-
-  const campoGusto =
-    formularioOpinion.querySelector(
-      '[name="me_gusto"]'
-    );
-
-  const campoMejorar =
-    formularioOpinion.querySelector(
-      '[name="mejorar"]'
-    );
-
-
-  function mostrarError(texto) {
-
-    mensajeFormulario.textContent = texto;
-
-    mensajeFormulario.classList.add("error");
-
-  }
-
-
-  function limpiarMensaje() {
-
-    mensajeFormulario.textContent = "";
-
-    mensajeFormulario.classList.remove("error");
-
-  }
-
-
-  estrellas.forEach(estrella => {
-
-    estrella.addEventListener("click", () => {
-
-      limpiarMensaje();
-
-    });
-
-  });
-
-
-  [campoGusto, campoMejorar].forEach(campo => {
-
-    if (campo) {
-
-      campo.addEventListener("input", () => {
-
-        limpiarMensaje();
-
-      });
-
-    }
-
-  });
-
-
-  formularioOpinion.addEventListener(
-    "submit",
-    async (e) => {
-
-      e.preventDefault();
-
-      limpiarMensaje();
-
-      const calificacionValor =
-        parseInt(calificacionInput.value) || 0;
-
-      const textoGusto =
-        campoGusto
-          ? campoGusto.value.trim()
-          : "";
-
-      const textoMejorar =
-        campoMejorar
-          ? campoMejorar.value.trim()
-          : "";
-
-
-      if (calificacionValor < 1) {
-
-        mostrarError(
-          "⚠️ Selecciona una calificación de 1 a 5 estrellas."
-        );
-
-        return;
-
-      }
-
-
-      if (!textoGusto && !textoMejorar) {
-
-        mostrarError(
-          "⚠️ Cuéntanos qué te gustó o qué podríamos mejorar."
-        );
-
-        return;
-
-      }
-
-
-      const datos =
-        new FormData(formularioOpinion);
-
-      const botonEnviar =
-        formularioOpinion.querySelector(
-          'button[type="submit"]'
-        );
-
-      botonEnviar.disabled = true;
-      botonEnviar.innerHTML = "Enviando...";
-
-      try {
-
-        const respuesta =
-          await fetch(
-            formularioOpinion.action,
-            {
-              method: "POST",
-              body: datos,
-              headers: {
-                "Accept": "application/json"
-              }
-            }
-          );
-
-        if (respuesta.ok) {
-
-          mensajeFormulario.textContent =
-            "💗 ¡Gracias por tu opinión! Nos ayuda a seguir mejorando.";
-
-          formularioOpinion.reset();
-
-          pintarEstrellas(0);
-
-          calificacionInput.value = "0";
-
-          setTimeout(() => {
-            limpiarMensaje();
-          }, 6000);
-
-        }
-        else {
-
-          mostrarError(
-            "Ocurrió un error, vuelve a intentarlo."
-          );
-
-        }
-
-      }
-      catch (error) {
-
-        mostrarError(
-          "Revisa la conexión e inténtalo de nuevo."
-        );
-
-      }
-      finally {
-
-        botonEnviar.disabled = false;
-        botonEnviar.innerHTML =
-          '<i class="fa-solid fa-heart"></i> Enviar opinión';
-
-      }
-
-    }
-  );
-
-}
+document.addEventListener("keydown", (evento) => {
+  if (evento.key === "Escape" && entregaModal?.classList.contains("activo")) cerrarEntregaModal();
+});
 
 
 // ======================================

@@ -172,8 +172,7 @@
   <nav id="menu">
     <a href="#inicio" class="nav-link activo-menu">Inicio</a>
     <a href="#productos" class="nav-link">Catálogo</a>
-    <a href="#nosotros" class="nav-link">Nosotros</a>
-    <a href="#opiniones" class="nav-link">Opiniones</a>
+    <a href="#entregas" class="nav-link">Entregas</a>
     <a href="#contacto" class="nav-link">Contacto</a>
   </nav>
 
@@ -637,131 +636,17 @@
 </section>
 
 
-<section class="nosotros" id="nosotros">
-
-  <div class="nosotros-contenedor">
-
-    <div class="nosotros-imagen">
-      <img src="img/logo de aitana.jpeg" alt="Aitana Make Up" width="1254" height="1254" loading="lazy" decoding="async">
-    </div>
-
-    <div class="nosotros-texto">
-
-      <span class="catalogo-mini">SOBRE AITANA</span>
-
-      <h2>Conoce Aitana Make Up</h2>
-
-      <p>
-        Belleza, maquillaje y accesorios pensados para que
-        resaltes tu estilo desde casa.
-      </p>
-
-      <ul class="nosotros-lista">
-        <li>
-          <i class="fa-solid fa-check"></i>
-          Precios accesibles
-        </li>
-        <li>
-          <i class="fa-solid fa-check"></i>
-          Atención personalizada por WhatsApp
-        </li>
-        <li>
-          <i class="fa-solid fa-check"></i>
-          Envíos a todo el Perú
-        </li>
-      </ul>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<section class="opiniones" id="opiniones">
-
-  <div class="contacto-contenedor">
-
-    <div class="contacto-info">
-      <span class="mini">TU OPINIÓN CUENTA</span>
-
-      <h2>¿Qué te pareció nuestro catálogo?</h2>
-
-      <p>
-        Cuéntanos qué te gustó y qué podríamos mejorar.
-        Tu opinión nos ayuda a seguir creciendo.
-      </p>
-    </div>
-
-    <form
-      class="formulario-opinion"
-      action="https://formspree.io/f/xzepvgvv"
-      method="POST"
-    >
-
-      <div class="campo-calificacion">
-        <label>Califica tu experiencia</label>
-
-        <div class="estrellas" id="estrellas" role="radiogroup" aria-label="Calificación de 1 a 5 estrellas">
-          <i class="fa-solid fa-star" data-valor="1" role="radio" aria-label="1 estrella" aria-checked="false" tabindex="0"></i>
-          <i class="fa-solid fa-star" data-valor="2" role="radio" aria-label="2 estrellas" aria-checked="false" tabindex="-1"></i>
-          <i class="fa-solid fa-star" data-valor="3" role="radio" aria-label="3 estrellas" aria-checked="false" tabindex="-1"></i>
-          <i class="fa-solid fa-star" data-valor="4" role="radio" aria-label="4 estrellas" aria-checked="false" tabindex="-1"></i>
-          <i class="fa-solid fa-star" data-valor="5" role="radio" aria-label="5 estrellas" aria-checked="false" tabindex="-1"></i>
-        </div>
-
-        <input
-          type="hidden"
-          name="calificacion"
-          id="calificacion"
-          value="0"
-        >
-      </div>
-
-      <div class="campo">
-        <label for="me-gusto">¿Qué te gustó?</label>
-        <textarea
-          name="me_gusto"
-          id="me-gusto"
-          rows="3"
-          placeholder="Ej: Los gloss y los precios..."
-        ></textarea>
-      </div>
-
-      <div class="campo">
-        <label for="mejorar">¿Qué podríamos mejorar?</label>
-        <textarea
-          name="mejorar"
-          id="mejorar"
-          rows="3"
-          placeholder="Ej: Más tonos de labiales..."
-        ></textarea>
-      </div>
-
-      <button type="submit" class="btn-opinion">
-        <i class="fa-solid fa-heart"></i>
-        Enviar opinión
-      </button>
-
-      <p class="mensaje-formulario" id="mensajeFormulario"></p>
-
-    </form>
-
-  </div>
-
-</section>
-
-
 <section class="entregas-aitana" id="entregas" aria-labelledby="titulo-entregas">
   <div class="entregas-contenedor">
     <div class="entregas-encabezado">
       <span class="catalogo-mini">PEDIDOS ENTREGADOS</span>
-      <h2 id="titulo-entregas">Entregas Aitana 💕</h2>
-      <p>Momentos reales de nuestros pedidos llegando a sus destinos.</p>
+      <h2 id="titulo-entregas">Clientes felices, pedidos entregados 💕</h2>
+      <p>Gracias por confiar en Aitana Make Up</p>
     </div>
 
-    <div class="entregas-galeria">
-      <figure class="entrega-foto">
+    <div class="entregas-galeria" id="entregasGaleria" aria-label="Entregas reales de Aitana Make Up">
+      <figure class="entrega-tarjeta">
+        <button class="entrega-foto" type="button" data-entrega-imagen="img/entregas-01.jpeg" aria-label="Ampliar primera entrega real">
         <img
           src="img/entregas-01.jpeg"
           alt="Clienta recibiendo un pedido de Aitana Make Up"
@@ -770,9 +655,12 @@
           loading="lazy"
           decoding="async"
         >
+          <span class="entrega-badge">✓ ENTREGA REAL</span>
+        </button>
       </figure>
 
-      <figure class="entrega-foto">
+      <figure class="entrega-tarjeta">
+        <button class="entrega-foto" type="button" data-entrega-imagen="img/entregas-02.jpeg" aria-label="Ampliar segunda entrega real">
         <img
           src="img/entregas-02.jpeg"
           alt="Clienta mostrando su entrega de Aitana Make Up"
@@ -781,8 +669,29 @@
           loading="lazy"
           decoding="async"
         >
+          <span class="entrega-badge">✓ ENTREGA REAL</span>
+        </button>
       </figure>
     </div>
+
+    <div class="entregas-proximas" aria-label="Más entregas próximamente">
+      <span class="entregas-indicadores" aria-hidden="true">
+        <i class="activo"></i><i></i>
+      </span>
+      <span>Más entregas próximamente ✨</span>
+    </div>
+
+    <div class="entregas-confianza" aria-label="Confianza Aitana">
+      <span>📦 Envíos a todo el Perú</span>
+      <span>💬 Pedidos por WhatsApp</span>
+    </div>
+
+    <a
+      class="entregas-cta"
+      href="https://wa.me/51982797861?text=Hola%20Aitana%20Make%20Up,%20quiero%20hacer%20mi%20pedido"
+      target="_blank"
+      rel="noopener noreferrer"
+    >💕 Quiero hacer mi pedido</a>
   </div>
 </section>
 
@@ -921,6 +830,11 @@
 
 <!-- MODAL PARA VER TONOS / DETALLES -->
 
+<div class="entrega-modal" id="entregaModal" role="dialog" aria-modal="true" aria-label="Entrega real ampliada" aria-hidden="true">
+  <button class="entrega-modal-cerrar" id="entregaModalCerrar" type="button" aria-label="Cerrar fotografía ampliada">&times;</button>
+  <img id="entregaModalImagen" src="" alt="Entrega real de Aitana Make Up ampliada">
+</div>
+
 <div
   class="vista-rapida-modal"
   id="vistaRapidaModal"
@@ -1011,9 +925,9 @@
     <i class="fa-brands fa-whatsapp"></i>
     <span>WhatsApp</span>
   </a>
-  <a href="#opiniones" class="aitana-mobile-bottom-link" aria-label="Opiniones">
-    <i class="fa-solid fa-star"></i>
-    <span>Opiniones</span>
+  <a href="#entregas" class="aitana-mobile-bottom-link" aria-label="Entregas">
+    <i class="fa-solid fa-box-open"></i>
+    <span>Entregas</span>
   </a>
 </nav>
 

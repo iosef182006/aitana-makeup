@@ -1,0 +1,90 @@
+const CACHE_VERSION = "aitana-pwa-v1";
+const STATIC_CACHE = `${CACHE_VERSION}-static`;
+const NETWORK_CACHE = `${CACHE_VERSION}-network`;
+
+const ESSENTIAL_FILES = [
+  "/",
+  "/index.html",
+  "/style.css",
+  "/script.js",
+  "/revision-auth.js",
+  "/supabase-config.js",
+  "/manifest.webmanifest",
+  "/img/logo%20de%20aitana.jpeg",
+  "/img/apple-touch-icon.png",
+  "/img/icon-192.png",
+  "/img/icon-512.png",
+  "/img/icon-maskable-512.png"
+];
+
+const ICON_ASSETS = new Set([
+  "/img/logo%20de%20aitana.jpeg",
+  "/img/apple-touch-icon.png",
+  "/img/icon-192.png",
+  "/img/icon-512.png",
+  "/img/icon-maskable-512.png"
+]);
+
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(STATIC_CACHE)
+      .then(cache => cache.addAll(ESSENTIAL_FILES))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(
+        keys
+          .filter(key => key.startsWith("aitana-pwa-") && ![STATIC_CACHE, NETWORK_CACHE].includes(key))
+          .map(key => caches.delete(key))
+      ))
+      .then(() => self.clients.claim())
+  );
+});
+
+async function networkFirst(request) {
+  const cache = await caches.open(NETWORK_CACHE);
+
+  try {
+    const response = await fetch(request, { cache: "no-store" });
+    if (response && response.ok) await cache.put(request, response.clone());
+    return response;
+  } catch (error) {
+    const cached = await caches.match(request);
+    if (cached) return cached;
+    if (request.mode === "navigate") return caches.match("/index.html");
+    throw error;
+  }
+}
+
+async function cacheFirstIcon(request) {
+  const cached = await caches.match(request);
+  if (cached) return cached;
+
+  const response = await fetch(request);
+  if (response && response.ok) {
+    const cache = await caches.open(STATIC_CACHE);
+    await cache.put(request, response.clone());
+  }
+  return response;
+}
+
+self.addEventListener("fetch", event => {
+  const { request } = event;
+  if (request.method !== "GET") return;
+
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+
+  if (request.mode === "navigate" || ["style", "script"].includes(request.destination)) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
+  if (ICON_ASSETS.has(url.pathname)) {
+    event.respondWith(cacheFirstIcon(request));
+  }
+});

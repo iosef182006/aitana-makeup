@@ -2,13 +2,19 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Aitana Make Up | Maquillaje y accesorios</title>
   <meta
     name="description"
     content="Aitana Make Up: maquillaje, labiales, gloss, accesorios y productos de belleza con envíos a todo el Perú."
   >
   <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+  <meta name="theme-color" content="#f63372">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Aitana">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Aitana Make Up | Maquillaje y accesorios">
@@ -928,6 +934,21 @@
     </button>
   </div>
 </div>
+
+<aside class="pwa-ios-aviso" id="pwaIosAviso" aria-label="Guardar Aitana como aplicación" hidden>
+  <div class="pwa-ios-icono" aria-hidden="true">💗</div>
+  <div class="pwa-ios-texto">
+    <strong>Guarda Aitana como app</strong>
+    <p>Ten nuestro catálogo siempre a la mano.</p>
+    <small>En Safari toca Compartir y luego “Añadir a pantalla de inicio”.</small>
+  </div>
+  <button type="button" id="pwaIosEntendido">Entendido</button>
+</aside>
+
+<button type="button" class="pwa-android-instalar" id="pwaAndroidInstalar" hidden>
+  <img src="/img/icon-192.png" alt="" width="34" height="34">
+  <span>Instalar Aitana 💗</span>
+</button>
 
 <nav class="aitana-mobile-bottom-nav" aria-label="Navegación principal móvil">
   <a href="#inicio" class="aitana-mobile-bottom-link" aria-label="Inicio">

@@ -1,4 +1,4 @@
-const MODO_ACTUALIZACION = false;
+const MODO_ACTUALIZACION = true;
 const numeroWhatsapp = "51982797861";
 
 const esRutaRevision =
@@ -2455,6 +2455,21 @@ document.querySelectorAll(".aitana-mobile-cat").forEach(boton => {
   });
 });
 
+// Indicador visual discreto mientras quedan categorías fuera de pantalla.
+const categoriasMobile = document.getElementById("aitanaMobileCategories");
+
+function actualizarIndicadorCategorias() {
+  if (!categoriasMobile) return;
+  const quedanCategorias =
+    categoriasMobile.scrollLeft + categoriasMobile.clientWidth <
+    categoriasMobile.scrollWidth - 2;
+  categoriasMobile.classList.toggle("hay-mas-categorias", quedanCategorias);
+}
+
+categoriasMobile?.addEventListener("scroll", actualizarIndicadorCategorias, { passive: true });
+window.addEventListener("resize", actualizarIndicadorCategorias);
+window.addEventListener("load", actualizarIndicadorCategorias);
+
 
 // Atajos visuales del Home → reutilizan filtros reales del catálogo
 document
@@ -2540,3 +2555,99 @@ document.addEventListener("keydown", (evento) => {
   }
 });
 document.addEventListener("DOMContentLoaded", mostrarAnuncioAitana);
+
+
+// ======================================
+// PWA: INSTALACIÓN Y MODO STANDALONE
+// ======================================
+
+const pwaIosAviso = document.getElementById("pwaIosAviso");
+const pwaIosEntendido = document.getElementById("pwaIosEntendido");
+const pwaAndroidInstalar = document.getElementById("pwaAndroidInstalar");
+const PWA_IOS_AVISO_KEY = "aitana-pwa-ios-aviso-cerrado";
+let eventoInstalacionPwa = null;
+
+function estaEnModoStandalone() {
+  return window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+}
+
+function actualizarModoPwa() {
+  const standalone = estaEnModoStandalone();
+  document.documentElement.classList.toggle("modo-standalone", standalone);
+
+  if (standalone) {
+    if (pwaIosAviso) pwaIosAviso.hidden = true;
+    if (pwaAndroidInstalar) pwaAndroidInstalar.hidden = true;
+  }
+}
+
+function puedeMostrarInstalacionPwa() {
+  return !esRutaRevision && !MODO_ACTUALIZACION && !estaEnModoStandalone();
+}
+
+function esSafariIos() {
+  const agente = navigator.userAgent;
+  const dispositivoIos = /iPad|iPhone|iPod/.test(agente) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const otroNavegadorIos = /CriOS|FxiOS|EdgiOS|OPiOS/.test(agente);
+  return dispositivoIos && /Safari/.test(agente) && !otroNavegadorIos;
+}
+
+function mostrarAvisoIosPwa() {
+  if (!pwaIosAviso || !puedeMostrarInstalacionPwa() || !esSafariIos()) return;
+
+  try {
+    if (localStorage.getItem(PWA_IOS_AVISO_KEY) === "true") return;
+  } catch (error) {
+    // Si el almacenamiento está bloqueado, el aviso sigue siendo descartable en la sesión actual.
+  }
+
+  pwaIosAviso.hidden = false;
+}
+
+pwaIosEntendido?.addEventListener("click", () => {
+  pwaIosAviso.hidden = true;
+  try {
+    localStorage.setItem(PWA_IOS_AVISO_KEY, "true");
+  } catch (error) {
+    // Sin persistencia, simplemente se oculta durante esta carga.
+  }
+});
+
+window.addEventListener("beforeinstallprompt", evento => {
+  evento.preventDefault();
+  eventoInstalacionPwa = evento;
+  if (pwaAndroidInstalar && puedeMostrarInstalacionPwa()) {
+    pwaAndroidInstalar.hidden = false;
+  }
+});
+
+pwaAndroidInstalar?.addEventListener("click", async () => {
+  if (!eventoInstalacionPwa) return;
+  pwaAndroidInstalar.hidden = true;
+  await eventoInstalacionPwa.prompt();
+  await eventoInstalacionPwa.userChoice;
+  eventoInstalacionPwa = null;
+});
+
+window.addEventListener("appinstalled", () => {
+  eventoInstalacionPwa = null;
+  if (pwaAndroidInstalar) pwaAndroidInstalar.hidden = true;
+  actualizarModoPwa();
+});
+
+window.matchMedia("(display-mode: standalone)").addEventListener?.("change", actualizarModoPwa);
+
+document.addEventListener("DOMContentLoaded", () => {
+  actualizarModoPwa();
+  window.setTimeout(mostrarAvisoIosPwa, 1200);
+});
+
+if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/service-worker.js", { scope: "/" }).catch(() => {
+      // La web sigue funcionando normalmente si el navegador no permite el registro.
+    });
+  });
+}

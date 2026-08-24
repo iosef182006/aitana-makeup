@@ -2565,12 +2565,10 @@ const pwaIosAviso = document.getElementById("pwaIosAviso");
 const pwaIosEntendido = document.getElementById("pwaIosEntendido");
 const pwaAndroidInstalar = document.getElementById("pwaAndroidInstalar");
 const PWA_IOS_AVISO_KEY = "aitana-pwa-ios-aviso-cerrado";
-const PWA_SPLASH_KEY = "aitanaSplashUltimaVez";
-const PWA_SPLASH_VERSION_KEY = "aitanaSplashVersion";
-const PWA_SPLASH_VERSION = "2";
-const PWA_SPLASH_INTERVALO = 4 * 60 * 60 * 1000;
 const aitanaSplash = document.getElementById("aitanaSplash");
 let eventoInstalacionPwa = null;
+let splashAitanaActiva = false;
+let splashAitanaOcultaDesde = 0;
 
 function estaEnModoStandalone() {
   return window.matchMedia("(display-mode: standalone)").matches ||
@@ -2587,29 +2585,26 @@ function actualizarModoPwa() {
   }
 }
 
-function mostrarSplashPwa() {
-  if (!aitanaSplash || esRutaRevision || MODO_ACTUALIZACION || !estaEnModoStandalone()) {
+function mostrarSplashPwa({ alRegresar = false } = {}) {
+  if (
+    !aitanaSplash ||
+    splashAitanaActiva ||
+    esRutaRevision ||
+    MODO_ACTUALIZACION ||
+    !estaEnModoStandalone()
+  ) {
     return;
   }
 
-  const ahora = Date.now();
-
-  try {
-    if (localStorage.getItem(PWA_SPLASH_VERSION_KEY) !== PWA_SPLASH_VERSION) {
-      localStorage.removeItem(PWA_SPLASH_KEY);
-      localStorage.setItem(PWA_SPLASH_VERSION_KEY, PWA_SPLASH_VERSION);
-    }
-
-    const ultimaVez = Number(localStorage.getItem(PWA_SPLASH_KEY)) || 0;
-    if (ahora - ultimaVez < PWA_SPLASH_INTERVALO) return;
-    localStorage.setItem(PWA_SPLASH_KEY, String(ahora));
-  } catch (error) {
-    // Si el almacenamiento no estÃ¡ disponible, se permite la intro en esta carga.
+  const tipoNavegacion = performance.getEntriesByType?.("navigation")[0]?.type;
+  if (!alRegresar && tipoNavegacion === "reload") {
+    return;
   }
 
   const movimientoReducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const duracion = movimientoReducido ? 300 : 980;
 
+  splashAitanaActiva = true;
   aitanaSplash.hidden = false;
   aitanaSplash.setAttribute("aria-hidden", "false");
   document.body.classList.add("splash-aitana-activa");
@@ -2626,9 +2621,26 @@ function mostrarSplashPwa() {
       aitanaSplash.classList.remove("splash-visible", "splash-saliendo");
       aitanaSplash.setAttribute("aria-hidden", "true");
       document.body.classList.remove("splash-aitana-activa");
+      splashAitanaActiva = false;
     }, movimientoReducido ? 0 : 220);
   }, duracion);
 }
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
+    splashAitanaOcultaDesde = Date.now();
+    return;
+  }
+
+  if (
+    splashAitanaOcultaDesde &&
+    Date.now() - splashAitanaOcultaDesde >= 2000
+  ) {
+    mostrarSplashPwa({ alRegresar: true });
+  }
+
+  splashAitanaOcultaDesde = 0;
+});
 
 function puedeMostrarInstalacionPwa() {
   return !esRutaRevision && !MODO_ACTUALIZACION && !estaEnModoStandalone();

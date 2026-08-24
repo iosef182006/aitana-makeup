@@ -5911,3 +5911,124 @@ html.ruta-revision:not(.revision-autorizada) body > :not(#revisionAcceso) {
     opacity: 1;
   }
 }
+
+/* Splash breve: solo JavaScript la habilita dentro de la PWA instalada. */
+body.splash-aitana-activa {
+  overflow: hidden;
+}
+
+.aitana-splash {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: grid;
+  min-height: 100dvh;
+  padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 255, 255, .78), transparent 31%),
+    linear-gradient(145deg, #fff2f7 0%, #fbd4e3 48%, #f7b9d0 100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 180ms ease, visibility 180ms ease;
+}
+
+.aitana-splash[hidden] {
+  display: none;
+}
+
+.aitana-splash.splash-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.aitana-splash.splash-saliendo {
+  opacity: 0;
+}
+
+.aitana-splash-contenido {
+  position: relative;
+  display: flex;
+  min-width: 230px;
+  flex-direction: column;
+  align-items: center;
+  color: #531128;
+  line-height: 1;
+  opacity: 0;
+  transform: scale(.94) translateY(5px);
+}
+
+.splash-visible .aitana-splash-contenido {
+  animation: aitanaSplashMarca 760ms cubic-bezier(.2, .78, .24, 1) 80ms forwards;
+}
+
+.aitana-splash-contenido strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(60px, 19vw, 82px);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -.07em;
+  text-shadow: 0 8px 24px rgba(173, 18, 76, .12);
+}
+
+.aitana-splash-contenido small {
+  margin-top: 12px;
+  padding-left: .5em;
+  color: #b30d4c;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .5em;
+  opacity: 0;
+  animation: aitanaSplashSubtitulo 360ms ease 390ms forwards;
+}
+
+.aitana-splash-destello {
+  position: absolute;
+  color: rgba(211, 20, 91, .55);
+  font-size: 18px;
+  opacity: 0;
+}
+
+.destello-a { top: -28px; right: 7px; }
+.destello-b { bottom: -34px; left: 18px; font-size: 12px; }
+.destello-c { top: 12px; left: -17px; font-size: 10px; }
+
+.splash-visible .aitana-splash-destello {
+  animation: aitanaSplashDestello 620ms ease 360ms forwards;
+}
+
+.splash-visible .destello-b { animation-delay: 470ms; }
+.splash-visible .destello-c { animation-delay: 570ms; }
+
+@keyframes aitanaSplashMarca {
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes aitanaSplashSubtitulo {
+  to { opacity: 1; }
+}
+
+@keyframes aitanaSplashDestello {
+  0% { opacity: 0; transform: scale(.65) rotate(0); }
+  55% { opacity: .75; }
+  100% { opacity: .38; transform: scale(1) rotate(16deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aitana-splash,
+  .aitana-splash-contenido,
+  .aitana-splash-contenido small,
+  .aitana-splash-destello {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .aitana-splash.splash-visible,
+  .aitana-splash.splash-visible .aitana-splash-contenido,
+  .aitana-splash.splash-visible .aitana-splash-contenido small {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+}

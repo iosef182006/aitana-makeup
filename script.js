@@ -2565,6 +2565,9 @@ const pwaIosAviso = document.getElementById("pwaIosAviso");
 const pwaIosEntendido = document.getElementById("pwaIosEntendido");
 const pwaAndroidInstalar = document.getElementById("pwaAndroidInstalar");
 const PWA_IOS_AVISO_KEY = "aitana-pwa-ios-aviso-cerrado";
+const PWA_SPLASH_KEY = "aitanaSplashUltimaVez";
+const PWA_SPLASH_INTERVALO = 4 * 60 * 60 * 1000;
+const aitanaSplash = document.getElementById("aitanaSplash");
 let eventoInstalacionPwa = null;
 
 function estaEnModoStandalone() {
@@ -2580,6 +2583,44 @@ function actualizarModoPwa() {
     if (pwaIosAviso) pwaIosAviso.hidden = true;
     if (pwaAndroidInstalar) pwaAndroidInstalar.hidden = true;
   }
+}
+
+function mostrarSplashPwa() {
+  if (!aitanaSplash || esRutaRevision || MODO_ACTUALIZACION || !estaEnModoStandalone()) {
+    return;
+  }
+
+  const ahora = Date.now();
+
+  try {
+    const ultimaVez = Number(localStorage.getItem(PWA_SPLASH_KEY)) || 0;
+    if (ahora - ultimaVez < PWA_SPLASH_INTERVALO) return;
+    localStorage.setItem(PWA_SPLASH_KEY, String(ahora));
+  } catch (error) {
+    // Si el almacenamiento no estÃ¡ disponible, se permite la intro en esta carga.
+  }
+
+  const movimientoReducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const duracion = movimientoReducido ? 300 : 980;
+
+  aitanaSplash.hidden = false;
+  aitanaSplash.setAttribute("aria-hidden", "false");
+  document.body.classList.add("splash-aitana-activa");
+
+  requestAnimationFrame(() => {
+    aitanaSplash.classList.add("splash-visible");
+  });
+
+  window.setTimeout(() => {
+    aitanaSplash.classList.add("splash-saliendo");
+
+    window.setTimeout(() => {
+      aitanaSplash.hidden = true;
+      aitanaSplash.classList.remove("splash-visible", "splash-saliendo");
+      aitanaSplash.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("splash-aitana-activa");
+    }, movimientoReducido ? 0 : 220);
+  }, duracion);
 }
 
 function puedeMostrarInstalacionPwa() {
@@ -2641,6 +2682,7 @@ window.matchMedia("(display-mode: standalone)").addEventListener?.("change", act
 
 document.addEventListener("DOMContentLoaded", () => {
   actualizarModoPwa();
+  mostrarSplashPwa();
   window.setTimeout(mostrarAvisoIosPwa, 1200);
 });
 

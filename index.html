@@ -29,7 +29,43 @@
     :root, html, body, #aitanaSplash, .aitana-splash {
       background-color: #fff3f8;
     }
+
+    html.aitana-splash-pendiente body > :not(#aitanaSplash) {
+      visibility: hidden !important;
+    }
+
+    html.aitana-splash-pendiente #aitanaSplash[hidden] {
+      display: grid;
+      opacity: 1;
+      visibility: visible;
+    }
   </style>
+
+  <script>
+    window.AITANA_CONFIG = Object.freeze({ modoActualizacion: false });
+
+    (() => {
+      const rutaActual = window.location.pathname.replace(/\/+$/, "");
+      const standalone = window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true;
+      const tipoNavegacion = performance.getEntriesByType?.("navigation")[0]?.type;
+      const prepararSplash =
+        standalone &&
+        rutaActual !== "/revision" &&
+        !window.AITANA_CONFIG.modoActualizacion &&
+        tipoNavegacion !== "reload";
+
+      window.AITANA_SPLASH_PREPARADA = prepararSplash;
+      if (!prepararSplash) return;
+
+      document.documentElement.classList.add("aitana-splash-pendiente");
+      window.setTimeout(() => {
+        if (!document.documentElement.classList.contains("aitana-splash-pendiente")) return;
+        window.AITANA_SPLASH_FALLBACK = true;
+        document.documentElement.classList.remove("aitana-splash-pendiente");
+      }, 2500);
+    })();
+  </script>
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Aitana Make Up | Maquillaje y accesorios">

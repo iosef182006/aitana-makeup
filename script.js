@@ -1,4 +1,4 @@
-const MODO_ACTUALIZACION = false;
+const MODO_ACTUALIZACION = window.AITANA_CONFIG?.modoActualizacion === true;
 const numeroWhatsapp = "51982797861";
 
 const esRutaRevision =
@@ -2600,6 +2600,8 @@ function mostrarSplashPwa({ alRegresar = false } = {}) {
     return;
   }
 
+  if (!alRegresar && window.AITANA_SPLASH_FALLBACK) return;
+
   const tipoNavegacion = performance.getEntriesByType?.("navigation")[0]?.type;
   if (!alRegresar && tipoNavegacion === "reload") {
     return;
@@ -2613,9 +2615,15 @@ function mostrarSplashPwa({ alRegresar = false } = {}) {
   aitanaSplash.setAttribute("aria-hidden", "false");
   document.body.classList.add("splash-aitana-activa");
 
-  requestAnimationFrame(() => {
+  if (window.AITANA_SPLASH_PREPARADA) {
     aitanaSplash.classList.add("splash-visible");
-  });
+    document.documentElement.classList.remove("aitana-splash-pendiente");
+    window.AITANA_SPLASH_PREPARADA = false;
+  } else {
+    requestAnimationFrame(() => {
+      aitanaSplash.classList.add("splash-visible");
+    });
+  }
 
   window.setTimeout(() => {
     aitanaSplash.classList.add("splash-saliendo");
@@ -2625,6 +2633,7 @@ function mostrarSplashPwa({ alRegresar = false } = {}) {
       aitanaSplash.classList.remove("splash-visible", "splash-saliendo");
       aitanaSplash.setAttribute("aria-hidden", "true");
       document.body.classList.remove("splash-aitana-activa");
+      document.documentElement.classList.remove("aitana-splash-pendiente");
       splashAitanaActiva = false;
     }, movimientoReducido ? 0 : 220);
   }, duracion);

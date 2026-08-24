@@ -448,6 +448,37 @@ body {
   cursor: zoom-in;
 }
 
+.producto-favorito {
+  position: absolute;
+  z-index: 8;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.85);
+  border-radius: 50%;
+  color: #bd2a61;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 5px 16px rgba(84,29,49,.13);
+  font-size: 19px;
+  cursor: pointer;
+  transition: color .2s ease, transform .2s ease, background .2s ease;
+}
+
+.producto-favorito.activo {
+  color: #ef3478;
+  background: #fff0f6;
+}
+
+.producto-favorito.pop { animation: favorito-pop .22s ease; }
+
+@keyframes favorito-pop {
+  50% { transform: scale(1.25); }
+}
+
 .vista-rapida-pista {
   position: absolute;
   right: 12px;
@@ -661,16 +692,32 @@ body {
   color: #934052;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 768px) {
   .vista-rapida-modal {
     align-items: end;
-    padding: 10px;
+    padding: 10px 10px 0;
   }
 
   .vista-rapida-contenido {
     width: 100%;
     max-height: 92vh;
-    border-radius: 24px 24px 18px 18px;
+    border-radius: 26px 26px 0 0;
+    transform: translateY(100%);
+  }
+
+  .vista-rapida-modal.activo .vista-rapida-contenido { transform: translateY(0); }
+
+  .vista-rapida-contenido::before {
+    content: "";
+    position: sticky;
+    z-index: 6;
+    top: 8px;
+    display: block;
+    width: 42px;
+    height: 5px;
+    margin: 8px auto -13px;
+    border-radius: 99px;
+    background: #dec4cf;
   }
 
   .vista-rapida-cuerpo {
@@ -691,6 +738,8 @@ body {
   .vista-rapida-info {
     padding: 20px 22px 24px;
   }
+
+  .vista-rapida-stock { margin: 0 0 7px; }
 
   .vista-rapida-info h2 {
     margin: 6px 42px 8px 0;
@@ -935,6 +984,8 @@ body {
 .consulta-multiple-panel[hidden] {
   display: none;
 }
+
+.consulta-multiple-ver { display: none; }
 
 .consulta-multiple-resumen,
 .consulta-multiple-acciones {
@@ -2936,6 +2987,8 @@ footer {
   display: none;
 }
 
+.mobile-sheet { display: none; }
+
 @media (max-width: 768px) {
 
   html {
@@ -2946,6 +2999,169 @@ footer {
     overflow-x: hidden;
     padding-bottom: calc(56px + env(safe-area-inset-bottom, 0));
   }
+
+  body.mobile-sheet-abierto,
+  body:has(.vista-rapida-modal.activo) {
+    overflow: hidden;
+  }
+
+  .mobile-sheet {
+    position: fixed;
+    z-index: 100002;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    background: rgba(46,16,27,.58);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease, visibility .2s ease;
+  }
+
+  .mobile-sheet[hidden] { display: none; }
+  .mobile-sheet.activo { opacity: 1; visibility: visible; }
+
+  .mobile-sheet-panel {
+    width: 100%;
+    max-height: min(82vh, 720px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 8px 16px calc(18px + env(safe-area-inset-bottom, 0));
+    border-radius: 26px 26px 0 0;
+    background: #fffafb;
+    box-shadow: 0 -16px 45px rgba(54,20,34,.2);
+    transform: translateY(100%);
+    transition: transform .22s ease;
+  }
+
+  .mobile-sheet.activo .mobile-sheet-panel { transform: translateY(0); }
+
+  .mobile-sheet-handle {
+    width: 42px;
+    height: 5px;
+    margin: 0 auto 9px;
+    border-radius: 99px;
+    background: #dec4cf;
+  }
+
+  .mobile-sheet-header {
+    position: sticky;
+    z-index: 2;
+    top: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0 12px;
+    background: #fffafb;
+  }
+
+  .mobile-sheet-header h2 {
+    margin: 0;
+    color: #38232d;
+    font-size: 22px;
+  }
+
+  .mobile-sheet-cerrar {
+    display: grid;
+    place-items: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: #9e204e;
+    background: #fbe8f0;
+    font-size: 28px;
+  }
+
+  .mobile-sheet-lista {
+    display: grid;
+    gap: 10px;
+  }
+
+  .mobile-sheet-producto {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 11px;
+    padding: 9px;
+    border: 1px solid #f2d7e1;
+    border-radius: 17px;
+    background: #fff;
+  }
+
+  .mobile-sheet-miniatura {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #fff7fa;
+  }
+
+  .mobile-sheet-miniatura img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .mobile-sheet-producto-info { min-width: 0; text-align: left; }
+  .mobile-sheet-producto-info h3 {
+    margin: 0 0 5px;
+    overflow: hidden;
+    color: #3d2c34;
+    font-size: 13px;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+  }
+  .mobile-sheet-producto-info strong { color: #e32c70; font-size: 14px; }
+
+  .mobile-sheet-quitar {
+    min-height: 44px;
+    padding: 8px 9px;
+    border: 0;
+    color: #9b6579;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 750;
+    text-decoration: underline;
+  }
+
+  .mobile-sheet-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 50px;
+    margin-top: 14px;
+    border: 0;
+    border-radius: 16px;
+    color: #fff;
+    background: #20a85e;
+    font: inherit;
+    font-weight: 800;
+  }
+
+  .mobile-sheet-whatsapp[hidden] { display: none; }
+
+  .mobile-sheet-vacio {
+    padding: 36px 18px 42px;
+    text-align: center;
+  }
+
+  .mobile-sheet-vacio > span {
+    display: block;
+    margin-bottom: 8px;
+    color: #ed4f8c;
+    font-size: 45px;
+  }
+
+  .mobile-sheet-vacio h3 { margin: 0 0 7px; color: #3d2932; font-size: 18px; }
+  .mobile-sheet-vacio p { max-width: 270px; margin: 0 auto; color: #856d77; font-size: 13px; line-height: 1.5; }
 
   /* ---- margen lateral 16-20px ---- */
 
@@ -3289,6 +3505,7 @@ footer {
   }
 
   .aitana-mobile-product {
+    position: relative;
     flex: 0 0 84%;
     scroll-snap-align: start;
     min-width: 0;
@@ -3301,6 +3518,16 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 8px;
+  }
+
+  .producto-favorito {
+    width: 44px;
+    height: 44px;
+  }
+
+  .producto-favorito-mobile {
+    top: 8px;
+    right: 8px;
   }
 
   .aitana-mobile-product img {
@@ -3359,32 +3586,44 @@ footer {
     transform: none;
     z-index: 5002;
     width: auto;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    padding: 10px 12px;
-    border-radius: 18px;
+    min-height: 50px;
+    gap: 10px;
+    padding: 7px 8px 7px 12px;
+    border-radius: 16px;
   }
 
   .consulta-multiple-resumen {
-    justify-content: center;
-  }
-
-  .consulta-multiple-acciones {
-    width: 100%;
-  }
-
-  .consulta-multiple-whatsapp {
     flex: 1;
+    justify-content: flex-start;
     min-width: 0;
+    font-size: 12px;
+  }
+
+  .consulta-multiple-acciones { display: none; }
+
+  .consulta-multiple-ver {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 70px;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 13px;
+    color: #fff;
+    background: #f63372;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
   }
 
   body.consulta-multiple-activa {
-    padding-bottom: calc(180px + env(safe-area-inset-bottom, 0));
+    padding-bottom: calc(126px + env(safe-area-inset-bottom, 0));
   }
 
   body.consulta-multiple-activa .volver-arriba {
-    bottom: calc(190px + env(safe-area-inset-bottom, 0));
+    bottom: calc(132px + env(safe-area-inset-bottom, 0));
   }
 
   /* ---- CTA WhatsApp ---- */
@@ -3419,10 +3658,19 @@ footer {
     border-radius: 14px;
   }
 
-  /* ---- WhatsApp flotante de escritorio: oculto en móvil ---- */
+  /* ---- WhatsApp flotante permanece disponible en móvil ---- */
 
   .whatsapp-flotante {
-    display: none;
+    display: flex;
+    right: 16px;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0));
+    width: 50px;
+    height: 50px;
+    transition: bottom .2s ease, transform .2s ease;
+  }
+
+  body.consulta-multiple-activa .whatsapp-flotante {
+    bottom: calc(132px + env(safe-area-inset-bottom, 0));
   }
 
   /* ---- Volver arriba: sobre el bottom-nav ---- */
@@ -3462,8 +3710,37 @@ footer {
     padding: 4px 4px 6px;
     border-radius: 8px;
     transition: .2s;
-    flex: 1;
+    flex: 0 0 25%;
+    width: 25%;
+    min-width: 0;
+    box-sizing: border-box;
+    position: relative;
+    min-height: 44px;
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
   }
+
+  .mobile-nav-contador {
+    position: absolute;
+    top: 1px;
+    left: calc(50% + 7px);
+    display: grid;
+    place-items: center;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border: 2px solid #fff;
+    border-radius: 99px;
+    color: #fff;
+    background: #f63372;
+    font-size: 9px;
+    line-height: 1;
+  }
+
+  .mobile-nav-contador[hidden] { display: none; }
 
   .aitana-mobile-bottom-link.active {
     color: #f63372;

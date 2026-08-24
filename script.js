@@ -525,6 +525,17 @@ const productos = [
 
 
 const productosConsulta = new Set();
+const FAVORITOS_STORAGE_KEY = "aitana-favoritos";
+const productosFavoritos = new Set();
+
+try {
+  const favoritosGuardados = JSON.parse(localStorage.getItem(FAVORITOS_STORAGE_KEY) || "[]");
+  if (Array.isArray(favoritosGuardados)) {
+    favoritosGuardados.forEach(nombre => productosFavoritos.add(nombre));
+  }
+} catch (error) {
+  // La página continúa sin persistencia si el navegador bloquea el almacenamiento.
+}
 
 
 
@@ -687,6 +698,16 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
 
       <div class="producto-imagen">
 
+        <button
+          type="button"
+          class="producto-favorito"
+          data-favorito-index="${index}"
+          aria-label="Agregar ${producto.nombre} a favoritos"
+          aria-pressed="false"
+        >
+          <i class="fa-regular fa-heart" aria-hidden="true"></i>
+        </button>
+
         ${
           producto.nuevo === true
           ? `<div class="etiqueta-nuevo">✨ NUEVO</div>`
@@ -840,6 +861,106 @@ function crearProductos() {
 
 crearProductos();
 
+const favoritosSheet = document.getElementById("favoritosSheet");
+const favoritosLista = document.getElementById("favoritosLista");
+const consultaSheet = document.getElementById("consultaSheet");
+const consultaSheetLista = document.getElementById("consultaSheetLista");
+let sheetAbierto = null;
+let elementoAntesSheet = null;
+
+function guardarFavoritos() {
+  try {
+    localStorage.setItem(FAVORITOS_STORAGE_KEY, JSON.stringify([...productosFavoritos]));
+  } catch (error) {
+    // La interfaz sigue funcionando aunque el navegador bloquee localStorage.
+  }
+}
+
+function actualizarBotonesFavoritos() {
+  document.querySelectorAll("[data-favorito-index]").forEach(boton => {
+    const producto = productos[Number(boton.dataset.favoritoIndex)];
+    if (!producto) return;
+    const favorito = productosFavoritos.has(producto.nombre);
+    boton.classList.toggle("activo", favorito);
+    boton.setAttribute("aria-pressed", String(favorito));
+    boton.setAttribute("aria-label", `${favorito ? "Quitar" : "Agregar"} ${producto.nombre} ${favorito ? "de" : "a"} favoritos`);
+    boton.innerHTML = `<i class="${favorito ? "fa-solid" : "fa-regular"} fa-heart" aria-hidden="true"></i>`;
+  });
+}
+
+function plantillaEstadoVacio(icono, titulo, texto) {
+  return `<div class="mobile-sheet-vacio"><span aria-hidden="true">${icono}</span><h3>${titulo}</h3><p>${texto}</p></div>`;
+}
+
+function renderizarFavoritos() {
+  if (!favoritosLista) return;
+  const favoritos = productos
+    .map((producto, index) => ({ producto, index }))
+    .filter(({ producto }) => productosFavoritos.has(producto.nombre));
+
+  favoritosLista.innerHTML = favoritos.length
+    ? favoritos.map(({ producto, index }) => `
+      <article class="mobile-sheet-producto">
+        <div class="mobile-sheet-miniatura">${imagenHTML(producto.imagen, producto.nombre)}</div>
+        <div class="mobile-sheet-producto-info">
+          <h3>${producto.nombre}</h3>
+          <strong>S/${producto.precio}</strong>
+        </div>
+        <button type="button" class="mobile-sheet-quitar" data-favorito-index="${index}" aria-label="Quitar ${producto.nombre} de favoritos">Quitar</button>
+      </article>`).join("")
+    : plantillaEstadoVacio("♡", "Aún no tienes favoritos", "Toca el corazón de un producto para guardarlo aquí.");
+}
+
+function alternarFavorito(index, boton) {
+  const producto = productos[index];
+  if (!producto) return;
+  if (productosFavoritos.has(producto.nombre)) productosFavoritos.delete(producto.nombre);
+  else productosFavoritos.add(producto.nombre);
+  guardarFavoritos();
+  actualizarBotonesFavoritos();
+  renderizarFavoritos();
+  if (boton) {
+    boton.classList.remove("pop");
+    requestAnimationFrame(() => boton.classList.add("pop"));
+  }
+}
+
+function abrirMobileSheet(sheet) {
+  if (!sheet) return;
+  elementoAntesSheet = document.activeElement;
+  sheet.hidden = false;
+  requestAnimationFrame(() => sheet.classList.add("activo"));
+  sheet.setAttribute("aria-hidden", "false");
+  document.body.classList.add("mobile-sheet-abierto");
+  sheetAbierto = sheet;
+  abrirFavoritos?.classList.toggle("active", sheet === favoritosSheet);
+  abrirMiConsulta?.classList.toggle("active", sheet === consultaSheet);
+  sheet.querySelector(".mobile-sheet-cerrar")?.focus();
+}
+
+function cerrarMobileSheet(sheet = sheetAbierto) {
+  if (!sheet) return;
+  sheet.classList.remove("activo");
+  sheet.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("mobile-sheet-abierto");
+  setTimeout(() => { if (!sheet.classList.contains("activo")) sheet.hidden = true; }, 220);
+  sheetAbierto = null;
+  abrirFavoritos?.classList.remove("active");
+  abrirMiConsulta?.classList.remove("active");
+  elementoAntesSheet?.focus();
+}
+
+document.addEventListener("click", (evento) => {
+  const botonFavorito = evento.target.closest("[data-favorito-index]");
+  if (botonFavorito) {
+    evento.preventDefault();
+    evento.stopPropagation();
+    alternarFavorito(Number(botonFavorito.dataset.favoritoIndex), botonFavorito);
+  }
+});
+
+actualizarBotonesFavoritos();
+
 
 const panelConsultaMultiple =
   document.getElementById("consultaMultiplePanel");
@@ -852,6 +973,33 @@ const limpiarConsulta =
 
 const enviarConsultaWhatsapp =
   document.getElementById("enviarConsultaWhatsapp");
+
+const verConsultaMobile = document.getElementById("verConsultaMobile");
+const abrirMiConsulta = document.getElementById("abrirMiConsulta");
+const abrirFavoritos = document.getElementById("abrirFavoritos");
+const mobileConsultaContador = document.getElementById("mobileConsultaContador");
+const consultaSheetWhatsapp = document.getElementById("consultaSheetWhatsapp");
+
+function renderizarConsultaSheet() {
+  if (!consultaSheetLista) return;
+  const seleccionados = [...productosConsulta]
+    .map(index => ({ producto: productos[index], index }))
+    .filter(({ producto }) => producto);
+
+  consultaSheetLista.innerHTML = seleccionados.length
+    ? seleccionados.map(({ producto, index }) => `
+      <article class="mobile-sheet-producto">
+        <div class="mobile-sheet-miniatura">${imagenHTML(producto.imagen, producto.nombre)}</div>
+        <div class="mobile-sheet-producto-info">
+          <h3>${producto.nombre}</h3>
+          <strong>S/${producto.precio}</strong>
+        </div>
+        <button type="button" class="mobile-sheet-quitar" data-consulta-quitar-index="${index}" aria-label="Quitar ${producto.nombre} de mi consulta">Quitar</button>
+      </article>`).join("")
+    : plantillaEstadoVacio("🛍️", "Tu consulta está vacía", "Agrega productos y aparecerán aquí para consultarlos juntos.");
+
+  if (consultaSheetWhatsapp) consultaSheetWhatsapp.hidden = seleccionados.length === 0;
+}
 
 
 function actualizarConsultaMultiple() {
@@ -866,6 +1014,11 @@ function actualizarConsultaMultiple() {
 
   if (panelConsultaMultiple) {
     panelConsultaMultiple.hidden = cantidad === 0;
+  }
+
+  if (mobileConsultaContador) {
+    mobileConsultaContador.hidden = cantidad === 0;
+    mobileConsultaContador.textContent = String(cantidad);
   }
 
   document.body.classList.toggle(
@@ -892,6 +1045,8 @@ function actualizarConsultaMultiple() {
         ? "✓ Agregado"
         : "+ Agregar a consulta";
     });
+
+  renderizarConsultaSheet();
 
 }
 
@@ -965,6 +1120,69 @@ if (enviarConsultaWhatsapp) {
   });
 }
 
+function abrirConsultaSheet() {
+  renderizarConsultaSheet();
+  abrirMobileSheet(consultaSheet);
+}
+
+verConsultaMobile?.addEventListener("click", abrirConsultaSheet);
+abrirMiConsulta?.addEventListener("click", abrirConsultaSheet);
+abrirFavoritos?.addEventListener("click", () => {
+  renderizarFavoritos();
+  abrirMobileSheet(favoritosSheet);
+});
+
+consultaSheetWhatsapp?.addEventListener("click", () => {
+  if (!productosConsulta.size) return;
+  const url = `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(crearMensajeConsulta())}`;
+  window.open(url, "_blank", "noopener,noreferrer");
+});
+
+document.addEventListener("click", (evento) => {
+  const quitarConsulta = evento.target.closest("[data-consulta-quitar-index]");
+  if (quitarConsulta) {
+    alternarProductoConsulta(Number(quitarConsulta.dataset.consultaQuitarIndex));
+    return;
+  }
+
+  const cerrar = evento.target.closest("[data-cerrar-sheet]");
+  if (cerrar) cerrarMobileSheet(document.getElementById(cerrar.dataset.cerrarSheet));
+});
+
+[favoritosSheet, consultaSheet].forEach(sheet => {
+  sheet?.addEventListener("click", evento => {
+    if (evento.target === sheet) cerrarMobileSheet(sheet);
+  });
+});
+
+function habilitarCierrePorGesto(panel, cerrar) {
+  if (!panel) return;
+  let inicioY = 0;
+  let desplazamiento = 0;
+
+  panel.addEventListener("touchstart", evento => {
+    if (panel.scrollTop > 0) return;
+    inicioY = evento.touches[0].clientY;
+    desplazamiento = 0;
+  }, { passive: true });
+
+  panel.addEventListener("touchmove", evento => {
+    if (!inicioY || panel.scrollTop > 0) return;
+    desplazamiento = Math.max(0, evento.touches[0].clientY - inicioY);
+    if (desplazamiento) panel.style.transform = `translateY(${Math.min(desplazamiento, 150)}px)`;
+  }, { passive: true });
+
+  panel.addEventListener("touchend", () => {
+    panel.style.transform = "";
+    if (desplazamiento > 90) cerrar();
+    inicioY = 0;
+    desplazamiento = 0;
+  });
+}
+
+habilitarCierrePorGesto(favoritosSheet?.querySelector(".mobile-sheet-panel"), () => cerrarMobileSheet(favoritosSheet));
+habilitarCierrePorGesto(consultaSheet?.querySelector(".mobile-sheet-panel"), () => cerrarMobileSheet(consultaSheet));
+
 
 // ======================================
 // VISTA RÁPIDA DEL PRODUCTO
@@ -1010,13 +1228,13 @@ function abrirVistaRapida(index) {
     </div>
 
     <div class="vista-rapida-info">
-      <span class="vista-rapida-categoria">${producto.categoria}</span>
-      <h2 id="vistaRapidaTitulo">${producto.nombre}</h2>
-      <div class="vista-rapida-precio">S/${producto.precio}</div>
       <div class="vista-rapida-stock ${producto.agotado ? "agotado" : "disponible"}">
         <i class="fa-solid ${producto.agotado ? "fa-circle-xmark" : "fa-circle-check"}" aria-hidden="true"></i>
         ${producto.agotado ? "Agotado" : "Disponible"}
       </div>
+      <span class="vista-rapida-categoria">${producto.categoria}</span>
+      <h2 id="vistaRapidaTitulo">${producto.nombre}</h2>
+      <div class="vista-rapida-precio">S/${producto.precio}</div>
 
       <div class="vista-rapida-acciones">
         ${producto.agotado ? `
@@ -1042,7 +1260,7 @@ function abrirVistaRapida(index) {
         `}
         ${producto.detalles && producto.detalles.length ? `
           <button type="button" class="vista-rapida-tonos" data-vista-tonos-index="${index}">
-            Ver tonos o detalles
+            Ver tonos disponibles
           </button>
         ` : ""}
       </div>
@@ -1083,8 +1301,13 @@ vistaRapidaModal.addEventListener("click", (e) => {
 });
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") cerrarVistaRapida();
+  if (e.key === "Escape") {
+    cerrarVistaRapida();
+    cerrarMobileSheet();
+  }
 });
+
+habilitarCierrePorGesto(vistaRapidaModal.querySelector(".vista-rapida-contenido"), cerrarVistaRapida);
 
 
 actualizarConsultaMultiple();
@@ -2126,6 +2349,15 @@ function renderizarMobileProductos() {
       );
 
     tarjeta.innerHTML = `
+      <button
+        type="button"
+        class="producto-favorito producto-favorito-mobile"
+        data-favorito-index="${index}"
+        aria-label="Agregar ${producto.nombre} a favoritos"
+        aria-pressed="false"
+      >
+        <i class="fa-regular fa-heart" aria-hidden="true"></i>
+      </button>
       <a href="${hrefWA}" target="_blank" rel="noopener noreferrer" aria-label="Consultar ${producto.nombre} por WhatsApp">
         ${imagenHTML(producto.imagen, producto.nombre)}
       </a>
@@ -2149,6 +2381,7 @@ function renderizarMobileProductos() {
   });
 
   actualizarConsultaMultiple();
+  actualizarBotonesFavoritos();
 }
 
 function sincronizarBottomNav() {

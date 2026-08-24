@@ -884,9 +884,13 @@
   hidden
 >
   <div class="consulta-multiple-resumen">
-    <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
+    <span aria-hidden="true">🛍️</span>
     <span id="consultaMultipleContador">0 productos seleccionados</span>
   </div>
+
+  <button type="button" class="consulta-multiple-ver" id="verConsultaMobile">
+    Ver <span aria-hidden="true">›</span>
+  </button>
 
   <div class="consulta-multiple-acciones">
     <button type="button" class="consulta-multiple-limpiar" id="limpiarConsulta">
@@ -899,6 +903,32 @@
   </div>
 </aside>
 
+<div class="mobile-sheet" id="favoritosSheet" role="dialog" aria-modal="true" aria-labelledby="favoritosTitulo" aria-hidden="true">
+  <div class="mobile-sheet-panel">
+    <div class="mobile-sheet-handle" aria-hidden="true"></div>
+    <div class="mobile-sheet-header">
+      <h2 id="favoritosTitulo">Mis favoritos 💕</h2>
+      <button type="button" class="mobile-sheet-cerrar" data-cerrar-sheet="favoritosSheet" aria-label="Cerrar favoritos">&times;</button>
+    </div>
+    <div class="mobile-sheet-lista" id="favoritosLista"></div>
+  </div>
+</div>
+
+<div class="mobile-sheet" id="consultaSheet" role="dialog" aria-modal="true" aria-labelledby="consultaSheetTitulo" aria-hidden="true">
+  <div class="mobile-sheet-panel">
+    <div class="mobile-sheet-handle" aria-hidden="true"></div>
+    <div class="mobile-sheet-header">
+      <h2 id="consultaSheetTitulo">Mi consulta 💕</h2>
+      <button type="button" class="mobile-sheet-cerrar" data-cerrar-sheet="consultaSheet" aria-label="Cerrar mi consulta">&times;</button>
+    </div>
+    <div class="mobile-sheet-lista" id="consultaSheetLista"></div>
+    <button type="button" class="mobile-sheet-whatsapp" id="consultaSheetWhatsapp">
+      <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+      Consultar todo por WhatsApp
+    </button>
+  </div>
+</div>
+
 <nav class="aitana-mobile-bottom-nav" aria-label="Navegación principal móvil">
   <a href="#inicio" class="aitana-mobile-bottom-link" aria-label="Inicio">
     <i class="fa-solid fa-house"></i>
@@ -908,20 +938,15 @@
     <i class="fa-solid fa-tag"></i>
     <span>Catálogo</span>
   </a>
-  <a
-    href="https://wa.me/51982797861?text=Hola%20Aitana%20Make%20Up,%20quiero%20consultar%20por%20sus%20productos"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="aitana-mobile-bottom-link"
-    aria-label="WhatsApp"
-  >
-    <i class="fa-brands fa-whatsapp"></i>
-    <span>WhatsApp</span>
-  </a>
-  <a href="#entregas" class="aitana-mobile-bottom-link" aria-label="Entregas">
-    <i class="fa-solid fa-box-open"></i>
-    <span>Entregas</span>
-  </a>
+  <button type="button" class="aitana-mobile-bottom-link" id="abrirFavoritos" aria-label="Favoritos">
+    <i class="fa-regular fa-heart"></i>
+    <span>Favoritos</span>
+  </button>
+  <button type="button" class="aitana-mobile-bottom-link" id="abrirMiConsulta" aria-label="Mi consulta">
+    <i class="fa-solid fa-bag-shopping"></i>
+    <span>Mi consulta</span>
+    <b class="mobile-nav-contador" id="mobileConsultaContador" hidden>0</b>
+  </button>
 </nav>
 
 <a

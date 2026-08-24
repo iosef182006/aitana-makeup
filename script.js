@@ -525,11 +525,46 @@ const productos = [
 
 
 const CONSULTA_ACTUALIZACION_KEY = "aitana-consulta-actualizacion";
+const CONSULTA_STORAGE_KEY = "aitana-mi-consulta";
 const productosConsulta = new Set();
 const FAVORITOS_STORAGE_KEY = "aitana-favoritos";
 const productosFavoritos = new Set();
 
+function obtenerIdProductoConsulta(producto) {
+  return producto?.imagen || "";
+}
+
+function guardarConsultaPersistente() {
+  const ids = [...productosConsulta]
+    .map(index => productos[index])
+    .filter(producto => producto && !producto.agotado)
+    .map(obtenerIdProductoConsulta)
+    .filter(Boolean);
+
+  try {
+    localStorage.setItem(CONSULTA_STORAGE_KEY, JSON.stringify(ids));
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 try {
+  const idsGuardados = JSON.parse(
+    localStorage.getItem(CONSULTA_STORAGE_KEY) || "[]"
+  );
+
+  if (Array.isArray(idsGuardados)) {
+    idsGuardados.forEach(id => {
+      const index = productos.findIndex(
+        producto => obtenerIdProductoConsulta(producto) === id
+      );
+      if (index >= 0 && !productos[index].agotado) {
+        productosConsulta.add(index);
+      }
+    });
+  }
+
   let consultaTemporal = "";
   try {
     consultaTemporal = sessionStorage.getItem(CONSULTA_ACTUALIZACION_KEY) || "";
@@ -547,12 +582,18 @@ try {
   const consultaGuardadaParaActualizar = JSON.parse(consultaTemporal || "[]");
 
   if (Array.isArray(consultaGuardadaParaActualizar)) {
-    consultaGuardadaParaActualizar.forEach(nombre => {
-      const index = productos.findIndex(producto => producto.nombre === nombre);
-      if (index >= 0) productosConsulta.add(index);
+    consultaGuardadaParaActualizar.forEach(valorGuardado => {
+      const index = productos.findIndex(producto =>
+        obtenerIdProductoConsulta(producto) === valorGuardado ||
+        producto.nombre === valorGuardado
+      );
+      if (index >= 0 && !productos[index].agotado) {
+        productosConsulta.add(index);
+      }
     });
   }
 
+  guardarConsultaPersistente();
   try { sessionStorage.removeItem(CONSULTA_ACTUALIZACION_KEY); } catch (error) {}
   try { localStorage.removeItem(CONSULTA_ACTUALIZACION_KEY); } catch (error) {}
 } catch (error) {
@@ -1095,6 +1136,7 @@ function alternarProductoConsulta(index) {
     productosConsulta.add(index);
   }
 
+  guardarConsultaPersistente();
   actualizarConsultaMultiple();
 
 }
@@ -1135,6 +1177,7 @@ document.addEventListener("click", (e) => {
 if (limpiarConsulta) {
   limpiarConsulta.addEventListener("click", () => {
     productosConsulta.clear();
+    guardarConsultaPersistente();
     actualizarConsultaMultiple();
   });
 }
@@ -2786,12 +2829,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function guardarConsultaParaActualizacion() {
+  if (guardarConsultaPersistente()) return true;
   if (!productosConsulta.size) return true;
 
-  const nombres = [...productosConsulta]
-    .map(index => productos[index]?.nombre)
+  const ids = [...productosConsulta]
+    .map(index => obtenerIdProductoConsulta(productos[index]))
     .filter(Boolean);
-  const contenido = JSON.stringify(nombres);
+  const contenido = JSON.stringify(ids);
   let guardado = false;
 
   try {

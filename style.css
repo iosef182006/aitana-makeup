@@ -6361,8 +6361,12 @@ body.splash-aitana-activa {
 
   html.modo-standalone .ver-todos-nuevos {
     min-height: 44px;
-    padding: 7px 10px;
+    max-width: 104px;
+    padding: 6px 9px;
+    border-color: rgba(244, 49, 112, .45);
+    background: rgba(255, 255, 255, .72);
     font-size: 10px;
+    font-weight: 650;
     line-height: 1.15;
   }
 
@@ -6380,18 +6384,20 @@ body.splash-aitana-activa {
   }
 
   html.modo-standalone .recien-llegados-lista .producto-reciente {
-    flex: 0 0 82%;
+    flex: 0 0 70%;
+    height: 330px;
     scroll-snap-align: start;
   }
 
   html.modo-standalone .recien-llegados-lista .producto-reciente .producto-imagen {
-    height: 138px;
+    height: 128px;
     aspect-ratio: auto;
     padding: 5px;
   }
 
   html.modo-standalone .recien-llegados-lista .producto-reciente .producto-info {
-    padding: 7px 9px 9px;
+    min-height: 0;
+    padding: 6px 8px 8px;
   }
 
   html.modo-standalone .recien-llegados-lista .producto-reciente .categoria {
@@ -6408,13 +6414,17 @@ body.splash-aitana-activa {
   }
 
   html.modo-standalone .recien-llegados-lista .producto-reciente .precio {
-    margin: 3px 0 7px;
-    font-size: 20px;
+    margin: 2px 0 5px;
+    font-size: 19px;
     line-height: 1.1;
   }
 
   html.modo-standalone .recien-llegados-lista .producto-reciente .acciones-producto {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: row;
     gap: 5px;
+    margin-top: auto;
     padding-top: 0;
   }
 
@@ -6425,6 +6435,20 @@ body.splash-aitana-activa {
     padding: 8px 9px;
     font-size: 11px;
     line-height: 1.15;
+  }
+
+  html.modo-standalone .recien-llegados-lista .producto-reciente .ver-tonos {
+    grid-column: 1;
+  }
+
+  html.modo-standalone .recien-llegados-lista .producto-reciente .whatsapp {
+    grid-column: 2;
+  }
+
+  html.modo-standalone .recien-llegados-lista .producto-reciente .acciones-producto:not(:has(.ver-tonos)) .whatsapp,
+  html.modo-standalone .recien-llegados-lista .producto-reciente .agregar-consulta,
+  html.modo-standalone .recien-llegados-lista .producto-reciente .boton-agotado {
+    grid-column: 1 / -1;
   }
 
   html.modo-standalone .whatsapp-flotante {

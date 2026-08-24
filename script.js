@@ -51,7 +51,7 @@ const productos = [
     categoria: "Tintas labiales",
     imagen: "Tinta jarusa",
     precio: "4.00",
-    agotado: true,
+    agotado: false,
     detalles: [
       "Codigo 6"
     ]

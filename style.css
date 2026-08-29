@@ -4225,10 +4225,10 @@ body.anuncio-abierto {
 
 .entregas-galeria {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 340px));
+  grid-template-columns: repeat(3, minmax(0, 300px));
   justify-content: center;
   gap: clamp(18px, 3vw, 28px);
-  width: min(740px, 100%);
+  width: min(960px, 100%);
   margin: 0 auto;
 }
 
@@ -4367,6 +4367,13 @@ body.anuncio-abierto {
 }
 
 body.entrega-modal-abierto { overflow: hidden; }
+
+@media (min-width: 769px) and (max-width: 980px) {
+  .entregas-galeria {
+    grid-template-columns: repeat(2, minmax(0, 340px));
+    width: min(740px, 100%);
+  }
+}
 
 @media (max-width: 768px) {
   .entregas-aitana {

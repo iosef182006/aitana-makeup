@@ -1,4 +1,4 @@
-const CACHE_VERSION = "aitana-pwa-v5";
+const CACHE_VERSION = "aitana-pwa-v6";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const NETWORK_CACHE = `${CACHE_VERSION}-network`;
 
@@ -14,7 +14,10 @@ const ESSENTIAL_FILES = [
   "/img/apple-touch-icon.png",
   "/img/icon-192.png",
   "/img/icon-512.png",
-  "/img/icon-maskable-512.png"
+  "/img/icon-maskable-512.png",
+  "/img/entregas-01-rostro-difuminado.png",
+  "/img/entregas-02-rostro-difuminado.png",
+  "/img/entregas-03-rostro-difuminado.png"
 ];
 
 const ICON_ASSETS = new Set([

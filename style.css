@@ -4530,6 +4530,17 @@ body.entrega-modal-abierto { overflow: hidden; }
   min-height: 2.4em;
 }
 
+.producto-nota,
+.vista-rapida-nota {
+  color: #c72b62;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.vista-rapida-nota {
+  margin: 4px 0 0;
+}
+
 .acciones-producto {
   width: 100%;
 }

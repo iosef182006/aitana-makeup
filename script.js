@@ -224,6 +224,16 @@ const productos = [
   },
 
   {
+    nombre: "Rubor en Crema Samantha",
+    categoria: "Rostro",
+    imagen: "rubor-crema-samantha",
+    precio: "7.00",
+    agotado: false,
+    nuevo: true,
+    nota: "Tonos disponibles ✨💗"
+  },
+
+  {
     nombre: "Iluminador Compacto Revel",
     categoria: "Rostro",
     imagen: "iluminador",
@@ -706,6 +716,7 @@ const dimensionesImagenes = {
   "polvo translucido banana jarusa": [480, 640],
   "rizadores": [576, 768],
   "rubor liquido": [480, 640],
+  "rubor-crema-samantha": [960, 1280],
   "set-lima-saca-cuticula-akoya": [1153, 1280],
   "set-peine-espejo": [1280, 1278],
   "Tinta jarusa": [480, 640],
@@ -879,6 +890,8 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
         <span class="categoria">
           ${producto.categoria}
         </span>
+
+        ${producto.nota ? `<span class="producto-nota">${producto.nota}</span>` : ""}
 
 
         <h3>
@@ -1357,6 +1370,7 @@ function abrirVistaRapida(index) {
         ${producto.agotado ? "Agotado" : "Disponible"}
       </div>
       <span class="vista-rapida-categoria">${producto.categoria}</span>
+      ${producto.nota ? `<p class="vista-rapida-nota">${producto.nota}</p>` : ""}
       <h2 id="vistaRapidaTitulo">${producto.nombre}</h2>
       <div class="vista-rapida-precio">S/${producto.precio}</div>
 

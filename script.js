@@ -539,7 +539,7 @@ const productos = [
     imagen: "toallitas-ecorincia",
     precio: "3.50",
     agotado: false,
-    nuevo: true
+    nuevo: false
   },
 
   {

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Migración Aitana — uso local</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 860px; margin: 0 auto; padding: 24px; background: #fff8fb; color: #30232a; }
+    button { min-height: 44px; padding: 0 18px; border: 0; border-radius: 12px; background: #f52f70; color: white; font-weight: 700; cursor: pointer; }
+    button:disabled { opacity: .55; cursor: wait; }
+    form { display: grid; gap: 12px; max-width: 420px; margin: 18px 0; padding: 16px; border: 1px solid #f0cbd8; border-radius: 12px; background: white; }
+    label { display: grid; gap: 6px; font-weight: 600; }
+    input { min-height: 44px; padding: 0 12px; border: 1px solid #dcb7c4; border-radius: 10px; font: inherit; }
+    [hidden] { display: none !important; }
+    pre { min-height: 240px; padding: 16px; border: 1px solid #f0cbd8; border-radius: 12px; background: white; white-space: pre-wrap; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <h1>Migración privada Aitana</h1>
+  <p>Ejecutor local autenticado. No usa ni contiene una service role.</p>
+  <form id="migrationLogin" hidden>
+    <strong>Inicia sesión para autorizar las escrituras</strong>
+    <label>Correo<input id="migrationEmail" type="email" autocomplete="username" required></label>
+    <label>Contraseña<input id="migrationPassword" type="password" autocomplete="current-password" required></label>
+    <button id="migrationLoginButton" type="submit">Iniciar sesión y continuar</button>
+    <small id="migrationLoginError" role="alert"></small>
+  </form>
+  <button id="runMigration" type="button">Ejecutar migración segura</button>
+  <pre id="output" role="status">Esperando ejecución…</pre>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
+  <script src="/supabase-config.js"></script>
+  <script src="/migration/catalog-migrate.js"></script>
+</body>
+</html>

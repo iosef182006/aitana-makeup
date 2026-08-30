@@ -986,6 +986,24 @@ body.vista-rapida-abierta .volver-arriba {
     margin-top: 0;
   }
 
+  html.modo-standalone body.pwa-vista-favoritos #productos,
+  html.modo-standalone body.pwa-vista-favoritos .hero,
+  html.modo-standalone body.pwa-vista-favoritos .home-premium,
+  html.modo-standalone body.pwa-vista-favoritos .entregas-aitana,
+  html.modo-standalone body.pwa-vista-favoritos .ayuda,
+  html.modo-standalone body.pwa-vista-favoritos footer {
+    display: none !important;
+  }
+
+  html.modo-standalone body.pwa-vista-consulta #productos,
+  html.modo-standalone body.pwa-vista-consulta .hero,
+  html.modo-standalone body.pwa-vista-consulta .home-premium,
+  html.modo-standalone body.pwa-vista-consulta .entregas-aitana,
+  html.modo-standalone body.pwa-vista-consulta .ayuda,
+  html.modo-standalone body.pwa-vista-consulta footer {
+    display: none !important;
+  }
+
   html.modo-standalone .pwa-pantalla-kicker,
   html.modo-standalone .pwa-pantalla-subtitulo,
   html.modo-standalone .pwa-pantalla-contador {
@@ -4850,10 +4868,10 @@ body.anuncio-abierto {
 
 .entregas-galeria {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 300px));
+  grid-template-columns: repeat(4, minmax(0, 260px));
   justify-content: center;
-  gap: clamp(18px, 3vw, 28px);
-  width: min(960px, 100%);
+  gap: clamp(16px, 2.5vw, 24px);
+  width: min(100%, 1120px);
   margin: 0 auto;
 }
 
@@ -4878,6 +4896,15 @@ body.anuncio-abierto {
   border-radius: 19px;
   background: #fff8fb;
   cursor: zoom-in;
+  transition: transform .3s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s ease;
+}
+
+.entrega-foto:hover {
+  transform: scale(1.04);
+}
+
+.entrega-tarjeta:hover {
+  box-shadow: 0 20px 48px rgba(168, 71, 113, .18);
 }
 
 .entrega-foto img {

@@ -1371,6 +1371,7 @@ function ocultarPantallasPwa() {
   });
   sheetAbierto = null;
   document.body.classList.remove("mobile-sheet-abierto");
+  document.body.style.overflow = "";
 }
 
 function actualizarBloquesVistaPwa(vista) {
@@ -1413,9 +1414,11 @@ function navegarVistaPwa(vista, opciones = {}) {
     const pantalla = vista === "favoritos" ? pwaFavoritosVista : pwaConsultaVista;
     if (vista === "favoritos") renderizarFavoritos();
     else renderizarConsultaSheet();
+    document.body.style.overflow = "hidden";
     pantalla.hidden = false;
     pantalla.scrollTo({ top: 0 });
   } else {
+    document.body.style.overflow = "";
     requestAnimationFrame(() => {
       window.scrollTo({
         top: opciones.inicio ? 0 : (scrollVistasPwa.get(vista) || 0),

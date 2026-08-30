@@ -41,6 +41,11 @@
       opacity: 1;
       visibility: visible;
     }
+
+    html.aitana-splash-pendiente .aitana-splash-contenido {
+      opacity: 1;
+      transform: none;
+    }
   </style>
 
   <script>
@@ -60,12 +65,13 @@
       window.AITANA_SPLASH_PREPARADA = prepararSplash;
       if (!prepararSplash) return;
 
+      window.AITANA_SPLASH_INICIO = performance.now();
       document.documentElement.classList.add("aitana-splash-pendiente");
       window.setTimeout(() => {
         if (!document.documentElement.classList.contains("aitana-splash-pendiente")) return;
         window.AITANA_SPLASH_FALLBACK = true;
         document.documentElement.classList.remove("aitana-splash-pendiente");
-      }, 2500);
+      }, 900);
     })();
   </script>
 
@@ -350,28 +356,7 @@
     </div>
 
     <div class="aitana-mobile-categoria-titulo">Compra por categoría</div>
-    <div class="aitana-mobile-categories" id="aitanaMobileCategories">
-      <div class="aitana-mobile-cat" data-categoria="Labiales" aria-label="Labiales">
-        <span class="aitana-mobile-cat-circle"><img src="img/icons/labiales-128.png" alt="Labiales" width="128" height="126" decoding="async"></span>
-        <span class="aitana-mobile-cat-label">Labiales</span>
-      </div>
-      <div class="aitana-mobile-cat" data-categoria="Lip Gloss" aria-label="Gloss">
-        <span class="aitana-mobile-cat-circle"><img src="img/icons/gloss-128.png" alt="Gloss" width="128" height="123" decoding="async"></span>
-        <span class="aitana-mobile-cat-label">Gloss</span>
-      </div>
-      <div class="aitana-mobile-cat" data-categoria="Rostro" aria-label="Rostro">
-        <span class="aitana-mobile-cat-circle"><img src="img/icons/rost-128.png" alt="Rostro" width="128" height="128" decoding="async"></span>
-        <span class="aitana-mobile-cat-label">Rostro</span>
-      </div>
-      <div class="aitana-mobile-cat" data-categoria="Ojos y labios" aria-label="Ojos">
-        <span class="aitana-mobile-cat-circle"><img src="img/icons/ojos-128.png" alt="Ojos" width="128" height="122" decoding="async"></span>
-        <span class="aitana-mobile-cat-label">Ojos</span>
-      </div>
-      <div class="aitana-mobile-cat" data-categoria="Accesorios" aria-label="Accesorios">
-        <span class="aitana-mobile-cat-circle"><img src="img/icons/accesorios-128.png" alt="Accesorios" width="128" height="128" decoding="async"></span>
-        <span class="aitana-mobile-cat-label">Accesorios</span>
-      </div>
-    </div>
+    <div class="aitana-mobile-categories" id="aitanaMobileCategories"></div>
 
     <div class="recien-llegados-mobile-slot" id="recienLlegadosMobileSlot"></div>
 
@@ -433,37 +418,6 @@
 </section>
 
 <section class="home-premium" aria-label="Explora Aitana Make Up">
-  <div class="home-premium-bloque compra-categorias-premium">
-    <div class="home-premium-encabezado">
-      <span>EXPLORA AITANA</span>
-      <h2>Compra por categoría</h2>
-      <p>Todo lo que amas, a un clic de distancia.</p>
-    </div>
-
-    <div class="categorias-premium-grid">
-      <button type="button" data-descubrimiento-categoria="Labiales">
-        <span><img src="img/icons/labiales-128.png" alt="" width="128" height="126" loading="lazy"></span>
-        Labiales
-      </button>
-      <button type="button" data-descubrimiento-categoria="Lip Gloss">
-        <span><img src="img/icons/gloss-128.png" alt="" width="128" height="123" loading="lazy"></span>
-        Lip Gloss
-      </button>
-      <button type="button" data-descubrimiento-categoria="Rostro">
-        <span><img src="img/icons/rost-128.png" alt="" width="128" height="128" loading="lazy"></span>
-        Rostro
-      </button>
-      <button type="button" data-descubrimiento-categoria="Ojos y labios">
-        <span><img src="img/icons/ojos-128.png" alt="" width="128" height="122" loading="lazy"></span>
-        Ojos
-      </button>
-      <button type="button" data-descubrimiento-categoria="Accesorios">
-        <span><img src="img/icons/accesorios-128.png" alt="" width="128" height="128" loading="lazy"></span>
-        Accesorios
-      </button>
-    </div>
-  </div>
-
   <section class="busca-hoy busca-hoy-desktop" aria-labelledby="buscaHoyTitulo">
     <div class="busca-hoy-encabezado">
       <span>INSPÍRATE</span>
@@ -510,7 +464,7 @@
         <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
       </button>
 
-      <div class="recien-llegados-lista" id="lista-recien-llegados"></div>
+      <div class="recien-llegados-lista" id="lista-recien-llegados" aria-busy="true"></div>
 
       <button
         type="button"
@@ -547,9 +501,9 @@
         </p>
       </div>
 
-      <div class="resultado-total">
-        <strong id="contadorProductos">0</strong>
-        productos
+      <div class="resultado-total" aria-live="polite">
+        <strong id="contadorProductos">Cargando catálogo...</strong>
+        <span id="contadorProductosEtiqueta" hidden>productos</span>
       </div>
 
     </div>
@@ -639,46 +593,6 @@
         Todas las categorías
       </button>
 
-      <button class="filtro" data-categoria="Tintas labiales">
-        Tintas labiales
-      </button>
-
-      <button class="filtro" data-categoria="Lip Gloss">
-        Lip Gloss
-      </button>
-
-      <button class="filtro" data-categoria="Labiales">
-        Labiales
-      </button>
-
-      <button class="filtro" data-categoria="Rostro">
-        Rostro
-      </button>
-
-      <button class="filtro" data-categoria="Ojos y labios">
-        Ojos
-      </button>
-
-      <button class="filtro" data-categoria="Correctores">
-        Correctores
-      </button>
-
-      <button class="filtro" data-categoria="Bálsamos">
-        Bálsamos
-      </button>
-
-      <button class="filtro" data-categoria="Brochas">
-        Brochas
-      </button>
-
-      <button class="filtro" data-categoria="Accesorios">
-        Accesorios
-      </button>
-
-      <button class="filtro" data-categoria="Cuidado facial">
-        Cuidado facial
-      </button>
-
     </div>
 
     <button type="button" class="limpiar-filtros" id="limpiarFiltros" hidden>
@@ -688,7 +602,7 @@
 
   </div>
 
-  <div class="grid-productos" id="lista-productos"></div>
+  <div class="grid-productos" id="lista-productos" aria-busy="true" aria-label="Catálogo de productos"></div>
 
   <div class="ver-mas-productos-contenedor">
     <p class="progreso-productos" id="progresoProductos" aria-live="polite"></p>

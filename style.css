@@ -415,6 +415,72 @@ body {
 
 }
 
+/* Estado de carga del catálogo: conserva la geometría de las tarjetas reales. */
+.catalogo-skeleton {
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.catalogo-skeleton .skeleton-bloque,
+.catalogo-skeleton .skeleton-linea,
+.catalogo-skeleton .skeleton-boton {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: #f8e8ee;
+}
+
+.catalogo-skeleton .skeleton-bloque::after,
+.catalogo-skeleton .skeleton-linea::after,
+.catalogo-skeleton .skeleton-boton::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(100deg, transparent 20%, rgba(255,255,255,.72) 48%, transparent 76%);
+  transform: translateX(-100%);
+  animation: aitanaSkeleton 1.25s ease-in-out infinite;
+}
+
+.catalogo-skeleton .producto-imagen {
+  border-radius: inherit;
+}
+
+.catalogo-skeleton .producto-info {
+  width: 100%;
+  align-items: center;
+  gap: 12px;
+}
+
+.catalogo-skeleton .skeleton-linea {
+  width: 82%;
+  height: 14px;
+  border-radius: 999px;
+}
+
+.catalogo-skeleton .skeleton-linea-corta { width: 34%; height: 11px; }
+.catalogo-skeleton .skeleton-linea-titulo { width: 72%; height: 20px; }
+.catalogo-skeleton .skeleton-linea-precio { width: 42%; height: 24px; }
+.catalogo-skeleton .skeleton-linea-stock { width: 54%; height: 11px; }
+
+.catalogo-skeleton .skeleton-boton {
+  width: 82%;
+  height: 40px;
+  margin-top: auto;
+  border-radius: 12px;
+}
+
+@keyframes aitanaSkeleton {
+  to { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalogo-skeleton .skeleton-bloque::after,
+  .catalogo-skeleton .skeleton-linea::after,
+  .catalogo-skeleton .skeleton-boton::after {
+    animation: none;
+  }
+}
+
 
 .producto:hover {
 
@@ -3554,7 +3620,11 @@ footer {
     justify-content: center;
     gap: 5px;
     min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
     color: #b33;
+    font-family: inherit;
     font-size: 9px;
     font-weight: 600;
     cursor: pointer;
@@ -3579,6 +3649,18 @@ footer {
      height: 64px;
      object-fit: contain;
      display: block;
+   }
+
+   .aitana-mobile-cat-circle.categoria-icono-generico {
+     border-radius: 50% !important;
+     background: linear-gradient(145deg, #fff, #ffe3ed) !important;
+     color: #c51d59;
+     font-size: 23px;
+   }
+
+   .aitana-mobile-cat-circle.categoria-icono-generico i {
+     display: block;
+     line-height: 1;
    }
 
   .aitana-mobile-cat-label {
@@ -5001,17 +5083,11 @@ body.entrega-modal-abierto { overflow: hidden; }
   padding: 70px 0 28px;
 }
 
-.home-premium-bloque {
-  margin-bottom: 64px;
-}
-
-.home-premium-encabezado,
 .busca-hoy-encabezado {
   margin-bottom: 25px;
   text-align: center;
 }
 
-.home-premium-encabezado > span,
 .busca-hoy-encabezado > span,
 .aitana-mobile-section-kicker {
   color: #d51c61;
@@ -5020,7 +5096,6 @@ body.entrega-modal-abierto { overflow: hidden; }
   letter-spacing: .18em;
 }
 
-.home-premium-encabezado h2,
 .busca-hoy-encabezado h2 {
   margin: 7px 0;
   color: #301a23;
@@ -5028,54 +5103,9 @@ body.entrega-modal-abierto { overflow: hidden; }
   font-size: clamp(29px, 3vw, 40px);
 }
 
-.home-premium-encabezado p,
 .busca-hoy-encabezado p {
   margin: 0;
   color: #826371;
-}
-
-.categorias-premium-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.categorias-premium-grid button {
-  display: flex;
-  padding: 22px 12px 18px;
-  align-items: center;
-  flex-direction: column;
-  gap: 12px;
-  border: 1px solid #f4d7e1;
-  border-radius: 26px;
-  background: linear-gradient(145deg, #fff, #fff7fa);
-  box-shadow: 0 8px 24px rgba(102,37,62,.07);
-  color: #502b39;
-  font: inherit;
-  font-weight: 800;
-  cursor: pointer;
-  transition: transform .25s, box-shadow .25s, border-color .25s;
-}
-
-.categorias-premium-grid button:hover {
-  border-color: #ed9bb6;
-  box-shadow: 0 14px 32px rgba(170,48,94,.14);
-  transform: translateY(-5px);
-}
-
-.categorias-premium-grid button span {
-  display: grid;
-  width: 112px;
-  height: 112px;
-  place-items: center;
-  border-radius: 50%;
-  background: #fff0f5;
-}
-
-.categorias-premium-grid img {
-  width: 88px;
-  height: 88px;
-  object-fit: contain;
 }
 
 .busca-hoy-mobile {
@@ -5192,20 +5222,6 @@ body.entrega-modal-abierto { overflow: hidden; }
 }
 
 @media (max-width: 900px) {
-  .categorias-premium-grid {
-    gap: 10px;
-  }
-
-  .categorias-premium-grid button span {
-    width: 88px;
-    height: 88px;
-  }
-
-  .categorias-premium-grid img {
-    width: 70px;
-    height: 70px;
-  }
-
   .beneficios-home {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -6217,7 +6233,7 @@ body.splash-aitana-activa {
     linear-gradient(145deg, #fff2f7 0%, #fbd4e3 48%, #f7b9d0 100%);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 180ms ease, visibility 180ms ease;
+  transition: opacity 120ms ease, visibility 120ms ease;
 }
 
 .aitana-splash[hidden] {
@@ -6246,7 +6262,7 @@ body.splash-aitana-activa {
 }
 
 .splash-visible .aitana-splash-contenido {
-  animation: aitanaSplashMarca 760ms cubic-bezier(.2, .78, .24, 1) 80ms forwards;
+  animation: aitanaSplashMarca 280ms cubic-bezier(.2, .78, .24, 1) 20ms forwards;
 }
 
 .aitana-splash-contenido strong {
@@ -6266,7 +6282,7 @@ body.splash-aitana-activa {
   font-weight: 800;
   letter-spacing: .5em;
   opacity: 0;
-  animation: aitanaSplashSubtitulo 360ms ease 390ms forwards;
+  animation: aitanaSplashSubtitulo 160ms ease 100ms forwards;
 }
 
 .aitana-splash-destello {
@@ -6281,13 +6297,14 @@ body.splash-aitana-activa {
 .destello-c { top: 12px; left: -17px; font-size: 10px; }
 
 .splash-visible .aitana-splash-destello {
-  animation: aitanaSplashDestello 620ms ease 360ms forwards;
+  animation: aitanaSplashDestello 220ms ease 80ms forwards;
 }
 
-.splash-visible .destello-b { animation-delay: 470ms; }
-.splash-visible .destello-c { animation-delay: 570ms; }
+.splash-visible .destello-b { animation-delay: 100ms; }
+.splash-visible .destello-c { animation-delay: 130ms; }
 
 @keyframes aitanaSplashMarca {
+  from { opacity: .85; transform: scale(.98) translateY(2px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 

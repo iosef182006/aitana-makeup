@@ -1,4 +1,4 @@
-const CACHE_VERSION = "aitana-pwa-v17";
+const CACHE_VERSION = "aitana-pwa-v18";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const NETWORK_CACHE = `${CACHE_VERSION}-network`;
 
@@ -10,7 +10,7 @@ const ESSENTIAL_FILES = [
   "/revision-auth.js",
   "/supabase-config.js",
   "/manifest.webmanifest",
-  "/img/logo%20de%20aitana.jpeg",
+  "/img/logo-aitana-192.webp",
   "/img/apple-touch-icon.png",
   "/img/icon-192.png",
   "/img/icon-512.png",
@@ -18,7 +18,7 @@ const ESSENTIAL_FILES = [
 ];
 
 const ICON_ASSETS = new Set([
-  "/img/logo%20de%20aitana.jpeg",
+  "/img/logo-aitana-192.webp",
   "/img/apple-touch-icon.png",
   "/img/icon-192.png",
   "/img/icon-512.png",

@@ -128,7 +128,7 @@ function normalizeSupabaseProduct(producto, imagenes, variantes, clienteSupabase
   const { data: datosImagenPublica } = imagenPrincipal?.storage_path
     ? clienteSupabase.storage.from("product-images").getPublicUrl(imagenPrincipal.storage_path)
     : { data: { publicUrl: null } };
-  const imagenPublica = datosImagenPublica?.publicUrl || new URL("img/app-icon-aitana.png", document.baseURI).href;
+  const imagenPublica = datosImagenPublica?.publicUrl || new URL("img/app-icon-aitana.webp", document.baseURI).href;
   const imagenesTonosPublicas = imagenesTonos
     .filter(imagen => imagen.storage_path)
     .map(imagen => clienteSupabase.storage.from("product-images").getPublicUrl(imagen.storage_path).data.publicUrl)
@@ -601,6 +601,10 @@ function productoTieneTonos(producto) {
   );
 }
 
+function productoRequiereSeleccionTono(producto) {
+  return Array.isArray(producto?.variantes) && producto.variantes.length > 0;
+}
+
 function obtenerTextoStock(producto) {
   if (producto.stockQuantity == null) return "Disponible";
   const cantidad = Number(producto.stockQuantity);
@@ -619,13 +623,50 @@ function crearPrecioHTML(producto, clase = "precio") {
 }
 
 
-function crearMensajeProducto(producto) {
-  const pregunta = productoTieneTonos(producto)
-    ? "¿Podrían confirmarme su disponibilidad y qué tonos tienen disponibles?"
-    : "¿Podrían confirmarme si está disponible?";
-
-  return `Hola, Aitana Make Up 💕 Me interesa *${producto.nombre}* (S/ ${producto.precio}). ${pregunta} Gracias 😊`;
+function formatearPrecioWhatsapp(precio) {
+  const valor = Number(precio);
+  return Number.isFinite(valor) ? `S/ ${valor.toFixed(2)}` : "";
 }
+
+function crearMensajeProductoWhatsapp(producto, variante = null) {
+  const precio = formatearPrecioWhatsapp(producto?.precio);
+  const detalles = [
+    `• ${producto?.nombre || "Producto"}`,
+    precio ? `• Precio: ${precio}` : "",
+    variante ? `• Tono: ${variante}` : ""
+  ].filter(Boolean).join("\n");
+  const pregunta = producto?.agotado
+    ? "¿Tendrán reposición próximamente?"
+    : "¿Está disponible?";
+
+  return `Hola Aitana Make Up 💗\n\nEstoy interesada en este producto:\n\n${detalles}\n\n${pregunta}`;
+}
+
+function crearUrlWhatsapp(mensaje) {
+  return `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensaje)}`;
+}
+
+function consultarProductoWhatsapp(index) {
+  const producto = productos[index];
+  if (!producto || producto.agotado) return;
+
+  const variante = variantesConsulta.get(obtenerIdProductoConsulta(producto)) || null;
+  if (productoRequiereSeleccionTono(producto) && !variante) {
+    if (vistaRapidaModal?.classList.contains("activo")) cerrarVistaRapida();
+    abrirModal(index, false, "Selecciona un tono antes de consultar.");
+    return;
+  }
+
+  const mensaje = crearMensajeProductoWhatsapp(producto, variante);
+  window.open(crearUrlWhatsapp(mensaje), "_blank", "noopener,noreferrer");
+}
+
+document.addEventListener("click", evento => {
+  const enlace = evento.target.closest("[data-whatsapp-producto-index]");
+  if (!enlace) return;
+  evento.preventDefault();
+  consultarProductoWhatsapp(Number(enlace.dataset.whatsappProductoIndex));
+});
 
 
 function crearTarjetaProducto(producto, index, claseAdicional = "") {
@@ -634,10 +675,9 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
       productoTieneTonos(producto);
 
 
-    const mensajeWhatsapp =
-      encodeURIComponent(
-        crearMensajeProducto(producto)
-      );
+    const urlWhatsappProducto = crearUrlWhatsapp(
+      crearMensajeProductoWhatsapp(producto)
+    );
 
 
     const tarjeta =
@@ -774,10 +814,11 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
             :
             `
             <a
-              href="https://wa.me/${numeroWhatsapp}?text=${mensajeWhatsapp}"
+              href="${urlWhatsappProducto}"
               target="_blank"
               rel="noopener noreferrer"
               class="whatsapp"
+              data-whatsapp-producto-index="${index}"
             >
               <i class="fa-brands fa-whatsapp"></i>
               Consultar
@@ -786,7 +827,7 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
               type="button"
               class="agregar-consulta"
               data-consulta-index="${index}"
-              aria-label="Agregar ${producto.nombre} a la consulta"
+              aria-label="Agregar ${producto.nombre} a Mi consulta"
               aria-pressed="false"
             >
               + Agregar a consulta
@@ -842,6 +883,19 @@ const favoritosSheet = document.getElementById("favoritosSheet");
 const favoritosLista = document.getElementById("favoritosLista");
 const consultaSheet = document.getElementById("consultaSheet");
 const consultaSheetLista = document.getElementById("consultaSheetLista");
+const mobileFavoritosContador = document.getElementById("mobileFavoritosContador");
+const favoritosPantallaContador = document.getElementById("favoritosPantallaContador");
+const consultaPantallaSubtitulo = document.getElementById("consultaPantallaSubtitulo");
+const consultaPantallaResumen = document.getElementById("consultaPantallaResumen");
+const pwaFavoritosVista = document.getElementById("pwaFavoritosVista");
+const pwaFavoritosLista = document.getElementById("pwaFavoritosLista");
+const pwaFavoritosContador = document.getElementById("pwaFavoritosContador");
+const pwaConsultaVista = document.getElementById("pwaConsultaVista");
+const pwaConsultaLista = document.getElementById("pwaConsultaLista");
+const pwaConsultaSubtitulo = document.getElementById("pwaConsultaSubtitulo");
+const pwaConsultaResumen = document.getElementById("pwaConsultaResumen");
+const pwaConsultaWhatsapp = document.getElementById("pwaConsultaWhatsapp");
+const pwaConsultaCtaResumen = document.getElementById("pwaConsultaCtaResumen");
 let sheetAbierto = null;
 let elementoAntesSheet = null;
 
@@ -863,6 +917,14 @@ function actualizarBotonesFavoritos() {
     boton.setAttribute("aria-label", `${favorito ? "Quitar" : "Agregar"} ${producto.nombre} ${favorito ? "de" : "a"} favoritos`);
     boton.innerHTML = `<i class="${favorito ? "fa-solid" : "fa-regular"} fa-heart" aria-hidden="true"></i>`;
   });
+
+  if (mobileFavoritosContador) {
+    const cantidadFavoritos = productos.filter(producto =>
+      productosFavoritos.has(obtenerIdProductoFavorito(producto))
+    ).length;
+    mobileFavoritosContador.hidden = cantidadFavoritos === 0;
+    mobileFavoritosContador.textContent = String(cantidadFavoritos);
+  }
 }
 
 function plantillaEstadoVacio(icono, titulo, texto) {
@@ -876,19 +938,37 @@ function renderizarFavoritos() {
     .map((producto, index) => ({ producto, index }))
     .filter(({ producto }) => productosFavoritos.has(obtenerIdProductoFavorito(producto)));
 
-  favoritosLista.innerHTML = favoritos.length
+  const vistaPwa = estaEnModoStandalone();
+  if (favoritosPantallaContador) {
+    favoritosPantallaContador.textContent = `${favoritos.length} ${favoritos.length === 1 ? "producto" : "productos"}`;
+  }
+  if (pwaFavoritosContador) {
+    pwaFavoritosContador.textContent = `${favoritos.length} ${favoritos.length === 1 ? "producto guardado" : "productos guardados"}`;
+  }
+
+  const contenidoFavoritos = favoritos.length
     ? favoritos.map(({ producto, index }) => `
       <article class="mobile-sheet-producto">
         <div class="mobile-sheet-miniatura">${imagenHTML(producto.imagen, producto.nombre, "", producto.imagenDiagnostico)}</div>
         <div class="mobile-sheet-producto-info">
           <h3>${producto.nombre}</h3>
           <strong>S/${producto.precio}</strong>
+          ${vistaPwa ? `<small class="pwa-favorito-stock ${producto.agotado ? "agotado" : ""}">${obtenerTextoStock(producto)}</small>` : ""}
         </div>
         <button type="button" class="mobile-sheet-quitar" data-favorito-index="${index}" aria-label="Quitar ${producto.nombre} de favoritos">Quitar</button>
+        ${vistaPwa ? `<div class="pwa-favorito-acciones">
+          ${producto.agotado ? '<span class="pwa-producto-agotado">Agotado</span>' : `<a href="${crearUrlWhatsapp(crearMensajeProductoWhatsapp(producto))}" data-whatsapp-producto-index="${index}" target="_blank" rel="noopener noreferrer">Consultar</a>
+          <button type="button" class="agregar-consulta" data-consulta-index="${index}" aria-label="Agregar ${producto.nombre} a Mi consulta" aria-pressed="false">+ Mi consulta</button>`}
+        </div>` : ""}
       </article>`).join("")
-    : plantillaEstadoVacio("♡", "Aún no tienes favoritos", "Toca el corazón de un producto para guardarlo aquí.");
+    : `${plantillaEstadoVacio("♡", "Aún no tienes favoritos", vistaPwa ? "Guarda los productos que más te gusten." : "Toca el corazón de un producto para guardarlo aquí.")}${vistaPwa ? '<button type="button" class="pwa-explorar-productos" data-pwa-vista="catalogo">Explorar productos</button>' : ""}`;
+
+  favoritosLista.innerHTML = contenidoFavoritos;
+  if (vistaPwa && pwaFavoritosLista) pwaFavoritosLista.innerHTML = contenidoFavoritos;
 
   registrarImagenesDiferidas(favoritosLista);
+  if (vistaPwa && pwaFavoritosLista) registrarImagenesDiferidas(pwaFavoritosLista);
+  actualizarConsultaMultiple();
 }
 
 function alternarFavorito(index, boton) {
@@ -908,7 +988,13 @@ function alternarFavorito(index, boton) {
 
 function abrirMobileSheet(sheet) {
   if (!sheet) return;
+  if (estaEnModoStandalone() && (sheet === favoritosSheet || sheet === consultaSheet)) {
+    navegarVistaPwa(sheet === favoritosSheet ? "favoritos" : "consulta");
+    return;
+  }
   elementoAntesSheet = document.activeElement;
+  sheet.setAttribute("role", "dialog");
+  sheet.setAttribute("aria-modal", "true");
   sheet.hidden = false;
   requestAnimationFrame(() => sheet.classList.add("activo"));
   sheet.setAttribute("aria-hidden", "false");
@@ -961,28 +1047,67 @@ const abrirFavoritos = document.getElementById("abrirFavoritos");
 const mobileConsultaContador = document.getElementById("mobileConsultaContador");
 const consultaSheetWhatsapp = document.getElementById("consultaSheetWhatsapp");
 
-function renderizarConsultaSheet() {
+function productoTieneTonoPendiente(producto) {
+  return productoRequiereSeleccionTono(producto) &&
+    !variantesConsulta.has(obtenerIdProductoConsulta(producto));
+}
+
+function renderizarConsultaSheet(mostrarAvisoTonos = false) {
   if (!consultaSheetLista) return;
   desregistrarImagenesDiferidas(consultaSheetLista);
   const seleccionados = [...productosConsulta]
     .map(index => ({ producto: productos[index], index }))
     .filter(({ producto }) => producto);
+  const tieneTonosPendientes = seleccionados.some(({ producto }) => productoTieneTonoPendiente(producto));
+  const totalReferencial = seleccionados.reduce((total, { producto }) => {
+    const precio = Number(producto.precio);
+    return Number.isFinite(precio) ? total + precio : total;
+  }, 0);
 
-  consultaSheetLista.innerHTML = seleccionados.length
-    ? seleccionados.map(({ producto, index }) => `
-      <article class="mobile-sheet-producto">
+  if (consultaPantallaSubtitulo) {
+    consultaPantallaSubtitulo.textContent = `${seleccionados.length} ${seleccionados.length === 1 ? "producto seleccionado" : "productos seleccionados"}`;
+  }
+  if (consultaPantallaResumen) {
+    consultaPantallaResumen.textContent = `${seleccionados.length} ${seleccionados.length === 1 ? "producto" : "productos"} · S/ ${totalReferencial.toFixed(2)}`;
+  }
+  if (pwaConsultaSubtitulo) {
+    pwaConsultaSubtitulo.textContent = `${seleccionados.length} ${seleccionados.length === 1 ? "producto seleccionado" : "productos seleccionados"}`;
+  }
+  if (pwaConsultaCtaResumen) {
+    pwaConsultaCtaResumen.textContent = `${seleccionados.length} ${seleccionados.length === 1 ? "producto" : "productos"} · S/ ${totalReferencial.toFixed(2)}`;
+  }
+
+  const contenidoConsulta = seleccionados.length
+    ? `${mostrarAvisoTonos && tieneTonosPendientes ? '<p class="mobile-sheet-aviso" role="alert">Selecciona los tonos pendientes antes de enviar tu consulta.</p>' : ""}${seleccionados.map(({ producto, index }) => `
+      <article class="mobile-sheet-producto${productoTieneTonoPendiente(producto) ? " tono-pendiente" : ""}">
         <div class="mobile-sheet-miniatura">${imagenHTML(producto.imagen, producto.nombre, "", producto.imagenDiagnostico)}</div>
         <div class="mobile-sheet-producto-info">
           <h3>${producto.nombre}</h3>
           ${variantesConsulta.get(obtenerIdProductoConsulta(producto)) ? `<small>Tono: ${variantesConsulta.get(obtenerIdProductoConsulta(producto))}</small>` : ""}
+          ${productoTieneTonoPendiente(producto) ? '<small class="mobile-sheet-tono-pendiente">Tono pendiente</small>' : ""}
           <strong>S/${producto.precio}</strong>
+          ${productoTieneTonoPendiente(producto) ? `<button type="button" class="mobile-sheet-elegir-tono" data-consulta-tono-index="${index}">Elegir tono</button>` : ""}
         </div>
         <button type="button" class="mobile-sheet-quitar" data-consulta-quitar-index="${index}" aria-label="Quitar ${producto.nombre} de mi consulta">Quitar</button>
-      </article>`).join("")
-    : plantillaEstadoVacio("🛍️", "Tu consulta está vacía", "Agrega productos y aparecerán aquí para consultarlos juntos.");
+      </article>`).join("")}`
+    : `${plantillaEstadoVacio("🛍️", "Tu consulta está vacía", estaEnModoStandalone() ? "Agrega los productos que te interesan y consúltanos por WhatsApp." : "Agrega productos y aparecerán aquí para consultarlos juntos.")}${estaEnModoStandalone() ? '<button type="button" class="pwa-explorar-productos" data-pwa-vista="catalogo">Explorar catálogo</button>' : ""}`;
+
+  consultaSheetLista.innerHTML = contenidoConsulta;
+  if (estaEnModoStandalone() && pwaConsultaLista) pwaConsultaLista.innerHTML = contenidoConsulta;
+
+  if (pwaConsultaResumen) {
+    pwaConsultaResumen.hidden = seleccionados.length === 0;
+    pwaConsultaResumen.innerHTML = seleccionados.length ? `
+      <h3>Resumen</h3>
+      <div><span>${seleccionados.length} ${seleccionados.length === 1 ? "producto seleccionado" : "productos seleccionados"}</span></div>
+      <div><span>Total referencial</span><strong>S/ ${totalReferencial.toFixed(2)}</strong></div>
+    ` : "";
+  }
 
   if (consultaSheetWhatsapp) consultaSheetWhatsapp.hidden = seleccionados.length === 0;
+  if (pwaConsultaWhatsapp) pwaConsultaWhatsapp.hidden = seleccionados.length === 0;
   registrarImagenesDiferidas(consultaSheetLista);
+  if (estaEnModoStandalone() && pwaConsultaLista) registrarImagenesDiferidas(pwaConsultaLista);
 }
 
 
@@ -1022,12 +1147,12 @@ function actualizarConsultaMultiple() {
       boton.setAttribute(
         "aria-label",
         seleccionado
-          ? `Quitar ${producto.nombre} de la consulta`
-          : `Agregar ${producto.nombre} a la consulta`
+          ? `Quitar ${producto.nombre} de Mi consulta`
+          : `Agregar ${producto.nombre} a Mi consulta`
       );
       boton.textContent = seleccionado
-        ? "✓ Agregado"
-        : "+ Agregar a consulta";
+        ? (boton.classList.contains("vista-rapida-agregar") ? "✓ Agregado a Mi consulta" : "✓ Agregado")
+        : (boton.classList.contains("vista-rapida-agregar") ? "+ Agregar a Mi consulta" : "+ Agregar a consulta");
     });
 
   renderizarConsultaSheet();
@@ -1044,6 +1169,7 @@ function alternarProductoConsulta(index) {
   const idProducto = obtenerIdProductoConsulta(producto);
 
   if (producto.variantes?.length && !variantesConsulta.has(idProducto)) {
+    if (vistaRapidaModal?.classList.contains("activo")) cerrarVistaRapida();
     abrirModal(index, true);
     return;
   }
@@ -1062,25 +1188,56 @@ function alternarProductoConsulta(index) {
 }
 
 
-function crearMensajeConsulta() {
+function obtenerProductosConsultaDisponibles() {
+  return [...productosConsulta]
+    .map(index => ({ producto: productos[index], index }))
+    .filter(({ producto }) => producto && !producto.agotado);
+}
 
-  const productosSeleccionados = [...productosConsulta]
-    .map(index => productos[index])
-    .filter(producto => producto && !producto.agotado);
+function crearMensajeConsultaWhatsapp(productosSeleccionados) {
+  let totalReferencial = 0;
+  let tienePrecioValido = false;
 
-  const lineasProductos = productosSeleccionados
-    .map(producto => {
-      const variante = variantesConsulta.get(obtenerIdProductoConsulta(producto));
-      return `• *${producto.nombre}*${variante ? ` — Tono: ${variante}` : ""} — S/ ${producto.precio}`;
-    })
-    .join("\n");
+  const productosNumerados = productosSeleccionados.map(({ producto }, posicion) => {
+    const variante = variantesConsulta.get(obtenerIdProductoConsulta(producto));
+    const precioNumerico = Number(producto.precio);
+    const precio = formatearPrecioWhatsapp(producto.precio);
+    if (Number.isFinite(precioNumerico)) {
+      totalReferencial += precioNumerico;
+      tienePrecioValido = true;
+    }
 
-  const preguntaTonos = productosSeleccionados.some(productoTieneTonos)
-    ? "¿Podrían confirmarme su disponibilidad? En los productos que tienen tonos, quisiera saber cuáles están disponibles."
-    : "¿Podrían confirmarme si están disponibles?";
+    return [
+      `${posicion + 1}. ${producto.nombre}`,
+      precio ? `   Precio: ${precio}` : "",
+      variante ? `   Tono: ${variante}` : ""
+    ].filter(Boolean).join("\n");
+  }).join("\n\n");
 
-  return `Hola, Aitana Make Up 💕 Quisiera consultar por:\n\n${lineasProductos}\n\n${preguntaTonos} Gracias 😊`;
+  const total = tienePrecioValido
+    ? `\n\nTotal referencial: S/ ${totalReferencial.toFixed(2)}`
+    : "";
 
+  return `Hola Aitana Make Up 💗\n\nQuiero consultar por estos productos:\n\n${productosNumerados}${total}\n\n¿Me confirman disponibilidad y envío, por favor? ✨`;
+}
+
+function enviarConsultaPorWhatsapp() {
+  const productosSeleccionados = obtenerProductosConsultaDisponibles();
+  if (!productosSeleccionados.length) return;
+
+  const pendientes = productosSeleccionados.filter(({ producto }) => productoTieneTonoPendiente(producto));
+  if (pendientes.length) {
+    renderizarConsultaSheet(true);
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      abrirMobileSheet(consultaSheet);
+    } else {
+      abrirModal(pendientes[0].index, false, "Selecciona los tonos pendientes antes de enviar tu consulta.");
+    }
+    return;
+  }
+
+  const mensaje = crearMensajeConsultaWhatsapp(productosSeleccionados);
+  window.open(crearUrlWhatsapp(mensaje), "_blank", "noopener,noreferrer");
 }
 
 
@@ -1108,35 +1265,39 @@ if (limpiarConsulta) {
 
 
 if (enviarConsultaWhatsapp) {
-  enviarConsultaWhatsapp.addEventListener("click", () => {
-    if (productosConsulta.size === 0) return;
-
-    const url =
-      `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(crearMensajeConsulta())}`;
-
-    window.open(url, "_blank", "noopener,noreferrer");
-  });
+  enviarConsultaWhatsapp.addEventListener("click", enviarConsultaPorWhatsapp);
 }
 
 function abrirConsultaSheet() {
   renderizarConsultaSheet();
-  abrirMobileSheet(consultaSheet);
+  if (estaEnModoStandalone()) navegarVistaPwa("consulta");
+  else abrirMobileSheet(consultaSheet);
 }
 
 verConsultaMobile?.addEventListener("click", abrirConsultaSheet);
 abrirMiConsulta?.addEventListener("click", abrirConsultaSheet);
 abrirFavoritos?.addEventListener("click", () => {
   renderizarFavoritos();
-  abrirMobileSheet(favoritosSheet);
+  if (estaEnModoStandalone()) navegarVistaPwa("favoritos");
+  else abrirMobileSheet(favoritosSheet);
 });
 
 consultaSheetWhatsapp?.addEventListener("click", () => {
-  if (!productosConsulta.size) return;
-  const url = `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(crearMensajeConsulta())}`;
-  window.open(url, "_blank", "noopener,noreferrer");
+  enviarConsultaPorWhatsapp();
+});
+pwaConsultaWhatsapp?.addEventListener("click", () => {
+  enviarConsultaPorWhatsapp();
 });
 
 document.addEventListener("click", (evento) => {
+  const elegirTono = evento.target.closest("[data-consulta-tono-index]");
+  if (elegirTono) {
+    const index = Number(elegirTono.dataset.consultaTonoIndex);
+    cerrarMobileSheet(consultaSheet);
+    abrirModal(index, false, "Selecciona un tono para completar tu consulta.");
+    return;
+  }
+
   const quitarConsulta = evento.target.closest("[data-consulta-quitar-index]");
   if (quitarConsulta) {
     alternarProductoConsulta(Number(quitarConsulta.dataset.consultaQuitarIndex));
@@ -1159,18 +1320,21 @@ function habilitarCierrePorGesto(panel, cerrar) {
   let desplazamiento = 0;
 
   panel.addEventListener("touchstart", evento => {
+    if (estaEnModoStandalone() && (panel.closest("#favoritosSheet") || panel.closest("#consultaSheet"))) return;
     if (panel.scrollTop > 0) return;
     inicioY = evento.touches[0].clientY;
     desplazamiento = 0;
   }, { passive: true });
 
   panel.addEventListener("touchmove", evento => {
+    if (estaEnModoStandalone() && (panel.closest("#favoritosSheet") || panel.closest("#consultaSheet"))) return;
     if (!inicioY || panel.scrollTop > 0) return;
     desplazamiento = Math.max(0, evento.touches[0].clientY - inicioY);
     if (desplazamiento) panel.style.transform = `translateY(${Math.min(desplazamiento, 150)}px)`;
   }, { passive: true });
 
   panel.addEventListener("touchend", () => {
+    if (estaEnModoStandalone() && (panel.closest("#favoritosSheet") || panel.closest("#consultaSheet"))) return;
     panel.style.transform = "";
     if (desplazamiento > 90) cerrar();
     inicioY = 0;
@@ -1180,6 +1344,101 @@ function habilitarCierrePorGesto(panel, cerrar) {
 
 habilitarCierrePorGesto(favoritosSheet?.querySelector(".mobile-sheet-panel"), () => cerrarMobileSheet(favoritosSheet));
 habilitarCierrePorGesto(consultaSheet?.querySelector(".mobile-sheet-panel"), () => cerrarMobileSheet(consultaSheet));
+
+
+// Navegación ligera exclusiva de la PWA instalada.
+const scrollVistasPwa = new Map([["inicio", 0], ["catalogo", 0]]);
+let vistaPwaActiva = "inicio";
+
+function actualizarNavegacionPwa(vista) {
+  document.querySelectorAll(".aitana-mobile-bottom-link[data-pwa-vista]").forEach(enlace => {
+    const activo = enlace.dataset.pwaVista === vista;
+    enlace.classList.toggle("active", activo);
+    if (activo) enlace.setAttribute("aria-current", "page");
+    else enlace.removeAttribute("aria-current");
+  });
+}
+
+function ocultarPantallasPwa() {
+  [pwaFavoritosVista, pwaConsultaVista].forEach(vista => {
+    if (vista) vista.hidden = true;
+  });
+  [favoritosSheet, consultaSheet].forEach(sheet => {
+    if (!sheet) return;
+    sheet.classList.remove("activo");
+    sheet.setAttribute("aria-hidden", "true");
+    sheet.hidden = true;
+  });
+  sheetAbierto = null;
+  document.body.classList.remove("mobile-sheet-abierto");
+}
+
+function actualizarBloquesVistaPwa(vista) {
+  document.querySelectorAll(".aitana-mobile-cta, .beneficios-home").forEach(bloque => {
+    bloque.hidden = true;
+    bloque.classList.add("pwa-oculto-inicio");
+  });
+
+  document.querySelectorAll(".recien-llegados").forEach(bloque => {
+    const ocultarEnCatalogo = vista === "catalogo";
+    bloque.hidden = ocultarEnCatalogo;
+    bloque.classList.toggle("pwa-oculto-catalogo", ocultarEnCatalogo);
+  });
+}
+
+function restaurarBloquesVistaWeb() {
+  document.querySelectorAll(".pwa-oculto-catalogo, .pwa-oculto-inicio").forEach(bloque => {
+    bloque.hidden = false;
+    bloque.classList.remove("pwa-oculto-catalogo", "pwa-oculto-inicio");
+  });
+}
+
+function navegarVistaPwa(vista, opciones = {}) {
+  if (!estaEnModoStandalone()) return false;
+  const vistasValidas = ["inicio", "catalogo", "favoritos", "consulta"];
+  if (!vistasValidas.includes(vista)) return false;
+
+  if (["inicio", "catalogo"].includes(vistaPwaActiva)) {
+    scrollVistasPwa.set(vistaPwaActiva, window.scrollY);
+  }
+
+  ocultarPantallasPwa();
+  vistaPwaActiva = vista;
+  document.body.classList.remove("pwa-vista-inicio", "pwa-vista-catalogo", "pwa-vista-favoritos", "pwa-vista-consulta");
+  document.body.classList.add(`pwa-vista-${vista}`);
+  actualizarBloquesVistaPwa(vista);
+  actualizarNavegacionPwa(vista);
+
+  if (vista === "favoritos" || vista === "consulta") {
+    const pantalla = vista === "favoritos" ? pwaFavoritosVista : pwaConsultaVista;
+    if (vista === "favoritos") renderizarFavoritos();
+    else renderizarConsultaSheet();
+    pantalla.hidden = false;
+    pantalla.scrollTo({ top: 0 });
+  } else {
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: opciones.inicio ? 0 : (scrollVistasPwa.get(vista) || 0),
+        behavior: "auto"
+      });
+    });
+  }
+  return true;
+}
+
+function inicializarNavegacionPwa() {
+  if (!estaEnModoStandalone() || document.body.classList.contains("pwa-navegacion-lista")) return;
+  document.body.classList.add("pwa-navegacion-lista");
+  navegarVistaPwa("inicio", { inicio: true });
+}
+
+document.addEventListener("click", evento => {
+  const destino = evento.target.closest("[data-pwa-vista]");
+  if (!destino || !estaEnModoStandalone()) return;
+  if (destino === abrirFavoritos || destino === abrirMiConsulta) return;
+  evento.preventDefault();
+  navegarVistaPwa(destino.dataset.pwaVista, { inicio: destino.dataset.pwaVista === vistaPwaActiva });
+});
 
 
 // ======================================
@@ -1198,12 +1457,19 @@ const vistaRapidaCerrar =
 let elementoAntesVistaRapida = null;
 
 
+function obtenerElementosFocoVistaRapida() {
+  return [...vistaRapidaModal.querySelectorAll(
+    'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+  )].filter(elemento => !elemento.hidden && elemento.offsetParent !== null);
+}
+
+
 function cerrarVistaRapida() {
   if (!vistaRapidaModal.classList.contains("activo")) return;
 
   vistaRapidaModal.classList.remove("activo");
   vistaRapidaModal.setAttribute("aria-hidden", "true");
-  document.body.style.overflow = "";
+  document.body.classList.remove("vista-rapida-abierta");
 
   if (elementoAntesVistaRapida) {
     elementoAntesVistaRapida.focus();
@@ -1214,9 +1480,12 @@ function cerrarVistaRapida() {
 function abrirVistaRapida(index) {
   const producto = productos[index];
   if (!producto) return;
+  const idProducto = obtenerIdProductoConsulta(producto);
+  const tonoSeleccionado = variantesConsulta.get(idProducto) || "";
+  const tieneTonos = productoTieneTonos(producto);
 
-  const mensajeWhatsapp = encodeURIComponent(
-    crearMensajeProducto(producto)
+  const urlWhatsappProducto = crearUrlWhatsapp(
+    crearMensajeProductoWhatsapp(producto)
   );
 
   vistaRapidaCuerpo.innerHTML = `
@@ -1225,6 +1494,15 @@ function abrirVistaRapida(index) {
         diferirSrc: false,
         loading: "eager"
       })}
+      <button
+        type="button"
+        class="producto-favorito vista-rapida-favorito"
+        data-favorito-index="${index}"
+        aria-label="Agregar ${producto.nombre} a favoritos"
+        aria-pressed="false"
+      >
+        <i class="fa-regular fa-heart" aria-hidden="true"></i>
+      </button>
       ${
         producto.reingreso === true
           ? '<span class="vista-rapida-nuevo vista-rapida-reingreso">↻ REINGRESO</span>'
@@ -1235,42 +1513,52 @@ function abrirVistaRapida(index) {
     </div>
 
     <div class="vista-rapida-info">
-      <div class="vista-rapida-stock ${producto.agotado ? "agotado" : "disponible"}">
-        <i class="fa-solid ${producto.agotado ? "fa-circle-xmark" : "fa-circle-check"}" aria-hidden="true"></i>
-        ${obtenerTextoStock(producto)}
-      </div>
       <span class="vista-rapida-categoria">${producto.categoria}</span>
-      ${producto.nota ? `<p class="vista-rapida-nota">${producto.nota}</p>` : ""}
       <h2 id="vistaRapidaTitulo">${producto.nombre}</h2>
-      ${crearPrecioHTML(producto, "vista-rapida-precio")}
+      <div class="vista-rapida-resumen">
+        ${crearPrecioHTML(producto, "vista-rapida-precio")}
+        <div class="vista-rapida-stock ${producto.agotado ? "agotado" : "disponible"}">
+          <i class="fa-solid ${producto.agotado ? "fa-circle-xmark" : "fa-circle"}" aria-hidden="true"></i>
+          ${obtenerTextoStock(producto)}
+        </div>
+      </div>
+      ${producto.nota ? `<p class="vista-rapida-nota">${producto.nota}</p>` : ""}
+
+      ${tieneTonos ? `
+        <div class="vista-rapida-tonos-resumen">
+          <span>Tonos disponibles</span>
+          ${tonoSeleccionado ? `<strong>Tono seleccionado: ${tonoSeleccionado} <i class="fa-solid fa-check" aria-hidden="true"></i></strong>` : ""}
+          <button type="button" class="vista-rapida-tonos" data-vista-tonos-index="${index}">
+            ${tonoSeleccionado ? "Cambiar tono" : "Ver tonos"}
+          </button>
+        </div>
+      ` : ""}
 
       <div class="vista-rapida-acciones">
         ${producto.agotado ? `
           <button type="button" class="vista-rapida-sin-stock" disabled>Producto agotado</button>
         ` : `
-          <a
-            class="vista-rapida-whatsapp"
-            href="https://wa.me/${numeroWhatsapp}?text=${mensajeWhatsapp}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
-            Consultar por WhatsApp
-          </a>
           <button
             type="button"
             class="agregar-consulta vista-rapida-agregar"
             data-consulta-index="${index}"
+            aria-label="Agregar ${producto.nombre} a Mi consulta"
             aria-pressed="false"
           >
-            + Agregar a consulta
+            + Agregar a Mi consulta
           </button>
+          <a
+            class="vista-rapida-whatsapp"
+            href="${urlWhatsappProducto}"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-whatsapp-producto-index="${index}"
+            aria-label="Consultar ${producto.nombre} por WhatsApp"
+          >
+            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+            Consultar por WhatsApp
+          </a>
         `}
-        ${producto.detalles && producto.detalles.length ? `
-          <button type="button" class="vista-rapida-tonos" data-vista-tonos-index="${index}">
-            Ver tonos disponibles
-          </button>
-        ` : ""}
       </div>
     </div>
   `;
@@ -1278,8 +1566,9 @@ function abrirVistaRapida(index) {
   elementoAntesVistaRapida = document.activeElement;
   vistaRapidaModal.classList.add("activo");
   vistaRapidaModal.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden";
+  document.body.classList.add("vista-rapida-abierta");
   actualizarConsultaMultiple();
+  actualizarBotonesFavoritos();
   vistaRapidaCerrar.focus();
 }
 
@@ -1312,6 +1601,21 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     cerrarVistaRapida();
     cerrarMobileSheet();
+    return;
+  }
+
+  if (e.key === "Tab" && vistaRapidaModal.classList.contains("activo")) {
+    const elementosFoco = obtenerElementosFocoVistaRapida();
+    if (!elementosFoco.length) return;
+    const primero = elementosFoco[0];
+    const ultimo = elementosFoco[elementosFoco.length - 1];
+    if (e.shiftKey && document.activeElement === primero) {
+      e.preventDefault();
+      ultimo.focus();
+    } else if (!e.shiftKey && document.activeElement === ultimo) {
+      e.preventDefault();
+      primero.focus();
+    }
   }
 });
 
@@ -1372,20 +1676,22 @@ const volverArriba =
 
 if (volverArriba) {
 
-  window.addEventListener("scroll", () => {
-
-    if(window.scrollY > 400){
-
-      volverArriba.classList.add("mostrar");
-
-    }
-    else {
-
+  const actualizarVisibilidadVolverArriba = () => {
+    if (estaEnModoStandalone()) {
+      volverArriba.hidden = true;
       volverArriba.classList.remove("mostrar");
-
+      return;
     }
 
+    volverArriba.hidden = false;
+    volverArriba.classList.toggle("mostrar", window.scrollY > 400);
+  };
+
+  window.addEventListener("scroll", () => {
+    actualizarVisibilidadVolverArriba();
   });
+
+  actualizarVisibilidadVolverArriba();
 
 
   volverArriba.addEventListener("click", () => {
@@ -1421,7 +1727,7 @@ let elementoAntesDelModal = null;
 
 
 
-function abrirModal(index, agregarAlElegir = false) {
+function abrirModal(index, agregarAlElegir = false, mensajeAyuda = "") {
 
   const producto = productos[index];
 
@@ -1473,7 +1779,7 @@ function abrirModal(index, agregarAlElegir = false) {
           </button>
         `).join("")}
       </div>
-      ${agregarAlElegir ? '<p class="selector-variantes-ayuda">Al elegir el tono se agregará a Mi consulta.</p>' : ""}
+      ${mensajeAyuda ? `<p class="selector-variantes-ayuda" role="status">${mensajeAyuda}</p>` : agregarAlElegir ? '<p class="selector-variantes-ayuda">Al elegir el tono se agregará a Mi consulta.</p>' : ""}
     `;
     modalImagenes.appendChild(selector);
   }
@@ -1526,6 +1832,10 @@ modalImagenes.addEventListener("click", evento => {
     cerrarVentana();
   } else {
     modalImagenes.querySelectorAll(".selector-variante").forEach(opcion => opcion.classList.toggle("seleccionada", opcion === boton));
+    if (productosConsulta.has(index)) {
+      guardarConsultaPersistente();
+      actualizarConsultaMultiple();
+    }
   }
 });
 
@@ -1633,7 +1943,7 @@ const progresoProductos =
 const botonSinResultadosLimpiar =
   document.getElementById("sinResultadosLimpiar");
 
-const PRODUCTOS_POR_CARGA = 8;
+const PRODUCTOS_POR_CARGA = 12;
 
 
 let categoriaSeleccionada = "Todos";
@@ -2578,12 +2888,10 @@ function renderizarMobileProductos() {
 
     const tarjeta = document.createElement("div");
     tarjeta.className = "aitana-mobile-product";
+    const vistaPwa = estaEnModoStandalone();
 
     const hrefWA =
-      "https://wa.me/" + numeroWhatsapp +
-      "?text=" + encodeURIComponent(
-        crearMensajeProducto(producto)
-      );
+      crearUrlWhatsapp(crearMensajeProductoWhatsapp(producto));
 
     tarjeta.innerHTML = `
       <button
@@ -2595,23 +2903,23 @@ function renderizarMobileProductos() {
       >
         <i class="fa-regular fa-heart" aria-hidden="true"></i>
       </button>
-      <a href="${hrefWA}" target="_blank" rel="noopener noreferrer" aria-label="Consultar ${producto.nombre} por WhatsApp">
+      ${vistaPwa ? `<button type="button" class="aitana-mobile-destacado-trigger" data-vista-rapida-index="${index}" aria-label="Ver detalles de ${producto.nombre}">` : `<a href="${hrefWA}" target="_blank" rel="noopener noreferrer" data-whatsapp-producto-index="${index}" aria-label="Consultar ${producto.nombre} por WhatsApp">`}
         ${imagenHTML(producto.imagen, producto.nombre, "", producto.imagenDiagnostico)}
-      </a>
+      ${vistaPwa ? "</button>" : "</a>"}
       <h3>${producto.nombre}</h3>
       <div class="aitana-mobile-precio">S/${producto.precio}</div>
-      <a href="${hrefWA}" target="_blank" rel="noopener noreferrer" class="aitana-mobile-whatsapp" aria-label="Consultar por WhatsApp">
+      ${vistaPwa ? "" : `<a href="${hrefWA}" target="_blank" rel="noopener noreferrer" class="aitana-mobile-whatsapp" data-whatsapp-producto-index="${index}" aria-label="Consultar por WhatsApp">
         <i class="fa-brands fa-whatsapp"></i> WhatsApp
       </a>
       <button
         type="button"
         class="agregar-consulta agregar-consulta-mobile"
         data-consulta-index="${index}"
-        aria-label="Agregar ${producto.nombre} a la consulta"
+        aria-label="Agregar ${producto.nombre} a Mi consulta"
         aria-pressed="false"
       >
         + Agregar a consulta
-      </button>
+      </button>`}
     `;
 
     contenedor.appendChild(tarjeta);
@@ -2624,6 +2932,10 @@ function renderizarMobileProductos() {
 
 function sincronizarBottomNav() {
   const linksNav = document.querySelectorAll(".aitana-mobile-bottom-link");
+  if (estaEnModoStandalone()) {
+    actualizarNavegacionPwa(vistaPwaActiva);
+    return;
+  }
   const linksNavMap = {};
   linksNav.forEach(link => {
     const href = link.getAttribute("href");
@@ -2659,9 +2971,11 @@ if (mobileSearch && buscadorReal) {
       buscadorReal.dispatchEvent(
         new Event("input", { bubbles: true })
       );
-      const productosSec = document.getElementById("productos");
-      if (productosSec) {
-        productosSec.scrollIntoView({ behavior: "smooth" });
+      if (estaEnModoStandalone()) {
+        navegarVistaPwa("catalogo", { inicio: true });
+      } else {
+        const productosSec = document.getElementById("productos");
+        productosSec?.scrollIntoView({ behavior: "smooth" });
       }
     }
   });
@@ -2681,7 +2995,8 @@ categoriasMobile?.addEventListener("click", evento => {
 
   const stockTodos = document.querySelector('.stock-filtro[data-stock="todos"]');
   stockTodos?.click();
-  document.getElementById("productos")?.scrollIntoView({ behavior: "smooth" });
+  if (estaEnModoStandalone()) navegarVistaPwa("catalogo", { inicio: true });
+  else document.getElementById("productos")?.scrollIntoView({ behavior: "smooth" });
 });
 
 // Indicador visual discreto mientras quedan categorías fuera de pantalla.
@@ -2711,10 +3026,13 @@ document.addEventListener("click", evento => {
 
   filtroReal?.click();
   stockTodos?.click();
-  document.getElementById("catalogoPrincipal")?.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
+  if (estaEnModoStandalone()) navegarVistaPwa("catalogo", { inicio: true });
+  else {
+    document.getElementById("catalogoPrincipal")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
 });
 
 // Scrollspy: mantener la barra inferior móvil sincronizada
@@ -2822,6 +3140,17 @@ function actualizarModoPwa() {
   if (standalone) {
     if (pwaIosAviso) pwaIosAviso.hidden = true;
     if (pwaAndroidInstalar) pwaAndroidInstalar.hidden = true;
+    inicializarNavegacionPwa();
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      renderizarMobileProductos();
+    }
+  } else {
+    restaurarBloquesVistaWeb();
+  }
+
+  if (volverArriba) {
+    volverArriba.hidden = standalone;
+    if (standalone) volverArriba.classList.remove("mostrar");
   }
 }
 

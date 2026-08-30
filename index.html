@@ -96,7 +96,7 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   >
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=18-navigation-fix">
 </head>
 
 <body>
@@ -240,8 +240,8 @@
 
 <header class="header">
 
-  <a href="#inicio" class="logo">
-    <img src="img/logo de aitana.jpeg" alt="Aitana Make Up" width="1254" height="1254">
+  <a href="#inicio" class="logo" data-pwa-vista="inicio">
+    <img src="img/logo-aitana-192.webp" alt="Aitana Make Up" width="192" height="192" decoding="async">
   </a>
 
   <nav id="menu">
@@ -286,21 +286,20 @@
 
 <section class="hero" id="inicio">
   <div class="hero-texto">
-    <p class="mini">BELLEZA • MAKEUP • TU ESTILO</p>
+    <p class="mini">BELLEZA · MAKEUP · TU ESTILO</p>
 
     <h1>
-      Tu belleza,
-      <span>tu momento Aitana</span>
+      Tu próximo favorito
+      <span>está aquí</span>
     </h1>
 
     <p>
-      Descubre favoritos de maquillaje, cuidado y accesorios
-      elegidos para acompañar cada versión de ti.
+      Maquillaje, cuidado y accesorios elegidos para ti.
     </p>
 
     <div class="hero-acciones">
       <a href="#productos" class="boton">
-        Comprar ahora
+        Ver productos
       </a>
       <a href="#tituloRecienLlegados" class="hero-secundario">
         Ver novedades <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
@@ -341,19 +340,6 @@
       <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
     </div>
 
-    <div class="aitana-mobile-banner">
-      <div class="aitana-mobile-banner-texto">
-        <p class="aitana-mobile-banner-titulo">AITANA MAKE UP</p>
-        <p class="aitana-mobile-banner-sub">Tu belleza, tu momento Aitana</p>
-        <p class="aitana-mobile-banner-desc">Favoritos para verte y sentirte increíble.</p>
-        <a href="#productos" class="aitana-mobile-banner-btn">
-          Ver catálogo <i class="fa-solid fa-arrow-right"></i>
-        </a>
-      </div>
-      <div class="aitana-mobile-banner-foto">
-        <img src="img/Gloss terciopelo revel.webp" alt="Gloss Terciopelo Revel" width="480" height="640" decoding="async">
-      </div>
-    </div>
     <div class="recien-llegados-mobile-slot" id="recienLlegadosMobileSlot"></div>
 
     <section class="busca-hoy busca-hoy-mobile" aria-labelledby="buscaHoyMobileTitulo">
@@ -388,7 +374,7 @@
           <span class="aitana-mobile-section-kicker">LOS MÁS AMADOS</span>
           <h2>Favoritos de Aitana 💗</h2>
         </div>
-        <a href="#productos" class="aitana-mobile-ver-todos">Ver todos ></a>
+        <a href="#productos" class="aitana-mobile-ver-todos" data-pwa-vista="favoritos">Ver todos &gt;</a>
       </div>
       <div class="aitana-mobile-products-carousel" id="aitanaMobileProducts">
       </div>
@@ -642,9 +628,9 @@
 
     <div class="entregas-galeria" id="entregasGaleria" aria-label="Entregas reales de Aitana Make Up">
       <figure class="entrega-tarjeta">
-        <button class="entrega-foto" type="button" data-entrega-imagen="img/entregas-01-rostro-difuminado.png" aria-label="Ampliar primera entrega real">
+        <button class="entrega-foto" type="button" data-entrega-imagen="img/entregas-01-rostro-difuminado.webp" aria-label="Ampliar primera entrega real">
         <img
-          src="img/entregas-01-rostro-difuminado.png"
+          src="img/entregas-01-rostro-difuminado.webp"
           alt="Clienta recibiendo un pedido de Aitana Make Up"
           width="900"
           height="1600"
@@ -656,9 +642,9 @@
       </figure>
 
       <figure class="entrega-tarjeta">
-        <button class="entrega-foto" type="button" data-entrega-imagen="img/entregas-02-rostro-difuminado.png" aria-label="Ampliar segunda entrega real">
+        <button class="entrega-foto" type="button" data-entrega-imagen="img/entregas-02-rostro-difuminado.webp" aria-label="Ampliar segunda entrega real">
         <img
-          src="img/entregas-02-rostro-difuminado.png"
+          src="img/entregas-02-rostro-difuminado.webp"
           alt="Clienta mostrando su entrega de Aitana Make Up"
           width="960"
           height="1280"
@@ -670,9 +656,9 @@
       </figure>
 
       <figure class="entrega-tarjeta">
-        <button class="entrega-foto" type="button" data-entrega-imagen="img/entregas-03-rostro-difuminado.png" aria-label="Ampliar tercera entrega real">
+        <button class="entrega-foto" type="button" data-entrega-imagen="img/entregas-03-rostro-difuminado.webp" aria-label="Ampliar tercera entrega real">
         <img
-          src="img/entregas-03-rostro-difuminado.png"
+          src="img/entregas-03-rostro-difuminado.webp"
           alt="Clienta mostrando el pedido que recibió de Aitana Make Up"
           width="960"
           height="1280"
@@ -780,7 +766,7 @@
 <footer>
 
   <div class="footer-logo">
-    <img src="img/logo de aitana.jpeg" alt="Aitana Make Up" width="1254" height="1254" loading="lazy" decoding="async">
+    <img src="img/logo-aitana-192.webp" alt="Aitana Make Up" width="192" height="192" loading="lazy" decoding="async">
   </div>
 
   <h3>Aitana Make Up 🌸</h3>
@@ -837,7 +823,7 @@
 
 <div class="entrega-modal" id="entregaModal" role="dialog" aria-modal="true" aria-label="Entrega real ampliada" aria-hidden="true">
   <button class="entrega-modal-cerrar" id="entregaModalCerrar" type="button" aria-label="Cerrar fotografía ampliada">&times;</button>
-  <img id="entregaModalImagen" src="" alt="Entrega real de Aitana Make Up ampliada">
+  <img id="entregaModalImagen" alt="Entrega real de Aitana Make Up ampliada" loading="lazy" decoding="async">
 </div>
 
 <div
@@ -910,7 +896,7 @@
     </button>
     <button type="button" class="consulta-multiple-whatsapp" id="enviarConsultaWhatsapp">
       <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
-      Consultar por WhatsApp
+      Enviar consulta por WhatsApp
     </button>
   </div>
 </aside>
@@ -919,9 +905,14 @@
   <div class="mobile-sheet-panel">
     <div class="mobile-sheet-handle" aria-hidden="true"></div>
     <div class="mobile-sheet-header">
-      <h2 id="favoritosTitulo">Mis favoritos 💕</h2>
+      <div>
+        <span class="pwa-pantalla-kicker">TU SELECCIÓN</span>
+        <h2 id="favoritosTitulo"><span class="etiqueta-sheet-web">Mis favoritos 💕</span><span class="etiqueta-sheet-pwa">Favoritos ♡</span></h2>
+        <p class="pwa-pantalla-subtitulo">Tus productos guardados</p>
+      </div>
       <button type="button" class="mobile-sheet-cerrar" data-cerrar-sheet="favoritosSheet" aria-label="Cerrar favoritos">&times;</button>
     </div>
+    <p class="pwa-pantalla-contador" id="favoritosPantallaContador" aria-live="polite"></p>
     <div class="mobile-sheet-lista" id="favoritosLista"></div>
   </div>
 </div>
@@ -930,16 +921,48 @@
   <div class="mobile-sheet-panel">
     <div class="mobile-sheet-handle" aria-hidden="true"></div>
     <div class="mobile-sheet-header">
-      <h2 id="consultaSheetTitulo">Mi consulta 💕</h2>
+      <div>
+        <span class="pwa-pantalla-kicker">LISTA PARA CONSULTAR</span>
+        <h2 id="consultaSheetTitulo"><span class="etiqueta-sheet-web">Mi consulta 💕</span><span class="etiqueta-sheet-pwa">Mi consulta</span></h2>
+        <p class="pwa-pantalla-subtitulo" id="consultaPantallaSubtitulo">Tus productos seleccionados</p>
+      </div>
       <button type="button" class="mobile-sheet-cerrar" data-cerrar-sheet="consultaSheet" aria-label="Cerrar mi consulta">&times;</button>
     </div>
     <div class="mobile-sheet-lista" id="consultaSheetLista"></div>
     <button type="button" class="mobile-sheet-whatsapp" id="consultaSheetWhatsapp">
-      <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
-      Consultar todo por WhatsApp
+      <span id="consultaPantallaResumen"></span>
+      <strong>
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+        <span class="etiqueta-sheet-web">Enviar consulta por WhatsApp</span>
+        <span class="etiqueta-sheet-pwa">Enviar consulta</span>
+      </strong>
     </button>
   </div>
 </div>
+
+<section class="pwa-pantalla-principal" id="pwaFavoritosVista" aria-labelledby="pwaFavoritosTitulo" hidden>
+  <header class="pwa-pantalla-header">
+    <span>TU SELECCIÓN</span>
+    <h2 id="pwaFavoritosTitulo">Mis favoritos 💕</h2>
+    <p id="pwaFavoritosContador">0 productos guardados</p>
+  </header>
+  <div class="pwa-pantalla-lista" id="pwaFavoritosLista"></div>
+</section>
+
+<section class="pwa-pantalla-principal pwa-consulta-vista" id="pwaConsultaVista" aria-labelledby="pwaConsultaTitulo" hidden>
+  <header class="pwa-pantalla-header">
+    <span>LISTA PARA CONSULTAR</span>
+    <h2 id="pwaConsultaTitulo">Mi consulta 💕</h2>
+    <p id="pwaConsultaSubtitulo">0 productos seleccionados</p>
+    <small>Revisa tus productos antes de enviarnos tu consulta.</small>
+  </header>
+  <div class="pwa-pantalla-lista" id="pwaConsultaLista"></div>
+  <div class="pwa-consulta-resumen" id="pwaConsultaResumen" hidden></div>
+  <button type="button" class="pwa-consulta-whatsapp" id="pwaConsultaWhatsapp" hidden>
+    <span id="pwaConsultaCtaResumen"></span>
+    <strong><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Enviar consulta</strong>
+  </button>
+</section>
 
 <aside class="pwa-actualizacion-aviso" id="pwaActualizacionAviso" role="status" hidden>
   <div>
@@ -960,24 +983,25 @@
 </aside>
 
 <button type="button" class="pwa-android-instalar" id="pwaAndroidInstalar" hidden>
-  <img src="/img/icon-192.png" alt="" width="34" height="34">
+  <img src="/img/icon-192.png" alt="" width="34" height="34" loading="lazy" decoding="async">
   <span>Instalar Aitana 💗</span>
 </button>
 
 <nav class="aitana-mobile-bottom-nav" aria-label="Navegación principal móvil">
-  <a href="#inicio" class="aitana-mobile-bottom-link" aria-label="Inicio">
+  <a href="#inicio" class="aitana-mobile-bottom-link" data-pwa-vista="inicio" aria-label="Inicio">
     <i class="fa-solid fa-house"></i>
     <span>Inicio</span>
   </a>
-  <a href="#productos" class="aitana-mobile-bottom-link" aria-label="Catálogo">
+  <a href="#productos" class="aitana-mobile-bottom-link" data-pwa-vista="catalogo" aria-label="Catálogo">
     <i class="fa-solid fa-tag"></i>
     <span>Catálogo</span>
   </a>
-  <button type="button" class="aitana-mobile-bottom-link" id="abrirFavoritos" aria-label="Favoritos">
+  <button type="button" class="aitana-mobile-bottom-link" id="abrirFavoritos" data-pwa-vista="favoritos" aria-label="Favoritos">
     <i class="fa-regular fa-heart"></i>
     <span>Favoritos</span>
+    <b class="mobile-nav-contador" id="mobileFavoritosContador" hidden>0</b>
   </button>
-  <button type="button" class="aitana-mobile-bottom-link" id="abrirMiConsulta" aria-label="Mi consulta">
+  <button type="button" class="aitana-mobile-bottom-link" id="abrirMiConsulta" data-pwa-vista="consulta" aria-label="Mi consulta">
     <i class="fa-solid fa-bag-shopping"></i>
     <span>Mi consulta</span>
     <b class="mobile-nav-contador" id="mobileConsultaContador" hidden>0</b>
@@ -1020,7 +1044,7 @@
     </button>
 
     <img
-      data-src="img/banner-profesional.png"
+      data-src="img/banner-profesional.webp"
       alt="Ya llegaron nuevos productos a Aitana Make Up"
       width="1024"
       height="1536"
@@ -1033,7 +1057,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="revision-auth.js"></script>
-<script src="script.js"></script>
+<script src="script.js?v=18-navigation-fix"></script>
 
 </body>
 </html>

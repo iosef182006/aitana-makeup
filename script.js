@@ -44,6 +44,8 @@ async function cargarCatalogoSupabase() {
 
 function mostrarErrorCatalogo() {
   if (!contenedor) return;
+  desregistrarImagenesDiferidas(contenedor);
+  desregistrarImagenesDiferidas(contenedorRecienLlegados);
   contenedor.innerHTML = `
     <div role="alert" style="grid-column: 1 / -1; padding: 32px 20px; text-align: center;">
       <h3>No pudimos cargar el catálogo</h3>
@@ -440,19 +442,31 @@ function codificarDatoImagen(valor) {
   return encodeURIComponent(String(valor || "")).replace(/'/g, "%27");
 }
 
-function imagenHTML(nombre, alt, clase = "", diagnostico = null) {
+function imagenHTML(nombre, alt, clase = "", diagnostico = null, opciones = {}) {
 
   if (/^https?:\/\//i.test(nombre || "")) {
+    const {
+      diferirSrc = true,
+      loading = "lazy",
+      fetchPriority = null
+    } = opciones;
+    const atributoOrigen = diferirSrc
+      ? `data-src="${nombre}"`
+      : `src="${nombre}"`;
+    const atributoPrioridad = fetchPriority
+      ? `fetchpriority="${fetchPriority}"`
+      : "";
+
     return `
       <img
-        src="${nombre}"
+        ${atributoOrigen}
         alt="${alt}"
         class="${clase}"
         data-image-product-id="${codificarDatoImagen(diagnostico?.productId)}"
         data-image-storage-path="${codificarDatoImagen(diagnostico?.storagePath)}"
         data-image-url="${codificarDatoImagen(diagnostico?.url || nombre)}"
-        loading="eager"
-        fetchpriority="high"
+        loading="${loading}"
+        ${atributoPrioridad}
         decoding="async"
         onerror="reportarErrorImagen(this)"
       >
@@ -483,6 +497,37 @@ function imagenHTML(nombre, alt, clase = "", diagnostico = null) {
       "
     >
   `;
+}
+
+const observadorImagenesDiferidas = "IntersectionObserver" in window
+  ? new IntersectionObserver((entradas, observador) => {
+      entradas.forEach(entrada => {
+        if (!entrada.isIntersecting) return;
+        const imagen = entrada.target;
+        if (imagen.dataset.src && !imagen.getAttribute("src")) {
+          imagen.src = imagen.dataset.src;
+        }
+        observador.unobserve(imagen);
+      });
+    }, { rootMargin: "240px 160px" })
+  : null;
+
+function registrarImagenesDiferidas(raiz = document) {
+  raiz?.querySelectorAll("img[data-src]").forEach(imagen => {
+    if (imagen.getAttribute("src")) return;
+    if (observadorImagenesDiferidas) {
+      observadorImagenesDiferidas.observe(imagen);
+    } else {
+      imagen.src = imagen.dataset.src;
+    }
+  });
+}
+
+function desregistrarImagenesDiferidas(raiz) {
+  if (!observadorImagenesDiferidas) return;
+  raiz?.querySelectorAll("img[data-src]").forEach(imagen => {
+    observadorImagenesDiferidas.unobserve(imagen);
+  });
 }
 
 
@@ -710,6 +755,8 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
 
 function crearProductos() {
 
+  desregistrarImagenesDiferidas(contenedor);
+  desregistrarImagenesDiferidas(contenedorRecienLlegados);
   contenedor.innerHTML = "";
 
   productos.forEach((producto, index) => {
@@ -734,6 +781,9 @@ function crearProductos() {
         );
       });
   }
+
+  registrarImagenesDiferidas(contenedor);
+  registrarImagenesDiferidas(contenedorRecienLlegados);
 
 }
 
@@ -772,6 +822,7 @@ function plantillaEstadoVacio(icono, titulo, texto) {
 
 function renderizarFavoritos() {
   if (!favoritosLista) return;
+  desregistrarImagenesDiferidas(favoritosLista);
   const favoritos = productos
     .map((producto, index) => ({ producto, index }))
     .filter(({ producto }) => productosFavoritos.has(obtenerIdProductoFavorito(producto)));
@@ -787,6 +838,8 @@ function renderizarFavoritos() {
         <button type="button" class="mobile-sheet-quitar" data-favorito-index="${index}" aria-label="Quitar ${producto.nombre} de favoritos">Quitar</button>
       </article>`).join("")
     : plantillaEstadoVacio("♡", "Aún no tienes favoritos", "Toca el corazón de un producto para guardarlo aquí.");
+
+  registrarImagenesDiferidas(favoritosLista);
 }
 
 function alternarFavorito(index, boton) {
@@ -861,6 +914,7 @@ const consultaSheetWhatsapp = document.getElementById("consultaSheetWhatsapp");
 
 function renderizarConsultaSheet() {
   if (!consultaSheetLista) return;
+  desregistrarImagenesDiferidas(consultaSheetLista);
   const seleccionados = [...productosConsulta]
     .map(index => ({ producto: productos[index], index }))
     .filter(({ producto }) => producto);
@@ -879,6 +933,7 @@ function renderizarConsultaSheet() {
     : plantillaEstadoVacio("🛍️", "Tu consulta está vacía", "Agrega productos y aparecerán aquí para consultarlos juntos.");
 
   if (consultaSheetWhatsapp) consultaSheetWhatsapp.hidden = seleccionados.length === 0;
+  registrarImagenesDiferidas(consultaSheetLista);
 }
 
 
@@ -1117,7 +1172,10 @@ function abrirVistaRapida(index) {
 
   vistaRapidaCuerpo.innerHTML = `
     <div class="vista-rapida-imagen-contenedor">
-      ${imagenHTML(producto.imagen, producto.nombre, "vista-rapida-imagen", producto.imagenDiagnostico)}
+      ${imagenHTML(producto.imagen, producto.nombre, "vista-rapida-imagen", producto.imagenDiagnostico, {
+        diferirSrc: false,
+        loading: "eager"
+      })}
       ${
         producto.reingreso === true
           ? '<span class="vista-rapida-nuevo vista-rapida-reingreso">↻ REINGRESO</span>'
@@ -1323,6 +1381,7 @@ function abrirModal(index, agregarAlElegir = false) {
     `${producto.nombre} - S/${producto.precio}`;
 
 
+  desregistrarImagenesDiferidas(modalImagenes);
   modalImagenes.innerHTML = "";
 
   const imagenesTonos = producto.imagenesTonos?.length
@@ -1333,7 +1392,15 @@ function abrirModal(index, agregarAlElegir = false) {
     const divTonos = document.createElement("div");
     divTonos.classList.add("detalle-imagen");
     const diagnostico = producto.imagenesTonosDiagnostico?.[toneIndex] || producto.imagenTonosDiagnostico;
-    divTonos.innerHTML = imagenHTML(imagenTonos, `Tonos de ${producto.nombre} ${toneIndex + 1}`, "", diagnostico);
+    divTonos.innerHTML = imagenHTML(
+      imagenTonos,
+      `Tonos de ${producto.nombre} ${toneIndex + 1}`,
+      "",
+      diagnostico,
+      toneIndex === 0
+        ? { diferirSrc: false, loading: "eager", fetchPriority: "high" }
+        : { diferirSrc: true, loading: "lazy" }
+    );
     modalImagenes.appendChild(divTonos);
   });
 
@@ -1387,6 +1454,8 @@ function abrirModal(index, agregarAlElegir = false) {
   modal.classList.add("activo");
 
   modal.setAttribute("aria-hidden", "false");
+
+  registrarImagenesDiferidas(modalImagenes);
 
   document.body.style.overflow = "hidden";
 
@@ -2312,6 +2381,7 @@ function ajustarMobile() {
 function renderizarMobileProductos() {
   const contenedor = document.getElementById("aitanaMobileProducts");
   if (!contenedor) return;
+  desregistrarImagenesDiferidas(contenedor);
   contenedor.innerHTML = "";
 
   const mapa = {};
@@ -2373,6 +2443,7 @@ function renderizarMobileProductos() {
 
   actualizarConsultaMultiple();
   actualizarBotonesFavoritos();
+  registrarImagenesDiferidas(contenedor);
 }
 
 function sincronizarBottomNav() {
@@ -2508,6 +2579,11 @@ function mostrarAnuncioAitana() {
     estaEnModoStandalone() ||
     sessionStorage.getItem(claveAnuncioVisto)
   ) return;
+
+  const imagenAnuncio = anuncioAitana.querySelector("img[data-src]");
+  if (imagenAnuncio && !imagenAnuncio.getAttribute("src")) {
+    imagenAnuncio.src = imagenAnuncio.dataset.src;
+  }
 
   focoAntesDelAnuncio = document.activeElement;
   anuncioAitana.hidden = false;

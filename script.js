@@ -230,6 +230,7 @@ const productos = [
     precio: "7.00",
     agotado: false,
     nuevo: true,
+    prioridadReciente: true,
     nota: "Tonos disponibles ✨💗"
   },
 
@@ -548,7 +549,8 @@ const productos = [
     imagen: "cepillo-cabello-akoya",
     precio: "8.00",
     agotado: false,
-    nuevo: true
+    nuevo: true,
+    prioridadReciente: true
   },
 
   {
@@ -557,7 +559,8 @@ const productos = [
     imagen: "set-peine-espejo",
     precio: "5.00",
     agotado: false,
-    nuevo: true
+    nuevo: true,
+    prioridadReciente: true
   },
 
   {
@@ -566,7 +569,8 @@ const productos = [
     imagen: "set-lima-saca-cuticula-akoya",
     precio: "6.00",
     agotado: false,
-    nuevo: true
+    nuevo: true,
+    prioridadReciente: true
   }
 
 ];
@@ -976,13 +980,18 @@ function crearProductos() {
   if (contenedorRecienLlegados) {
     contenedorRecienLlegados.innerHTML = "";
 
-    productos.forEach((producto, index) => {
-      if (producto.nuevo === true) {
+    productos
+      .map((producto, index) => ({ producto, index }))
+      .filter(({ producto }) => producto.nuevo === true)
+      .sort((a, b) =>
+        Number(b.producto.prioridadReciente === true) -
+        Number(a.producto.prioridadReciente === true)
+      )
+      .forEach(({ producto, index }) => {
         contenedorRecienLlegados.appendChild(
           crearTarjetaProducto(producto, index, "producto-reciente")
         );
-      }
-    });
+      });
   }
 
 }

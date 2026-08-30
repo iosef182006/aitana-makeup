@@ -2978,14 +2978,12 @@ function hayActividadImportanteParaActualizar() {
   const estaEscribiendo = activo?.matches?.(
     "input, textarea, select, [contenteditable='true']"
   );
-  const interfazActiva = document.querySelector(
-    ".mobile-sheet.activo, .vista-rapida-modal.activo, .modal.activo, .entrega-modal.activo, .header nav.abierto, form:focus-within"
+  const interfazActivaQueCancelaRecarga = document.querySelector(
+    ".header nav.abierto, form:focus-within"
   );
 
-  return productosConsulta.size > 0 ||
-    productosFavoritos.size > 0 ||
-    Boolean(estaEscribiendo) ||
-    Boolean(interfazActiva);
+  return Boolean(estaEscribiendo) ||
+    Boolean(interfazActivaQueCancelaRecarga);
 }
 
 function mostrarActualizacionPwa() {
@@ -3014,23 +3012,6 @@ function recargarConActualizacion() {
   window.location.reload();
 }
 
-function gestionarControladorPwaNuevo() {
-  let recargaReciente = false;
-  try {
-    recargaReciente = Date.now() - Number(sessionStorage.getItem(PWA_UPDATE_RELOAD_KEY) || 0) < 15000;
-  } catch (error) {
-    // Sin sessionStorage se conserva la protecciÃ³n en memoria.
-  }
-
-  if (recargaReciente || recargaActualizacionEnCurso) return;
-
-  if (hayActividadImportanteParaActualizar()) {
-    mostrarActualizacionPwa();
-  } else {
-    recargarConActualizacion();
-  }
-}
-
 pwaActualizarAhora?.addEventListener("click", recargarConActualizacion);
 
 if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location.protocol)) {
@@ -3052,11 +3033,7 @@ if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location
         const anunciarWorkerNuevo = worker => {
           if (worker?.state === "installed" && navigator.serviceWorker.controller) {
             workerActualizacionPendiente = worker;
-            if (hayActividadImportanteParaActualizar()) {
-              mostrarActualizacionPwa();
-            } else {
-              recargarConActualizacion();
-            }
+            mostrarActualizacionPwa();
           }
         };
 
@@ -3067,11 +3044,7 @@ if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location
 
         if (registro.waiting && navigator.serviceWorker.controller) {
           workerActualizacionPendiente = registro.waiting;
-          if (hayActividadImportanteParaActualizar()) {
-            mostrarActualizacionPwa();
-          } else {
-            recargarConActualizacion();
-          }
+          mostrarActualizacionPwa();
         }
 
         const comprobarActualizacion = async ({ forzar = false } = {}) => {
@@ -3082,12 +3055,16 @@ if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location
           try {
             await registro.update();
           } catch (error) {
-            // La aplicaciÃ³n continÃºa con normalidad si no hay conexiÃ³n.
+            // La aplicación continúa con normalidad si no hay conexión.
           }
         };
 
         document.addEventListener("visibilitychange", () => {
           if (document.visibilityState === "visible") comprobarActualizacion();
+        });
+
+        window.addEventListener("focus", () => {
+          comprobarActualizacion();
         });
 
         window.setInterval(comprobarActualizacion, PWA_UPDATE_INTERVALO);

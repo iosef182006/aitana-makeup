@@ -1,4 +1,4 @@
-const CACHE_VERSION = "aitana-pwa-v16";
+const CACHE_VERSION = "aitana-pwa-v17";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const NETWORK_CACHE = `${CACHE_VERSION}-network`;
 

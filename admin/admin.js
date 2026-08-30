@@ -41,6 +41,35 @@
     els.loginError.textContent = message;
   }
 
+  function transitionToLoggedOut(message = "") {
+    cleanupPreview();
+    state.products = [];
+    state.images.clear();
+    state.tonesImages.clear();
+    state.editingId = null;
+    state.currentImage = null;
+    state.actionProductId = null;
+    state.pendingDeleteId = null;
+    els.list.innerHTML = "";
+    els.form.reset();
+    els.formMessage.hidden = true;
+    els.variants.innerHTML = "";
+    els.tonesList.innerHTML = "";
+    els.preview.removeAttribute("src");
+    els.preview.hidden = true;
+    els.placeholder.hidden = false;
+    els.tonesPanel.hidden = true;
+    els.dialog.hidden = true;
+    els.actionsDialog.hidden = true;
+    els.stockDialog.hidden = true;
+    els.toast.hidden = true;
+    clearTimeout(toast.timer);
+    ["totalCount", "availableCount", "lowCount", "soldOutCount", "newCount"].forEach(id => { $(id).textContent = "0"; });
+    els.count.textContent = "0 productos";
+    $("password").value = "";
+    showLogin(message);
+  }
+
   function errorText(error, fallback) {
     console.error(error);
     if (/row-level security|permission denied|not allowed/i.test(error?.message || "")) return "Tu usuario no tiene permiso para realizar esta acción. Revisa las políticas RLS.";
@@ -67,7 +96,7 @@
       resetCatalogControls();
       setView("dashboard");
       await loadProducts();
-    } catch (_) { showLogin(); }
+    } catch (_) { transitionToLoggedOut(); }
   }
 
   els.loginForm.addEventListener("submit", async event => {
@@ -75,22 +104,43 @@
     els.loginError.hidden = true;
     els.loginButton.disabled = true;
     els.loginButton.textContent = "Ingresando…";
-    const { error } = await db.auth.signInWithPassword({ email: $("email").value.trim(), password: $("password").value });
-    if (error) {
-      els.loginError.textContent = "Correo o contraseña incorrectos.";
+    try {
+      const { error } = await db.auth.signInWithPassword({ email: $("email").value.trim(), password: $("password").value });
+      if (error) {
+        els.loginError.textContent = "Correo o contraseña incorrectos.";
+        els.loginError.hidden = false;
+      } else {
+        els.loginForm.reset();
+        resetCatalogControls();
+        setView("dashboard");
+        await loadProducts();
+      }
+    } catch (error) {
+      console.error("Aitana Admin: no se pudo completar el inicio de sesión.", error);
+      els.loginError.textContent = "No pudimos iniciar sesión. Inténtalo nuevamente.";
       els.loginError.hidden = false;
-    } else {
-      els.loginForm.reset();
-      resetCatalogControls();
-      setView("dashboard");
-      await loadProducts();
+    } finally {
+      $("password").value = "";
+      els.loginButton.disabled = false;
+      els.loginButton.textContent = "Iniciar sesión";
     }
-    els.loginButton.disabled = false;
-    els.loginButton.textContent = "Iniciar sesión";
   });
 
-  els.logout.addEventListener("click", async () => { await db.auth.signOut(); showLogin(); });
-  db.auth.onAuthStateChange(event => { if (event === "SIGNED_OUT") showLogin(); });
+  els.logout.addEventListener("click", async () => {
+    if (els.logout.disabled) return;
+    els.logout.disabled = true;
+    transitionToLoggedOut();
+    try {
+      const { error } = await db.auth.signOut();
+      if (error) throw error;
+    } catch (error) {
+      console.error("Aitana Admin: no se pudo completar el cierre de sesión.", error);
+      transitionToLoggedOut("No pudimos cerrar la sesión por completo. Inténtalo nuevamente.");
+    } finally {
+      els.logout.disabled = false;
+    }
+  });
+  db.auth.onAuthStateChange(event => { if (event === "SIGNED_OUT") transitionToLoggedOut(); });
 
   function stockQuantityValue(quantity) {
     if (quantity === null || quantity === undefined || quantity === "") return null;

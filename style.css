@@ -90,6 +90,22 @@ body {
 
 }
 
+.header nav a.nav-admin-link {
+  padding: 10px 14px;
+  border: 1px solid #f0dfe6;
+  color: #806f77;
+  background: #fff9fb;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.header nav a.nav-admin-link:hover,
+.header nav a.nav-admin-link:focus-visible {
+  border-color: #e8b9ca;
+  color: #a91f54;
+  background: #fff0f5;
+}
+
 
 .header-whatsapp {
 
@@ -2823,6 +2839,16 @@ footer {
 
   .header nav a:last-child {
     border-bottom: none;
+  }
+
+  .header nav a.nav-admin-link {
+    margin-top: 5px;
+    padding: 14px 16px;
+    border: 0;
+    border-top: 1px solid #eedbe3;
+    border-radius: 0;
+    background: transparent;
+    font-size: 14px;
   }
 
   .header-whatsapp {

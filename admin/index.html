@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fff7fa">
+  <title>Aitana Admin</title>
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <div id="app" class="app-shell" aria-live="polite">
+    <section id="loadingView" class="center-view">
+      <div class="loader" aria-label="Cargando"></div>
+    </section>
+
+    <section id="loginView" class="center-view" hidden>
+      <div class="login-card">
+        <div class="brand-mark" aria-hidden="true">A</div>
+        <h1>Aitana Admin <span aria-hidden="true">💗</span></h1>
+        <p>Panel de administración</p>
+        <form id="loginForm" class="stack">
+          <label>Correo<input id="email" type="email" autocomplete="username" inputmode="email" required></label>
+          <label>Contraseña<input id="password" type="password" autocomplete="current-password" required></label>
+          <p id="loginError" class="message error" role="alert" hidden></p>
+          <button id="loginButton" class="button primary" type="submit">Iniciar sesión</button>
+        </form>
+      </div>
+    </section>
+
+    <main id="adminView" hidden>
+      <header class="topbar">
+        <div><h1>Aitana Admin</h1><p>Gestiona tu catálogo</p></div>
+        <div class="topbar-actions">
+          <a class="header-button store-button" href="/" target="_blank" rel="noopener"><span aria-hidden="true">↗</span><b>Ver tienda</b></a>
+          <button id="logoutButton" class="header-button" type="button" aria-label="Cerrar sesión" title="Cerrar sesión"><span aria-hidden="true">⇥</span><b>Salir</b></button>
+        </div>
+      </header>
+
+      <section id="dashboardView" class="page">
+        <div class="stats" aria-label="Resumen de inventario">
+          <article><i aria-hidden="true">📦</i><span id="totalCount">0</span><small>Productos</small></article>
+          <article><i aria-hidden="true">✅</i><span id="availableCount">0</span><small>Disponibles</small></article>
+          <article><i aria-hidden="true">🔥</i><span id="lowCount">0</span><small>Poco stock</small></article>
+          <article><i aria-hidden="true">⛔</i><span id="soldOutCount">0</span><small>Agotados</small></article>
+          <article><i aria-hidden="true">✨</i><span id="newCount">0</span><small>Nuevos</small></article>
+        </div>
+        <button id="newProductButton" class="button primary add-button" type="button"><span>＋</span> Nuevo producto</button>
+        <div class="section-heading products-heading"><div><h2>Productos</h2><p id="productsCount">0 productos</p></div><button id="refreshButton" class="refresh-button" type="button" aria-label="Actualizar productos" title="Actualizar">↻</button></div>
+        <label class="search"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Buscar producto..." autocomplete="off"></label>
+        <div id="productFilters" class="filter-chips" aria-label="Filtrar productos">
+          <button class="active" type="button" data-filter="all">Todos</button>
+          <button type="button" data-filter="available">Disponibles</button>
+          <button type="button" data-filter="low">Poco stock</button>
+          <button type="button" data-filter="out">Agotados</button>
+          <button type="button" data-filter="new">Nuevos</button>
+        </div>
+        <label class="sort-control"><span>Ordenar por</span><select id="productSort"><option value="recent">Más recientes</option><option value="name">Nombre A-Z</option><option value="price-asc">Precio menor</option><option value="price-desc">Precio mayor</option><option value="stock-asc">Menor stock</option></select></label>
+        <p id="productsMessage" class="message" hidden></p>
+        <div id="productList" class="product-list"></div>
+      </section>
+
+      <section id="editorView" class="page" hidden>
+        <div class="editor-heading"><button id="backButton" class="back-button" type="button" aria-label="Volver">‹</button><div><span class="eyebrow">Productos</span><h2 id="editorTitle">Nuevo producto</h2></div></div>
+        <form id="productForm" class="editor-form">
+          <section class="form-card">
+            <h3>Foto principal</h3>
+            <label class="image-picker" for="productImage">
+              <img id="imagePreview" alt="Vista previa del producto" hidden>
+              <span id="imagePlaceholder"><b>＋</b> Seleccionar o tomar foto<small>JPG, PNG o WEBP · máximo 5 MB</small></span>
+            </label>
+            <input id="productImage" class="visually-hidden" type="file" accept="image/jpeg,image/png,image/webp" capture="environment">
+          </section>
+
+          <section class="form-card fields">
+            <label>Nombre<input id="name" name="name" required maxlength="150"></label>
+            <label>Marca<input id="brand" name="brand" maxlength="100"></label>
+            <label>Categoría<input id="category" name="category" required maxlength="100"></label>
+            <label>Descripción<textarea id="description" name="description" rows="4" maxlength="2000"></textarea></label>
+            <label>Nota del catálogo <small>(opcional)</small><textarea id="catalogNote" name="catalog_note" rows="2" maxlength="500" placeholder="Ej. Tonos disponibles"></textarea></label>
+            <div class="field-row">
+              <label>Precio<input id="price" name="price" type="number" inputmode="decimal" min="0" step="0.01" required></label>
+              <label>Precio anterior <small>(opcional)</small><input id="compareAtPrice" name="compare_at_price" type="number" inputmode="decimal" min="0" step="0.01"></label>
+            </div>
+            <label>Cantidad de stock <small>(opcional)</small><input id="stockQuantity" name="stock_quantity" type="number" inputmode="numeric" min="0" step="1" placeholder="Sin registrar"><small>Déjalo vacío si todavía no registraste una cantidad.</small></label>
+          </section>
+
+          <section class="form-card toggles">
+            <label><span><b>Nuevo</b><small>Mostrar como novedad</small></span><input id="isNew" type="checkbox" role="switch"></label>
+            <label><span><b>Destacado</b><small>Priorizar este producto</small></span><input id="isFeatured" type="checkbox" role="switch"></label>
+            <label><span><b>Prioridad reciente</b><small>Priorizar dentro de Recién llegó</small></span><input id="priorityRecent" type="checkbox" role="switch"></label>
+            <label><span><b>Reingreso</b><small>Mostrar la etiqueta de reingreso</small></span><input id="isRestock" type="checkbox" role="switch"></label>
+            <label><span><b>Activo</b><small>Disponible para publicación futura</small></span><input id="isActive" type="checkbox" role="switch" checked></label>
+          </section>
+
+          <section class="form-card">
+            <div class="section-heading tones-heading"><div><h3>TONOS</h3><p>Una o varias imágenes con los tonos numerados.</p></div></div>
+            <label class="tones-toggle"><span><b>Este producto tiene tonos</b><small>Mostrará el botón “Ver tonos” en la tienda.</small></span><input id="hasTones" type="checkbox" role="switch"></label>
+            <div id="tonesImagePanel" class="tones-image-panel" hidden>
+              <div class="tones-image-header"><h4>Imágenes de tonos</h4><small>Máximo 5 MB por imagen</small></div>
+              <div id="tonesImagesList" class="tones-images-list"></div>
+              <p id="tonesImagesEmpty" class="tones-images-empty">Todavía no agregaste imágenes de tonos.</p>
+              <label class="button secondary tones-add-button" for="tonesImage">＋ Subir imágenes de tonos</label>
+              <input id="tonesImage" class="visually-hidden" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" multiple>
+            </div>
+          </section>
+
+          <section class="form-card">
+            <div class="section-heading"><div><h3>Stock por tono / Variantes</h3><p>Opcional: controla el stock individual de cada tono.</p></div><button id="addVariantButton" class="text-button" type="button">＋ Agregar tono</button></div>
+            <div id="variantList" class="variant-list"></div>
+          </section>
+
+          <p id="formMessage" class="message error" role="alert" hidden></p>
+          <div class="form-actions">
+            <button id="saveButton" class="button primary" type="submit">Publicar producto</button>
+            <button id="deleteButton" class="button danger" type="button" hidden>Eliminar producto</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <div id="confirmDialog" class="dialog-backdrop" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <h2 id="confirmTitle">¿Eliminar este producto?</h2>
+      <p>Esta acción no se puede deshacer.</p>
+      <div><button id="cancelDeleteButton" class="button secondary" type="button">Cancelar</button><button id="confirmDeleteButton" class="button danger solid" type="button">Eliminar</button></div>
+    </div>
+  </div>
+
+  <div id="actionsDialog" class="dialog-backdrop actions-backdrop" hidden>
+    <div class="actions-menu" role="dialog" aria-modal="true" aria-labelledby="actionsTitle">
+      <div class="actions-menu-heading"><div><small>Acciones</small><h2 id="actionsTitle">Producto</h2></div><button id="closeActionsButton" type="button" aria-label="Cerrar">×</button></div>
+      <button type="button" data-product-action="edit"><span>✎</span> Editar</button>
+      <button type="button" data-product-action="stock"><span>⌗</span> Cambiar stock</button>
+      <button type="button" data-product-action="sold-out"><span>○</span> Marcar agotado</button>
+      <button id="featureActionButton" type="button" data-product-action="feature"><span>★</span> Destacar</button>
+      <button class="danger-action" type="button" data-product-action="delete"><span>⌫</span> Eliminar</button>
+    </div>
+  </div>
+
+  <div id="stockDialog" class="dialog-backdrop" hidden>
+    <form id="stockForm" class="dialog stock-dialog" role="dialog" aria-modal="true" aria-labelledby="stockTitle">
+      <h2 id="stockTitle">Cambiar stock</h2>
+      <p id="stockProductName"></p>
+      <label>Nueva cantidad <small>(opcional)</small><input id="quickStockQuantity" type="number" inputmode="numeric" min="0" step="1" placeholder="Sin registrar"><small>Déjalo vacío para guardar stock sin registrar.</small></label>
+      <div><button id="cancelStockButton" class="button secondary" type="button">Cancelar</button><button id="saveStockButton" class="button primary" type="submit">Guardar</button></div>
+    </form>
+  </div>
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
+  <script src="/supabase-config.js"></script>
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

@@ -20,6 +20,73 @@ if (pantallaActualizacion) {
   }
 }
 
+const TOTAL_PRODUCTOS_SUPABASE_ESPERADO = 55;
+
+async function cargarCatalogoSupabase() {
+  if (esRutaRevision || MODO_ACTUALIZACION) return;
+
+  try {
+    const cargaSupabase = await obtenerProductosSupabase();
+    if (cargaSupabase.productos.length !== TOTAL_PRODUCTOS_SUPABASE_ESPERADO) {
+      throw new Error(`Se esperaban ${TOTAL_PRODUCTOS_SUPABASE_ESPERADO} productos activos de Supabase y se recibieron ${cargaSupabase.productos.length}.`);
+    }
+
+    const cargaConImagenes = await cargarImagenesSupabase(cargaSupabase);
+    productos = await cargarVariantesSupabase(cargaConImagenes);
+    refrescarInterfazCatalogo();
+  } catch (error) {
+    productos = [];
+    console.warn("Aitana: no se pudo cargar el catálogo de Supabase.", error);
+    mostrarErrorCatalogo();
+    guardarConsultaPersistente();
+  }
+}
+
+function mostrarErrorCatalogo() {
+  if (!contenedor) return;
+  contenedor.innerHTML = `
+    <div role="alert" style="grid-column: 1 / -1; padding: 32px 20px; text-align: center;">
+      <h3>No pudimos cargar el catálogo</h3>
+      <p>Revisa tu conexión e inténtalo nuevamente.</p>
+      <button type="button" id="reintentarCatalogo" class="filtro">Reintentar</button>
+    </div>
+  `;
+  if (contenedorRecienLlegados) contenedorRecienLlegados.innerHTML = "";
+  document.getElementById("contadorProductos").textContent = "0";
+  document.getElementById("reintentarCatalogo")?.addEventListener("click", cargarCatalogoSupabase, { once: true });
+}
+
+function refrescarInterfazCatalogo() {
+  try {
+
+    consultaGuardadaInicial.forEach(valorGuardado => {
+      const id = typeof valorGuardado === "object" ? valorGuardado?.id : valorGuardado;
+      const varianteGuardada = typeof valorGuardado === "object" ? valorGuardado?.variante : null;
+      const index = productos.findIndex(producto => obtenerIdProductoConsulta(producto) === id);
+      const producto = productos[index];
+      if (index < 0 || !producto || producto.agotado) return;
+      if (varianteGuardada) {
+        const varianteDisponible = producto.variantes?.find(variante => variante.value === varianteGuardada && !variante.agotada);
+        if (!varianteDisponible) return;
+        variantesConsulta.set(id, varianteGuardada);
+      }
+      productosConsulta.add(index);
+    });
+
+    crearProductos();
+    observarAnimacionesCatalogo();
+    ordenarCatalogo();
+    reiniciarCargaYActualizar();
+    actualizarBotonesFavoritos();
+    renderizarFavoritos();
+    actualizarConsultaMultiple();
+    actualizarCarruselRecientes();
+    if (window.matchMedia("(max-width: 768px)").matches) renderizarMobileProductos();
+    guardarConsultaPersistente();
+  } catch (error) {
+    console.error("Aitana: el catálogo se cargó, pero ocurrió un error al refrescar la interfaz.", error);
+  }
+}
 
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
@@ -30,568 +97,173 @@ if ("scrollRestoration" in history) {
 // PRODUCTOS
 // ======================================
 
-const productos = [
-
-  // ==========================
-  // TINTAS LABIALES
-  // ==========================
-
-  {
-    nombre: "Tinta para Labios Samantha",
-    categoria: "Tintas labiales",
-    imagen: "Tinta Samantha",
-    precio: "5.00",
-    detalles: [
-      "Codigo 4"
-    ]
-  },
-
-  {
-    nombre: "Tinta para Labios The Game Jarusa",
-    categoria: "Tintas labiales",
-    imagen: "Tinta jarusa",
-    precio: "4.00",
-    agotado: false,
-    detalles: [
-      "Codigo 6"
-    ]
-  },
-
-
-  // ==========================
-  // LIP GLOSSES
-  // ==========================
-
-  {
-    nombre: "Lip Gloss Dup Dior",
-    categoria: "Lip Gloss",
-    imagen: "Gloss dup dior",
-    precio: "8.00",
-    agotado: true
-  },
-
-  {
-    nombre: "Lip Gloss Mirror Girl",
-    categoria: "Lip Gloss",
-    imagen: "Gloss mirror",
-    precio: "4.00"
-  },
-
-  {
-    nombre: "Lip Gloss Conejo",
-    categoria: "Lip Gloss",
-    imagen: "Gloss conejo",
-    precio: "6.00",
-    agotado: true
-  },
-
-  {
-    nombre: "Lip Gloss Terciopelo Revel",
-    categoria: "Lip Gloss",
-    imagen: "Gloss terciopelo revel",
-    precio: "8.00",
-    detalles: [
-      "tonos-gloss-revel"
-    ]
-  },
-
-  {
-    nombre: "Lip Gloss AOZY",
-    categoria: "Lip Gloss",
-    imagen: "lip-gloss-aozy",
-    precio: "8.00",
-    agotado: false,
-    nuevo: true
-  },
-
-  {
-    nombre: "Lip Gloss 3D Karité Plump Lips Super Volumen con Espejo",
-    categoria: "Lip Gloss",
-    imagen: "lip-gloss-3d-plump-lips",
-    precio: "8.50",
-    agotado: false,
-    nuevo: true,
-    detalles: [
-      "tonos-gloss-3d"
-    ]
-  },
-
-
-  // ==========================
-  // LABIALES
-  // ==========================
-
-  {
-    nombre: "Labial Líquido Matte AOZY",
-    categoria: "Labiales",
-    imagen: "aozy-1",
-    precio: "8.00",
-    agotado: false,
-    nuevo: true,
-    detalles: [
-      "tonos-aozy-matte"
-    ]
-  },
-
-  {
-    nombre: "Labial Líquido Matte Lofshe",
-    categoria: "Labiales",
-    imagen: "Labial liquido matte",
-    precio: "8.00",
-    agotado: true,
-    detalles: [
-      "5 codigos"
-    ]
-  },
-
-  {
-    nombre: "Labial Corazón Mate Crazy Girl",
-    categoria: "Labiales",
-    imagen: "Labial corazon matte",
-    precio: "8.00",
-    agotado: true,
-    detalles: [
-      "5 codigos labial corazon"
-    ]
-  },
-
-  {
-    nombre: "Labial Osito Revel",
-    categoria: "Labiales",
-    imagen: "Labial osito",
-    precio: "6.50",
-    detalles: [
-      "10 tonos",
-      "10 tonos-2"
-    ]
-  },
-
-  {
-    nombre: "Labial Líquido Waterproof Super Stay",
-    categoria: "Labiales",
-    imagen: "labial-waterproof-super-stay",
-    precio: "7.00",
-    agotado: false,
-    nuevo: true,
-    detalles: [
-      "tonos-labial-waterproof"
-    ]
-  },
-
-  {
-    nombre: "Lápiz Delineador de Labios USHAS",
-    categoria: "Labiales",
-    imagen: "lapiz-labios-ushas",
-    precio: "3.50",
-    agotado: false,
-    nuevo: true
-  },
-
-  {
-    nombre: "Labial Líquido Matte Ever Beauty",
-    categoria: "Labiales",
-    imagen: "labial-matte-ever-beauty",
-    precio: "7.00",
-    agotado: false,
-    nuevo: true,
-    detalles: [
-      "tonos-ever-beauty"
-    ]
-  },
-
-
-  // ==========================
-  // DELINEADORES
-  // ==========================
-
-  {
-    nombre: "Lápiz Delineador para Ojos, Labios y Cejas Magic Shop",
-    categoria: "Ojos y labios",
-    imagen: "delineadores",
-    precio: "3.00"
-  },
-
-
-  // ==========================
-  // RUBORES E ILUMINADORES
-  // ==========================
-
-  {
-    nombre: "Rubor Líquido AOZY",
-    categoria: "Rostro",
-    imagen: "rubor liquido",
-    precio: "8.00"
-  },
-
-  {
-    nombre: "Rubor en Crema Samantha",
-    categoria: "Rostro",
-    imagen: "rubor-crema-samantha",
-    precio: "7.00",
-    agotado: false,
-    nuevo: true,
-    prioridadReciente: true,
-    nota: "Tonos disponibles ✨💗"
-  },
-
-  {
-    nombre: "Iluminador Compacto Revel",
-    categoria: "Rostro",
-    imagen: "iluminador",
-    precio: "9.00"
-  },
-
-  {
-    nombre: "Rubor + Iluminador Compacto Revel",
-    categoria: "Rostro",
-    imagen: "iluminador y rubor 2 en 1",
-    precio: "10.00"
-  },
-
-
-  // ==========================
-  // CORRECTORES
-  // ==========================
-
-  {
-    nombre: "Corrector Líquido Matte Waterproof Samantha",
-    categoria: "Correctores",
-    imagen: "corrector liquido samantha",
-    precio: "8.00",
-    detalles: [
-      "tonos-corrector-samantha"
-    ]
-  },
-
-  {
-    nombre: "Corrector Matte Bellespa",
-    categoria: "Correctores",
-    imagen: "corrector liquido bellespa",
-    precio: "8.50",
-    detalles: [
-      "tonos-corrector-bellespa"
-    ]
-  },
-
-
-  // ==========================
-  // BÁLSAMOS
-  // ==========================
-
-  {
-    nombre: "Bálsamo Dup de Nivea",
-    categoria: "Bálsamos",
-    imagen: "belsamo dup  nivea",
-    precio: "6.00"
-  },
-
-  {
-    nombre: "Bálsamo con Color",
-    categoria: "Bálsamos",
-    imagen: "belsamo con color",
-    precio: "3.00"
-  },
-
-  {
-    nombre: "Bálsamo Fresita",
-    categoria: "Bálsamos",
-    imagen: "belsamo fresita",
-    precio: "3.00",
-    detalles: [
-      "belsamo fresita-2"
-    ]
-  },
-
-
-  // ==========================
-  // POLVOS Y CONTORNOS
-  // ==========================
-
-  {
-    nombre: "Polvo Translúcido Banana Jarusa",
-    categoria: "Rostro",
-    imagen: "polvo translucido banana jarusa",
-    precio: "10.00"
-  },
-
-  {
-    nombre: "Polvo Compacto Flower Secret",
-    categoria: "Rostro",
-    imagen: "polvo compacto flower secret",
-    precio: "8.00"
-  },
-
-  {
-    nombre: "Contorno en Crema Revel",
-    categoria: "Rostro",
-    imagen: "conncealer revel",
-    precio: "8.00"
-  },
-
-
-  // ==========================
-  // BEAUTY BLENDER
-  // ==========================
-
-  {
-    nombre: "Beauty Blenders",
-    categoria: "Accesorios",
-    imagen: "beauty blender",
-    precio: "3.50"
-  },
-
-  {
-    nombre: "Magic Box 7 en 1 (Blenders)",
-    categoria: "Accesorios",
-    imagen: "magic box 7 en 1",
-    precio: "9.00"
-  },
-
-
-  // ==========================
-  // BROCHAS
-  // ==========================
-
-  {
-    nombre: "Brocha para Ceja 2 en 1",
-    categoria: "Brochas",
-    imagen: "brocha para cejas",
-    precio: "3.00",
-    agotado: true
-  },
-
-  {
-    nombre: "Set de 6 Brochas para Ojos",
-    categoria: "Brochas",
-    imagen: "juego de 6 brochas para ojos",
-    precio: "10.00",
-    agotado: true
-  },
-
-
-  // ==========================
-  // OJOS y labios
-  // ==========================
-
-  {
-    nombre: "Paletas de Sombras Revel",
-    categoria: "Ojos y labios",
-    imagen: "disco revel",
-    precio: "10.00"
-  },
-
-  {
-    nombre: "Paleta Gliter Flower",
-    categoria: "Ojos y labios",
-    imagen: "paleta gliter",
-    precio: "5.00"
-  },
-
-
-  // ==========================
-  // CUIDADO FACIAL
-  // ==========================
-
-  {
-    nombre: "Mascarilla Bioaqua",
-    categoria: "Cuidado facial",
-    imagen: "mascarillas faciales bioaqua",
-    precio: "3.50"
-  },
-
-  {
-    nombre: "Mascarillas Hidratantes Faciales",
-    categoria: "Cuidado facial",
-    imagen: "mascarillas-hidratantes-faciales",
-    precio: "3.50",
-    agotado: false,
-    nuevo: true
-  },
-
-  {
-    nombre: "Mascarilla Hidratante de Limpieza Profunda Flower Secret",
-    categoria: "Cuidado facial",
-    imagen: "mascarilla-limpieza-flower-secret",
-    precio: "3.00",
-    agotado: false,
-    nuevo: true,
-    reingreso: true
-  },
-
-  {
-    nombre: "Tratamiento Reparador de Puntas",
-    categoria: "Cuidado facial",
-    imagen: "tratamiento-reparador-puntas",
-    precio: "2.00",
-    agotado: false,
-    nuevo: true
-  },
-
-  {
-    nombre: "Crema de Arroz para Manos Bioaqua",
-    categoria: "Cuidado facial",
-    imagen: "crema-manos-arroz-bioaqua",
-    precio: "3.50",
-    agotado: false,
-    nuevo: true
-  },
-
-  {
-    nombre: "Agua de Rosas Revel",
-    categoria: "Cuidado facial",
-    imagen: "agua-rosas-revel",
-    precio: "6.00",
-    agotado: false,
-    nuevo: true
-  },
-
-  {
-    nombre: "Mascarilla de Colágeno para Ojeras con Ácido Hialurónico y Baba de Caracol",
-    categoria: "Cuidado facial",
-    imagen: "mascarilla-colageno-ojeras",
-    precio: "3.00",
-    agotado: false,
-    nuevo: true,
-    reingreso: true
-  },
-
-
-  // ==========================
-  // ACCESORIOS
-  // ==========================
-
-  {
-    nombre: "Set de 3 Perfiladores",
-    categoria: "Accesorios",
-    imagen: "perfiladores",
-    precio: "3.50"
-  },
-
-  {
-    nombre: "Rizadores de Pestañas",
-    categoria: "Accesorios",
-    imagen: "rizadores",
-    precio: "6.00"
-  },
-
-  {
-    nombre: "Vinchas para Skincare",
-    categoria: "Accesorios",
-    imagen: "vinchas-skincare",
-    precio: "5.50",
-    agotado: false,
-    nuevo: true
-  },
-
-  {
-    nombre: "Doble Espejo de Cartera",
-    categoria: "Accesorios",
-    imagen: "doble-espejo-cartera",
-    precio: "5.50",
-    agotado: false,
-    nuevo: true
-  },
-
-  {
-     nombre: "Toallitas Desmaquillantes Madison",
-     categoria: "Cuidado facial",
-     imagen: "toallitas desmaquillantes",
-     precio: "3.50",
-     agotado: true
-  },
-
-  {
-    nombre: "Gancho Hawaiano",
-    categoria: "Accesorios",
-    imagen: "ganchos hawaianos",
-    precio: "3.00"
-  },
-
-  {
-    nombre: "Ligas para el Cabello Set de 6",
-    categoria: "Accesorios",
-    imagen: "ligas-cabello-set-6",
-    precio: "2.00",
-    agotado: false,
-    nuevo: true
-  },
-
-  {
-    nombre: "Peine para el Cabello",
-    categoria: "Accesorios",
-    imagen: "peine-cabello",
-    precio: "8.50",
-    agotado: true,
-    nuevo: true
-  },
-
-  {
-    nombre: "Cepillo Desenredante",
-    categoria: "Accesorios",
-    imagen: "peine-desenredante",
-    precio: "7.00",
-    agotado: false,
-    nuevo: true
-  },
-
-  {
-    nombre: "Toallitas Desmaquillantes Ecorincia",
-    categoria: "Cuidado facial",
-    imagen: "toallitas-ecorincia",
-    precio: "3.50",
-    agotado: false,
-    nuevo: false
-  },
-
-  {
-    nombre: "Cepillo para Cabello Akoya",
-    categoria: "Accesorios",
-    imagen: "cepillo-cabello-akoya",
-    precio: "8.00",
-    agotado: false,
-    nuevo: true,
-    prioridadReciente: true
-  },
-
-  {
-    nombre: "Set de Peine + Espejo",
-    categoria: "Accesorios",
-    imagen: "set-peine-espejo",
-    precio: "5.00",
-    agotado: false,
-    nuevo: true,
-    prioridadReciente: true
-  },
-
-  {
-    nombre: "Set de Lima + Saca Cutícula Akoya",
-    categoria: "Accesorios",
-    imagen: "set-lima-saca-cuticula-akoya",
-    precio: "6.00",
-    agotado: false,
-    nuevo: true,
-    prioridadReciente: true
+let productos = [];
+const SUPABASE_TONES_IMAGE_ALT = "tones";
+const SUPABASE_PRODUCT_IMAGES_BUCKET = "product-images";
+
+function normalizeSupabaseProduct(producto, imagenes, variantes, clienteSupabase) {
+  const esImagenTonos = imagen => imageIsNonPrimaryTones(imagen);
+  const stockQuantity = producto.stock_quantity == null ? null : Number(producto.stock_quantity);
+  const imagenesPrincipales = imagenes
+    .filter(imagen => !esImagenTonos(imagen))
+    .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
+  const imagenPrincipal = imagenesPrincipales.find(imagen => imagen.is_primary === true) || imagenesPrincipales[0];
+  const imagenesTonos = imagenes
+    .filter(esImagenTonos)
+    .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
+  const { data: datosImagenPublica } = imagenPrincipal?.storage_path
+    ? clienteSupabase.storage.from("product-images").getPublicUrl(imagenPrincipal.storage_path)
+    : { data: { publicUrl: null } };
+  const imagenPublica = datosImagenPublica?.publicUrl || new URL("img/app-icon-aitana.png", document.baseURI).href;
+  const imagenesTonosPublicas = imagenesTonos
+    .filter(imagen => imagen.storage_path)
+    .map(imagen => clienteSupabase.storage.from("product-images").getPublicUrl(imagen.storage_path).data.publicUrl)
+    .filter(Boolean);
+  const imagenesTonosDiagnostico = imagenesTonos
+    .filter(imagen => imagen.storage_path)
+    .map((imagen, index) => ({ productId: producto.id, storagePath: imagen.storage_path, url: imagenesTonosPublicas[index] }));
+
+  return {
+    id: producto.id,
+    slug: producto.slug,
+    nombre: producto.name,
+    descripcion: producto.description || "",
+    categoria: producto.category,
+    marca: producto.brand || "",
+    imagen: imagenPublica,
+    imagenTonos: imagenesTonosPublicas[0] || null,
+    imagenesTonos: imagenesTonosPublicas,
+    imagenDiagnostico: imagenPrincipal?.storage_path ? { productId: producto.id, storagePath: imagenPrincipal.storage_path, url: imagenPublica } : null,
+    imagenTonosDiagnostico: imagenesTonosDiagnostico[0] || null,
+    imagenesTonosDiagnostico,
+    precio: Number(producto.price).toFixed(2),
+    precioAnterior: producto.compare_at_price == null ? null : Number(producto.compare_at_price),
+    stockQuantity,
+    agotado: stockQuantity === 0,
+    nuevo: producto.is_new === true,
+    destacado: producto.is_featured === true,
+    prioridadReciente: producto.priority_recent === true,
+    reingreso: producto.is_restock === true,
+    nota: producto.catalog_note || "",
+    sortOrder: Number(producto.sort_order) || 0,
+    fechaCreacion: producto.created_at,
+    origenSupabase: true,
+    variantes: variantes
+      .filter(variante => variante.is_active === true)
+      .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0))
+      .map(variante => ({
+        id: variante.id,
+        name: variante.name,
+        value: variante.value,
+        stockQuantity: Number(variante.stock_quantity) || 0,
+        agotada: Number(variante.stock_quantity) === 0
+      }))
+  };
+}
+
+function imageIsNonPrimaryTones(imagen) {
+  return String(imagen?.alt_text || "").trim().toLowerCase() === SUPABASE_TONES_IMAGE_ALT;
+}
+
+async function obtenerProductosSupabase() {
+  const configuracion = window.AITANA_SUPABASE_CONFIG;
+  if (!window.supabase || !configuracion?.url || !configuracion?.publishableKey) {
+    throw new Error("La configuración pública de Supabase no está disponible.");
   }
 
-];
+  const clienteSupabase = window.supabase.createClient(configuracion.url, configuracion.publishableKey, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+  });
 
+  const { data: filasProductos, error: errorProductos } = await clienteSupabase
+    .from("products")
+    .select("id, slug, name, description, category, brand, price, compare_at_price, stock_quantity, is_active, is_new, is_featured, priority_recent, is_restock, catalog_note, sort_order, created_at")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false });
+
+  if (errorProductos) throw errorProductos;
+  const productosPrincipales = (filasProductos || []).map(producto => normalizeSupabaseProduct(producto, [], [], clienteSupabase));
+
+  return {
+    clienteSupabase,
+    filasProductos: filasProductos || [],
+    filasImagenes: [],
+    productos: productosPrincipales
+  };
+}
+
+async function cargarImagenesSupabase(cargaSupabase) {
+  const { clienteSupabase, filasProductos } = cargaSupabase;
+  if (!filasProductos.length) return { ...cargaSupabase, filasImagenes: [] };
+
+  const { data: filasImagenes, error } = await clienteSupabase
+    .from("product_images")
+    .select("id, product_id, storage_path, alt_text, sort_order, is_primary, created_at")
+    .in("product_id", filasProductos.map(producto => producto.id))
+    .order("sort_order", { ascending: true });
+
+  if (error) {
+    console.error("ERROR REAL product_images:", error);
+    throw error;
+  }
+
+  const productosConImagenes = filasProductos.map(producto => normalizeSupabaseProduct(
+    producto,
+    (filasImagenes || []).filter(imagen => imagen.product_id === producto.id),
+    [],
+    clienteSupabase
+  ));
+
+  return { ...cargaSupabase, filasImagenes: filasImagenes || [], productos: productosConImagenes };
+}
+
+async function cargarVariantesSupabase({ clienteSupabase, filasProductos, filasImagenes = [] }) {
+  if (!filasProductos.length) return [];
+
+  const idsProductos = filasProductos.map(producto => producto.id);
+  const { data, error } = await clienteSupabase
+    .from("product_variants")
+    .select("id, product_id, name, value, stock_quantity, sort_order, is_active, created_at, updated_at")
+    .in("product_id", idsProductos)
+    .order("sort_order", { ascending: true });
+
+  if (error) throw error;
+  const filasVariantes = data || [];
+
+  return filasProductos.map(producto => normalizeSupabaseProduct(
+    producto,
+    filasImagenes.filter(imagen => imagen.product_id === producto.id),
+    filasVariantes.filter(variante => variante.product_id === producto.id),
+    clienteSupabase
+  ));
+}
 
 const CONSULTA_ACTUALIZACION_KEY = "aitana-consulta-actualizacion";
 const CONSULTA_STORAGE_KEY = "aitana-mi-consulta";
 const productosConsulta = new Set();
 const FAVORITOS_STORAGE_KEY = "aitana-favoritos";
 const productosFavoritos = new Set();
+const variantesConsulta = new Map();
+let consultaGuardadaInicial = [];
 
 function obtenerIdProductoConsulta(producto) {
-  return producto?.imagen || "";
+  return producto?.slug || producto?.imagen || producto?.nombre || "";
+}
+
+function obtenerIdProductoFavorito(producto) {
+  return producto?.slug || producto?.nombre || "";
 }
 
 function guardarConsultaPersistente() {
   const ids = [...productosConsulta]
     .map(index => productos[index])
     .filter(producto => producto && !producto.agotado)
-    .map(obtenerIdProductoConsulta)
-    .filter(Boolean);
+    .map(producto => ({
+      id: obtenerIdProductoConsulta(producto),
+      variante: variantesConsulta.get(obtenerIdProductoConsulta(producto)) || null
+    }))
+    .filter(item => item.id);
 
   try {
     localStorage.setItem(CONSULTA_STORAGE_KEY, JSON.stringify(ids));
@@ -606,13 +278,17 @@ try {
     localStorage.getItem(CONSULTA_STORAGE_KEY) || "[]"
   );
 
+  consultaGuardadaInicial = Array.isArray(idsGuardados) ? idsGuardados : [];
+
   if (Array.isArray(idsGuardados)) {
-    idsGuardados.forEach(id => {
+    idsGuardados.forEach(valorGuardado => {
+      const id = typeof valorGuardado === "object" ? valorGuardado?.id : valorGuardado;
       const index = productos.findIndex(
-        producto => obtenerIdProductoConsulta(producto) === id
+        producto => obtenerIdProductoConsulta(producto) === id || producto.imagen === id || producto.nombre === id
       );
       if (index >= 0 && !productos[index].agotado) {
         productosConsulta.add(index);
+        if (valorGuardado?.variante) variantesConsulta.set(id, valorGuardado.variante);
       }
     });
   }
@@ -637,6 +313,7 @@ try {
     consultaGuardadaParaActualizar.forEach(valorGuardado => {
       const index = productos.findIndex(producto =>
         obtenerIdProductoConsulta(producto) === valorGuardado ||
+        producto.imagen === valorGuardado ||
         producto.nombre === valorGuardado
       );
       if (index >= 0 && !productos[index].agotado) {
@@ -645,7 +322,6 @@ try {
     });
   }
 
-  guardarConsultaPersistente();
   try { sessionStorage.removeItem(CONSULTA_ACTUALIZACION_KEY); } catch (error) {}
   try { localStorage.removeItem(CONSULTA_ACTUALIZACION_KEY); } catch (error) {}
 } catch (error) {
@@ -655,7 +331,10 @@ try {
 try {
   const favoritosGuardados = JSON.parse(localStorage.getItem(FAVORITOS_STORAGE_KEY) || "[]");
   if (Array.isArray(favoritosGuardados)) {
-    favoritosGuardados.forEach(nombre => productosFavoritos.add(nombre));
+    favoritosGuardados.forEach(valorGuardado => {
+      const producto = productos.find(item => item.nombre === valorGuardado || item.slug === valorGuardado);
+      productosFavoritos.add(producto ? obtenerIdProductoFavorito(producto) : valorGuardado);
+    });
   }
 } catch (error) {
   // La página continúa sin persistencia si el navegador bloquea el almacenamiento.
@@ -738,7 +417,47 @@ const dimensionesImagenes = {
   "vinchas-skincare": [960, 1280]
 };
 
-function imagenHTML(nombre, alt, clase = "") {
+const imagenesFallidasReportadas = new Set();
+
+function reportarErrorImagen(elemento) {
+  const productId = decodeURIComponent(elemento.dataset.imageProductId || "");
+  const storagePath = decodeURIComponent(elemento.dataset.imageStoragePath || "");
+  const url = decodeURIComponent(elemento.dataset.imageUrl || elemento.currentSrc || elemento.src || "");
+  const clave = `${productId}|${storagePath}|${url}`;
+  if (!imagenesFallidasReportadas.has(clave)) {
+    imagenesFallidasReportadas.add(clave);
+    console.warn("Aitana: falló la carga de una imagen de Supabase.", {
+      product_id: productId,
+      storage_path: storagePath,
+      generated_url: url,
+      bucket: SUPABASE_PRODUCT_IMAGES_BUCKET
+    });
+  }
+  elemento.onerror = null;
+}
+
+function codificarDatoImagen(valor) {
+  return encodeURIComponent(String(valor || "")).replace(/'/g, "%27");
+}
+
+function imagenHTML(nombre, alt, clase = "", diagnostico = null) {
+
+  if (/^https?:\/\//i.test(nombre || "")) {
+    return `
+      <img
+        src="${nombre}"
+        alt="${alt}"
+        class="${clase}"
+        data-image-product-id="${codificarDatoImagen(diagnostico?.productId)}"
+        data-image-storage-path="${codificarDatoImagen(diagnostico?.storagePath)}"
+        data-image-url="${codificarDatoImagen(diagnostico?.url || nombre)}"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        onerror="reportarErrorImagen(this)"
+      >
+    `;
+  }
 
   const dimensiones = dimensionesImagenes[nombre] || [];
   const atributosDimensiones = dimensiones.length
@@ -779,9 +498,28 @@ const contenedorRecienLlegados =
 
 function productoTieneTonos(producto) {
   return Boolean(
-    producto.detalles &&
-    producto.detalles.length > 0
+    (producto.imagenesTonos && producto.imagenesTonos.length > 0) ||
+    producto.imagenTonos ||
+    (producto.variantes && producto.variantes.length > 0) ||
+    (producto.detalles && producto.detalles.length > 0)
   );
+}
+
+function obtenerTextoStock(producto) {
+  if (producto.stockQuantity == null) return "Disponible";
+  const cantidad = Number(producto.stockQuantity);
+  if (cantidad === 0) return "Agotado";
+  if (cantidad === 1) return "Última unidad";
+  if (cantidad <= 5) return `Quedan ${cantidad}`;
+  return "Disponible";
+}
+
+function crearPrecioHTML(producto, clase = "precio") {
+  const anterior = Number(producto.precioAnterior);
+  const actual = Number(producto.precio);
+  const tieneOferta = Number.isFinite(anterior) && anterior > actual;
+  const descuento = tieneOferta ? Math.round((1 - actual / anterior) * 100) : 0;
+  return `<div class="${clase}">${tieneOferta ? `<span class="precio-anterior">S/${anterior.toFixed(2)}</span>` : ""}<span class="precio-actual">S/${producto.precio}</span>${tieneOferta && descuento > 0 ? `<small class="precio-descuento">-${descuento}%</small>` : ""}</div>`;
 }
 
 
@@ -816,6 +554,7 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
     }
 
     tarjeta.dataset.index = index;
+    if (producto.id) tarjeta.dataset.productId = producto.id;
 
 
     if(producto.agotado){
@@ -853,7 +592,9 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
         >
           ${imagenHTML(
             producto.imagen,
-            producto.nombre
+            producto.nombre,
+            "",
+            producto.imagenDiagnostico
           )}
           <span class="vista-rapida-pista">
             <i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i>
@@ -867,7 +608,7 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
           `
           <div class="etiqueta-disponible">
             <i class="fa-solid fa-circle-check"></i>
-            Disponible
+            ${obtenerTextoStock(producto)}
           </div>
           `
           :
@@ -903,9 +644,9 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
         </h3>
 
 
-        <div class="precio">
-          S/${producto.precio}
-        </div>
+        ${crearPrecioHTML(producto)}
+
+        <small class="producto-stock-unidades">${producto.stockQuantity == null ? "Stock sin registrar" : `${producto.stockQuantity} ${producto.stockQuantity === 1 ? "unidad" : "unidades"}`}</small>
 
 
         <div class="acciones-producto">
@@ -984,8 +725,8 @@ function crearProductos() {
       .map((producto, index) => ({ producto, index }))
       .filter(({ producto }) => producto.nuevo === true)
       .sort((a, b) =>
-        Number(b.producto.prioridadReciente === true) -
-        Number(a.producto.prioridadReciente === true)
+        new Date(b.producto.fechaCreacion || 0) - new Date(a.producto.fechaCreacion || 0) ||
+        Number(b.producto.prioridadReciente === true) - Number(a.producto.prioridadReciente === true)
       )
       .forEach(({ producto, index }) => {
         contenedorRecienLlegados.appendChild(
@@ -995,7 +736,6 @@ function crearProductos() {
   }
 
 }
-
 
 crearProductos();
 
@@ -1018,7 +758,7 @@ function actualizarBotonesFavoritos() {
   document.querySelectorAll("[data-favorito-index]").forEach(boton => {
     const producto = productos[Number(boton.dataset.favoritoIndex)];
     if (!producto) return;
-    const favorito = productosFavoritos.has(producto.nombre);
+    const favorito = productosFavoritos.has(obtenerIdProductoFavorito(producto));
     boton.classList.toggle("activo", favorito);
     boton.setAttribute("aria-pressed", String(favorito));
     boton.setAttribute("aria-label", `${favorito ? "Quitar" : "Agregar"} ${producto.nombre} ${favorito ? "de" : "a"} favoritos`);
@@ -1034,12 +774,12 @@ function renderizarFavoritos() {
   if (!favoritosLista) return;
   const favoritos = productos
     .map((producto, index) => ({ producto, index }))
-    .filter(({ producto }) => productosFavoritos.has(producto.nombre));
+    .filter(({ producto }) => productosFavoritos.has(obtenerIdProductoFavorito(producto)));
 
   favoritosLista.innerHTML = favoritos.length
     ? favoritos.map(({ producto, index }) => `
       <article class="mobile-sheet-producto">
-        <div class="mobile-sheet-miniatura">${imagenHTML(producto.imagen, producto.nombre)}</div>
+        <div class="mobile-sheet-miniatura">${imagenHTML(producto.imagen, producto.nombre, "", producto.imagenDiagnostico)}</div>
         <div class="mobile-sheet-producto-info">
           <h3>${producto.nombre}</h3>
           <strong>S/${producto.precio}</strong>
@@ -1052,8 +792,9 @@ function renderizarFavoritos() {
 function alternarFavorito(index, boton) {
   const producto = productos[index];
   if (!producto) return;
-  if (productosFavoritos.has(producto.nombre)) productosFavoritos.delete(producto.nombre);
-  else productosFavoritos.add(producto.nombre);
+  const idFavorito = obtenerIdProductoFavorito(producto);
+  if (productosFavoritos.has(idFavorito)) productosFavoritos.delete(idFavorito);
+  else productosFavoritos.add(idFavorito);
   guardarFavoritos();
   actualizarBotonesFavoritos();
   renderizarFavoritos();
@@ -1127,9 +868,10 @@ function renderizarConsultaSheet() {
   consultaSheetLista.innerHTML = seleccionados.length
     ? seleccionados.map(({ producto, index }) => `
       <article class="mobile-sheet-producto">
-        <div class="mobile-sheet-miniatura">${imagenHTML(producto.imagen, producto.nombre)}</div>
+        <div class="mobile-sheet-miniatura">${imagenHTML(producto.imagen, producto.nombre, "", producto.imagenDiagnostico)}</div>
         <div class="mobile-sheet-producto-info">
           <h3>${producto.nombre}</h3>
+          ${variantesConsulta.get(obtenerIdProductoConsulta(producto)) ? `<small>Tono: ${variantesConsulta.get(obtenerIdProductoConsulta(producto))}</small>` : ""}
           <strong>S/${producto.precio}</strong>
         </div>
         <button type="button" class="mobile-sheet-quitar" data-consulta-quitar-index="${index}" aria-label="Quitar ${producto.nombre} de mi consulta">Quitar</button>
@@ -1195,8 +937,16 @@ function alternarProductoConsulta(index) {
 
   if (!producto || producto.agotado) return;
 
+  const idProducto = obtenerIdProductoConsulta(producto);
+
+  if (producto.variantes?.length && !variantesConsulta.has(idProducto)) {
+    abrirModal(index, true);
+    return;
+  }
+
   if (productosConsulta.has(index)) {
     productosConsulta.delete(index);
+    variantesConsulta.delete(idProducto);
   }
   else {
     productosConsulta.add(index);
@@ -1215,7 +965,10 @@ function crearMensajeConsulta() {
     .filter(producto => producto && !producto.agotado);
 
   const lineasProductos = productosSeleccionados
-    .map(producto => `• *${producto.nombre}* — S/ ${producto.precio}`)
+    .map(producto => {
+      const variante = variantesConsulta.get(obtenerIdProductoConsulta(producto));
+      return `• *${producto.nombre}*${variante ? ` — Tono: ${variante}` : ""} — S/ ${producto.precio}`;
+    })
     .join("\n");
 
   const preguntaTonos = productosSeleccionados.some(productoTieneTonos)
@@ -1243,6 +996,7 @@ document.addEventListener("click", (e) => {
 if (limpiarConsulta) {
   limpiarConsulta.addEventListener("click", () => {
     productosConsulta.clear();
+    variantesConsulta.clear();
     guardarConsultaPersistente();
     actualizarConsultaMultiple();
   });
@@ -1363,7 +1117,7 @@ function abrirVistaRapida(index) {
 
   vistaRapidaCuerpo.innerHTML = `
     <div class="vista-rapida-imagen-contenedor">
-      ${imagenHTML(producto.imagen, producto.nombre, "vista-rapida-imagen")}
+      ${imagenHTML(producto.imagen, producto.nombre, "vista-rapida-imagen", producto.imagenDiagnostico)}
       ${
         producto.reingreso === true
           ? '<span class="vista-rapida-nuevo vista-rapida-reingreso">↻ REINGRESO</span>'
@@ -1376,12 +1130,12 @@ function abrirVistaRapida(index) {
     <div class="vista-rapida-info">
       <div class="vista-rapida-stock ${producto.agotado ? "agotado" : "disponible"}">
         <i class="fa-solid ${producto.agotado ? "fa-circle-xmark" : "fa-circle-check"}" aria-hidden="true"></i>
-        ${producto.agotado ? "Agotado" : "Disponible"}
+        ${obtenerTextoStock(producto)}
       </div>
       <span class="vista-rapida-categoria">${producto.categoria}</span>
       ${producto.nota ? `<p class="vista-rapida-nota">${producto.nota}</p>` : ""}
       <h2 id="vistaRapidaTitulo">${producto.nombre}</h2>
-      <div class="vista-rapida-precio">S/${producto.precio}</div>
+      ${crearPrecioHTML(producto, "vista-rapida-precio")}
 
       <div class="vista-rapida-acciones">
         ${producto.agotado ? `
@@ -1488,13 +1242,16 @@ const observadorAnimaciones =
   );
 
 
-document
-  .querySelectorAll(".producto, .catalogo-panel, .hero-texto")
-  .forEach(elemento => {
+function observarAnimacionesCatalogo() {
+  document
+    .querySelectorAll(".producto, .catalogo-panel, .hero-texto")
+    .forEach(elemento => {
+      if (elemento.classList.contains("visible")) return;
+      observadorAnimaciones.observe(elemento);
+    });
+}
 
-    observadorAnimaciones.observe(elemento);
-
-  });
+observarAnimacionesCatalogo();
 
 
 
@@ -1557,7 +1314,7 @@ let elementoAntesDelModal = null;
 
 
 
-function abrirModal(index) {
+function abrirModal(index, agregarAlElegir = false) {
 
   const producto = productos[index];
 
@@ -1568,8 +1325,44 @@ function abrirModal(index) {
 
   modalImagenes.innerHTML = "";
 
+  const imagenesTonos = producto.imagenesTonos?.length
+    ? producto.imagenesTonos
+    : (producto.imagenTonos ? [producto.imagenTonos] : []);
 
-  producto.detalles.forEach(detalle => {
+  imagenesTonos.forEach((imagenTonos, toneIndex) => {
+    const divTonos = document.createElement("div");
+    divTonos.classList.add("detalle-imagen");
+    const diagnostico = producto.imagenesTonosDiagnostico?.[toneIndex] || producto.imagenTonosDiagnostico;
+    divTonos.innerHTML = imagenHTML(imagenTonos, `Tonos de ${producto.nombre} ${toneIndex + 1}`, "", diagnostico);
+    modalImagenes.appendChild(divTonos);
+  });
+
+  if (producto.variantes?.length) {
+    const selector = document.createElement("div");
+    selector.className = "selector-variantes";
+    selector.innerHTML = `
+      <p>Selecciona un tono:</p>
+      <div class="selector-variantes-opciones">
+        ${producto.variantes.map(variante => `
+          <button
+            type="button"
+            class="selector-variante"
+            data-variante-index="${index}"
+            data-variante-value="${variante.value}"
+            data-agregar-consulta="${agregarAlElegir}"
+            ${variante.agotada ? "disabled" : ""}
+          >
+            <span>${variante.name}: ${variante.value}</span>
+            <small>${variante.agotada ? "Agotado" : variante.stockQuantity === 1 ? "Última unidad" : variante.stockQuantity <= 5 ? `Quedan ${variante.stockQuantity}` : "Disponible"}</small>
+          </button>
+        `).join("")}
+      </div>
+      ${agregarAlElegir ? '<p class="selector-variantes-ayuda">Al elegir el tono se agregará a Mi consulta.</p>' : ""}
+    `;
+    modalImagenes.appendChild(selector);
+  }
+
+  (producto.detalles || []).forEach(detalle => {
 
     const div =
       document.createElement("div");
@@ -1600,6 +1393,23 @@ function abrirModal(index) {
   cerrarModal.focus();
 
 }
+
+modalImagenes.addEventListener("click", evento => {
+  const boton = evento.target.closest("[data-variante-index]");
+  if (!boton || boton.disabled) return;
+  const index = Number(boton.dataset.varianteIndex);
+  const producto = productos[index];
+  if (!producto) return;
+  variantesConsulta.set(obtenerIdProductoConsulta(producto), boton.dataset.varianteValue);
+  if (boton.dataset.agregarConsulta === "true") {
+    productosConsulta.add(index);
+    guardarConsultaPersistente();
+    actualizarConsultaMultiple();
+    cerrarVentana();
+  } else {
+    modalImagenes.querySelectorAll(".selector-variante").forEach(opcion => opcion.classList.toggle("seleccionada", opcion === boton));
+  }
+});
 
 
 
@@ -2509,7 +2319,12 @@ function renderizarMobileProductos() {
     mapa[producto.nombre] = { producto, index };
   });
 
-  productosDestacadosMobile.forEach(nombre => {
+  const nombresDestacados = [
+    ...productosDestacadosMobile,
+    ...productos.filter(producto => producto.destacado === true).map(producto => producto.nombre)
+  ].filter((nombre, index, lista) => lista.indexOf(nombre) === index);
+
+  nombresDestacados.forEach(nombre => {
     const destacado = mapa[nombre];
     if (!destacado || destacado.producto.agotado) return;
 
@@ -2535,7 +2350,7 @@ function renderizarMobileProductos() {
         <i class="fa-regular fa-heart" aria-hidden="true"></i>
       </button>
       <a href="${hrefWA}" target="_blank" rel="noopener noreferrer" aria-label="Consultar ${producto.nombre} por WhatsApp">
-        ${imagenHTML(producto.imagen, producto.nombre)}
+        ${imagenHTML(producto.imagen, producto.nombre, "", producto.imagenDiagnostico)}
       </a>
       <h3>${producto.nombre}</h3>
       <div class="aitana-mobile-precio">S/${producto.precio}</div>
@@ -3054,3 +2869,5 @@ if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location
     }
   });
 }
+
+cargarCatalogoSupabase();

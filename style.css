@@ -6457,7 +6457,7 @@ body.splash-aitana-activa {
 
   html.modo-standalone .recien-llegados-lista .producto-reciente .whatsapp,
   html.modo-standalone .recien-llegados-lista .producto-reciente .agregar-consulta,
-  html.modo-standalone .recien-llegados-lista .producto-reciente .ver-tonos {
+html.modo-standalone .recien-llegados-lista .producto-reciente .ver-tonos {
     min-height: 44px;
     padding: 8px 9px;
     font-size: 11px;
@@ -6669,4 +6669,89 @@ body.splash-aitana-activa {
   html.modo-standalone .pwa-actualizacion-aviso button:active {
     transform: scale(.96);
   }
+}
+
+/* Catálogo de Supabase: ofertas y selector de variantes */
+.precio,
+.vista-rapida-precio {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.precio-anterior {
+  color: #8c7c83;
+  font-size: 0.72em;
+  font-weight: 500;
+  text-decoration: line-through;
+}
+
+.precio-actual {
+  color: inherit;
+}
+
+.precio-descuento {
+  padding: 3px 6px;
+  border-radius: 999px;
+  color: #b51f55;
+  background: #fff0f5;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.selector-variantes {
+  width: min(100%, 520px);
+  margin: auto;
+}
+
+.selector-variantes > p {
+  margin: 0 0 12px;
+  color: #5b4650;
+  font-weight: 700;
+}
+
+.selector-variantes-opciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.selector-variante {
+  min-height: 62px;
+  padding: 10px 12px;
+  border: 1px solid #e8bfd0;
+  border-radius: 13px;
+  color: #4d3440;
+  background: #fff;
+  text-align: left;
+}
+
+.selector-variante span,
+.selector-variante small {
+  display: block;
+}
+
+.selector-variante small {
+  margin-top: 2px;
+  color: #806d75;
+}
+
+.selector-variante:hover:not(:disabled),
+.selector-variante.seleccionada {
+  border-color: #e83f7a;
+  background: #fff1f6;
+}
+
+.selector-variante:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  text-decoration: line-through;
+}
+
+.selector-variantes-ayuda {
+  margin-top: 13px !important;
+  color: #8a727c !important;
+  font-size: 13px;
+  font-weight: 500 !important;
 }

@@ -402,8 +402,9 @@ const productos = [
     categoria: "Cuidado facial",
     imagen: "mascarilla-limpieza-flower-secret",
     precio: "3.00",
-    agotado: true,
-    nuevo: true
+    agotado: false,
+    nuevo: true,
+    reingreso: true
   },
 
   {
@@ -438,8 +439,9 @@ const productos = [
     categoria: "Cuidado facial",
     imagen: "mascarilla-colageno-ojeras",
     precio: "3.00",
-    agotado: true,
-    nuevo: true
+    agotado: false,
+    nuevo: true,
+    reingreso: true
   },
 
 
@@ -517,6 +519,42 @@ const productos = [
     categoria: "Accesorios",
     imagen: "peine-desenredante",
     precio: "7.00",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Toallitas Desmaquillantes Ecorincia",
+    categoria: "Cuidado facial",
+    imagen: "toallitas-ecorincia",
+    precio: "3.50",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Cepillo para Cabello Akoya",
+    categoria: "Accesorios",
+    imagen: "cepillo-cabello-akoya",
+    precio: "8.00",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Set de Peine + Espejo",
+    categoria: "Accesorios",
+    imagen: "set-peine-espejo",
+    precio: "5.00",
+    agotado: false,
+    nuevo: true
+  },
+
+  {
+    nombre: "Set de Lima + Saca Cutícula Akoya",
+    categoria: "Accesorios",
+    imagen: "set-lima-saca-cuticula-akoya",
+    precio: "6.00",
     agotado: false,
     nuevo: true
   }
@@ -626,6 +664,7 @@ const dimensionesImagenes = {
   "belsamo fresita": [480, 640],
   "belsamo fresita-2": [600, 600],
   "brocha para cejas": [480, 640],
+  "cepillo-cabello-akoya": [1280, 1010],
   "crema-manos-arroz-bioaqua": [720, 1280],
   "Codigo 4": [450, 800],
   "Codigo 6": [450, 800],
@@ -667,9 +706,12 @@ const dimensionesImagenes = {
   "polvo translucido banana jarusa": [480, 640],
   "rizadores": [576, 768],
   "rubor liquido": [480, 640],
+  "set-lima-saca-cuticula-akoya": [1153, 1280],
+  "set-peine-espejo": [1280, 1278],
   "Tinta jarusa": [480, 640],
   "Tinta Samantha": [480, 640],
   "toallitas desmaquillantes": [720, 960],
+  "toallitas-ecorincia": [1280, 1148],
   "tonos-aozy-matte": [1219, 1280],
   "tonos-corrector-bellespa": [1280, 1040],
   "tonos-corrector-samantha": [1280, 1257],
@@ -781,9 +823,11 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
         </button>
 
         ${
-          producto.nuevo === true
-          ? `<div class="etiqueta-nuevo">✨ NUEVO</div>`
-          : ""
+          producto.reingreso === true
+          ? `<div class="etiqueta-nuevo etiqueta-reingreso">↻ REINGRESO</div>`
+          : producto.nuevo === true
+            ? `<div class="etiqueta-nuevo">✨ NUEVO</div>`
+            : ""
         }
 
         <button
@@ -1298,7 +1342,13 @@ function abrirVistaRapida(index) {
   vistaRapidaCuerpo.innerHTML = `
     <div class="vista-rapida-imagen-contenedor">
       ${imagenHTML(producto.imagen, producto.nombre, "vista-rapida-imagen")}
-      ${producto.nuevo === true ? '<span class="vista-rapida-nuevo">✨ NUEVO</span>' : ""}
+      ${
+        producto.reingreso === true
+          ? '<span class="vista-rapida-nuevo vista-rapida-reingreso">↻ REINGRESO</span>'
+          : producto.nuevo === true
+            ? '<span class="vista-rapida-nuevo">✨ NUEVO</span>'
+            : ""
+      }
     </div>
 
     <div class="vista-rapida-info">
@@ -1680,7 +1730,7 @@ function actualizarCatalogo() {
 
 
     const contenidoBusqueda = normalizarTexto(
-      `${producto.nombre} ${producto.categoria} ${textoDisponibilidad} ${producto.nuevo === true ? "nuevo nuevos" : ""}`
+      `${producto.nombre} ${producto.categoria} ${textoDisponibilidad} ${producto.nuevo === true ? "nuevo nuevos" : ""} ${producto.reingreso === true ? "reingreso repuesto volvió" : ""}`
     );
 
 
@@ -2675,14 +2725,15 @@ const pwaActualizacionAviso = document.getElementById("pwaActualizacionAviso");
 const pwaActualizarAhora = document.getElementById("pwaActualizarAhora");
 const PWA_IOS_AVISO_KEY = "aitana-pwa-ios-aviso-cerrado";
 const PWA_UPDATE_RELOAD_KEY = "aitana-pwa-actualizacion-recarga";
-const PWA_UPDATE_INTERVALO = 30 * 60 * 1000;
-const PWA_UPDATE_MINIMO = 5 * 60 * 1000;
+const PWA_UPDATE_INTERVALO = 5 * 60 * 1000;
+const PWA_UPDATE_MINIMO = 60 * 1000;
 const aitanaSplash = document.getElementById("aitanaSplash");
 let eventoInstalacionPwa = null;
 let splashAitanaActiva = false;
 let splashAitanaOcultaDesde = 0;
 let recargaActualizacionEnCurso = false;
 let ultimaComprobacionPwa = 0;
+let workerActualizacionPendiente = null;
 
 function estaEnModoStandalone() {
   return window.matchMedia("(display-mode: standalone)").matches ||
@@ -2864,7 +2915,10 @@ function hayActividadImportanteParaActualizar() {
     ".mobile-sheet.activo, .vista-rapida-modal.activo, .modal.activo, .entrega-modal.activo, .header nav.abierto, form:focus-within"
   );
 
-  return productosConsulta.size > 0 || Boolean(estaEscribiendo) || Boolean(interfazActiva);
+  return productosConsulta.size > 0 ||
+    productosFavoritos.size > 0 ||
+    Boolean(estaEscribiendo) ||
+    Boolean(interfazActiva);
 }
 
 function mostrarActualizacionPwa() {
@@ -2884,6 +2938,12 @@ function recargarConActualizacion() {
   } catch (error) {
     // La bandera en memoria tambiÃ©n evita una segunda recarga en esta carga.
   }
+  if (workerActualizacionPendiente) {
+    pwaActualizarAhora?.setAttribute("disabled", "");
+    workerActualizacionPendiente.postMessage({ type: "SKIP_WAITING" });
+    return;
+  }
+
   window.location.reload();
 }
 
@@ -2919,22 +2979,32 @@ if ("serviceWorker" in navigator && ["http:", "https:"].includes(window.location
       if (!esRutaRevision && estaEnModoStandalone()) {
         navigator.serviceWorker.addEventListener("controllerchange", () => {
           if (!controladorInicial) return;
-          gestionarControladorPwaNuevo();
+          if (recargaActualizacionEnCurso) window.location.reload();
         });
 
-        const activarWorkerNuevo = worker => {
+        const anunciarWorkerNuevo = worker => {
           if (worker?.state === "installed" && navigator.serviceWorker.controller) {
-            worker.postMessage({ type: "SKIP_WAITING" });
+            workerActualizacionPendiente = worker;
+            if (hayActividadImportanteParaActualizar()) {
+              mostrarActualizacionPwa();
+            } else {
+              recargarConActualizacion();
+            }
           }
         };
 
         registro.addEventListener("updatefound", () => {
           const workerNuevo = registro.installing;
-          workerNuevo?.addEventListener("statechange", () => activarWorkerNuevo(workerNuevo));
+          workerNuevo?.addEventListener("statechange", () => anunciarWorkerNuevo(workerNuevo));
         });
 
         if (registro.waiting && navigator.serviceWorker.controller) {
-          registro.waiting.postMessage({ type: "SKIP_WAITING" });
+          workerActualizacionPendiente = registro.waiting;
+          if (hayActividadImportanteParaActualizar()) {
+            mostrarActualizacionPwa();
+          } else {
+            recargarConActualizacion();
+          }
         }
 
         const comprobarActualizacion = async ({ forzar = false } = {}) => {

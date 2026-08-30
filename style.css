@@ -4517,6 +4517,15 @@ body.entrega-modal-abierto { overflow: hidden; }
   white-space: nowrap;
 }
 
+.etiqueta-reingreso {
+  background: linear-gradient(135deg, #8f4bd8, #f43170);
+  box-shadow: 0 3px 9px rgba(115, 48, 170, .24);
+}
+
+.vista-rapida-reingreso {
+  background: linear-gradient(135deg, #8f4bd8, #f43170);
+}
+
 .producto-info h3 {
   min-height: 2.4em;
 }

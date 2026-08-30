@@ -1,4 +1,4 @@
-const CACHE_VERSION = "aitana-pwa-v6";
+const CACHE_VERSION = "aitana-pwa-v8";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const NETWORK_CACHE = `${CACHE_VERSION}-network`;
 
@@ -32,7 +32,6 @@ self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then(cache => cache.addAll(ESSENTIAL_FILES))
-      .then(() => self.skipWaiting())
   );
 });
 

@@ -8485,10 +8485,4 @@ button, input, select, a { -webkit-tap-highlight-color: transparent; }
     transform: none;
   }
 
-  html:not(.modo-standalone) .entregas-aitana,
-  html:not(.modo-standalone) .ayuda,
-  html:not(.modo-standalone) footer {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 640px;
-  }
 }

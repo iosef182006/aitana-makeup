@@ -86,7 +86,6 @@ function refrescarInterfazCatalogo() {
 
     renderizarCategoriasCatalogo();
     crearProductos();
-    observarAnimacionesCatalogo();
     ordenarCatalogo();
     reiniciarCargaYActualizar();
     actualizarBotonesFavoritos();
@@ -546,6 +545,7 @@ function desregistrarImagenesDiferidas(raiz) {
 const contenedor = document.getElementById("lista-productos");
 const contenedorRecienLlegados =
   document.getElementById("lista-recien-llegados");
+let tarjetasCatalogo = [];
 
 function crearSkeletonProducto(claseAdicional = "") {
   const skeleton = document.createElement("div");
@@ -850,12 +850,13 @@ function crearProductos() {
   desregistrarImagenesDiferidas(contenedor);
   desregistrarImagenesDiferidas(contenedorRecienLlegados);
   contenedor.innerHTML = "";
-
-  productos.forEach((producto, index) => {
-    contenedor.appendChild(
-      crearTarjetaProducto(producto, index)
-    );
-  });
+  tarjetasCatalogo = productos.map((producto, index) =>
+    crearTarjetaProducto(producto, index)
+  );
+  const montarCatalogoCompleto =
+    !window.matchMedia("(min-width: 769px)").matches ||
+    estaEnModoStandalone();
+  contenedor.replaceChildren(...(montarCatalogoCompleto ? tarjetasCatalogo : []));
 
   if (contenedorRecienLlegados) {
     contenedorRecienLlegados.innerHTML = "";
@@ -874,7 +875,6 @@ function crearProductos() {
       });
   }
 
-  registrarImagenesDiferidas(contenedor);
   registrarImagenesDiferidas(contenedorRecienLlegados);
 
 }
@@ -1975,8 +1975,11 @@ function actualizarCatalogo() {
       .filter(Boolean);
 
 
-  const tarjetas =
-    contenedor.querySelectorAll(".producto");
+  const tarjetas = tarjetasCatalogo;
+  const optimizarDomDesktop =
+    window.matchMedia("(min-width: 769px)").matches &&
+    !estaEnModoStandalone();
+  const tarjetasVisibles = [];
 
 
   let totalResultados = 0;
@@ -2051,6 +2054,10 @@ function actualizarCatalogo() {
           ? "flex"
           : "none";
 
+      if (totalResultados < cantidadProductosVisible) {
+        tarjetasVisibles.push(tarjeta);
+      }
+
       totalResultados++;
 
     }
@@ -2094,6 +2101,17 @@ function actualizarCatalogo() {
 
   botonLimpiarBusqueda.hidden = !hayBusqueda;
   botonLimpiarFiltros.hidden = !hayFiltrosActivos;
+
+  if (optimizarDomDesktop) {
+    desregistrarImagenesDiferidas(contenedor);
+    contenedor.replaceChildren(...tarjetasVisibles);
+  } else if (contenedor.childElementCount !== tarjetas.length) {
+    contenedor.replaceChildren(...tarjetas);
+  }
+
+  registrarImagenesDiferidas(contenedor);
+  observarAnimacionesCatalogo();
+  actualizarBotonesFavoritos();
 
 }
 
@@ -2335,10 +2353,7 @@ botonesStock.forEach(boton => {
 
 function ordenarCatalogo() {
 
-  const tarjetas =
-    [
-      ...contenedor.querySelectorAll(".producto")
-    ];
+  const tarjetas = tarjetasCatalogo;
 
 
   tarjetas.sort((tarjetaA, tarjetaB) => {
@@ -2406,11 +2421,12 @@ function ordenarCatalogo() {
   });
 
 
-  tarjetas.forEach(tarjeta => {
-
-    contenedor.appendChild(tarjeta);
-
-  });
+  if (
+    !window.matchMedia("(min-width: 769px)").matches ||
+    estaEnModoStandalone()
+  ) {
+    contenedor.replaceChildren(...tarjetas);
+  }
 
 }
 

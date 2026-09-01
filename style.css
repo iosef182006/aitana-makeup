@@ -8450,3 +8450,45 @@ button, input, select, a { -webkit-tap-highlight-color: transparent; }
     box-shadow: 0 3px 9px rgba(94, 28, 53, .12);
   }
 }
+
+/* Fluidez desktop: menos repintados costosos sin alterar móvil ni standalone. */
+@media (min-width: 769px) {
+  html:not(.modo-standalone) .header {
+    background: rgba(255, 255, 255, .98);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  html:not(.modo-standalone) .whatsapp-flotante {
+    animation: none;
+  }
+
+  html:not(.modo-standalone) .producto,
+  html:not(.modo-standalone) .catalogo-panel,
+  html:not(.modo-standalone) .hero-texto {
+    transition-duration: .22s;
+  }
+
+  html:not(.modo-standalone) .producto {
+    transition-property: opacity, transform, border-color, box-shadow;
+  }
+
+  html:not(.modo-standalone) .producto.visible:hover {
+    transform: translateY(-2px);
+  }
+
+  html:not(.modo-standalone) .producto:hover {
+    box-shadow: 0 12px 28px rgba(75, 32, 48, .095);
+  }
+
+  html:not(.modo-standalone) .producto:hover .producto-imagen img {
+    transform: none;
+  }
+
+  html:not(.modo-standalone) .entregas-aitana,
+  html:not(.modo-standalone) .ayuda,
+  html:not(.modo-standalone) footer {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 640px;
+  }
+}

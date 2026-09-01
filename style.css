@@ -8340,3 +8340,111 @@ button, input, select, a { -webkit-tap-highlight-color: transparent; }
   }
   html:not(.modo-standalone) .aitana-mobile-destacado-trigger { height: 116px; }
 }
+
+/* Pulido final exclusivo de la web desktop. */
+@media (min-width: 769px) {
+  #lista-productos .etiqueta-nuevo:not(.etiqueta-reingreso) {
+    top: 10px;
+    right: auto;
+    left: 10px;
+    display: inline-flex;
+    width: max-content;
+    max-width: calc(100% - 64px);
+    padding: 6px 10px;
+    align-items: center;
+    border-radius: 999px;
+    font-size: 11px;
+    line-height: 1;
+    box-shadow: 0 3px 9px rgba(94, 28, 53, .12);
+  }
+
+  .catalogo-panel {
+    padding-top: 30px;
+    padding-bottom: 24px;
+  }
+
+  .catalogo-encabezado {
+    margin-bottom: 18px;
+  }
+
+  .catalogo-herramientas {
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .catalogo-herramientas .buscador-contenedor {
+    max-width: none;
+  }
+
+  .catalogo-herramientas .orden-productos {
+    width: min(240px, 24%);
+    flex: 0 0 auto;
+  }
+
+  .stock-filtros {
+    padding: 10px 0 8px;
+    align-items: center;
+  }
+
+  .stock-filtros .grupo-etiqueta {
+    flex-basis: auto;
+    margin-right: 4px;
+  }
+
+  .filtros {
+    gap: 7px;
+    padding-top: 3px;
+  }
+
+  .filtros .grupo-etiqueta {
+    margin-bottom: 1px;
+  }
+
+  #lista-productos .producto-info h3 {
+    height: 39px;
+    min-height: 39px;
+    max-height: 39px;
+  }
+
+  #lista-productos .producto-stock-unidades {
+    min-height: 13px;
+  }
+
+  #lista-productos .acciones-producto {
+    margin-top: auto;
+  }
+
+  .volver-arriba {
+    width: 42px;
+    height: 42px;
+    opacity: 0;
+    box-shadow: 0 5px 14px rgba(82, 30, 49, .16);
+  }
+
+  .volver-arriba.mostrar {
+    opacity: .82;
+  }
+
+  .volver-arriba.mostrar:hover {
+    opacity: 1;
+  }
+}
+
+/* Desktop con ventana estrecha: conservar el chip sin afectar dispositivos táctiles. */
+@media (hover: hover) and (pointer: fine) {
+  html:not(.modo-standalone) #lista-productos .etiqueta-nuevo:not(.etiqueta-reingreso) {
+    top: 10px;
+    right: auto;
+    bottom: auto;
+    left: 10px;
+    display: inline-flex;
+    width: max-content;
+    max-width: calc(100% - 64px);
+    padding: 6px 10px;
+    align-items: center;
+    border-radius: 999px;
+    font-size: 11px;
+    line-height: 1;
+    box-shadow: 0 3px 9px rgba(94, 28, 53, .12);
+  }
+}

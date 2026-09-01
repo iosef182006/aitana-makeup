@@ -782,7 +782,7 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
 
         ${crearPrecioHTML(producto)}
 
-        <small class="producto-stock-unidades">${producto.stockQuantity == null ? "Stock sin registrar" : `${producto.stockQuantity} ${producto.stockQuantity === 1 ? "unidad" : "unidades"}`}</small>
+        <small class="producto-stock-unidades">${producto.stockQuantity == null ? "Disponible" : `${producto.stockQuantity} ${producto.stockQuantity === 1 ? "unidad" : "unidades"}`}</small>
 
 
         <div class="acciones-producto">

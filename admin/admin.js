@@ -23,7 +23,7 @@
     editorTitle: $("editorTitle"), save: $("saveButton"), delete: $("deleteButton"), image: $("productImage"), preview: $("imagePreview"), placeholder: $("imagePlaceholder"),
     hasTones: $("hasTones"), tonesPanel: $("tonesImagePanel"), tonesImage: $("tonesImage"), tonesList: $("tonesImagesList"), tonesEmpty: $("tonesImagesEmpty"),
     variants: $("variantList"), dialog: $("confirmDialog"), confirmDelete: $("confirmDeleteButton"), toast: $("toast"),
-    count: $("productsCount"), filters: $("productFilters"), sort: $("productSort"), actionsDialog: $("actionsDialog"), actionsTitle: $("actionsTitle"), featureAction: $("featureActionButton"), stockDialog: $("stockDialog"), stockForm: $("stockForm"), quickStock: $("quickStockQuantity"), stockProductName: $("stockProductName")
+    count: $("productsCount"), filters: $("productFilters"), sort: $("productSort"), actionsDialog: $("actionsDialog"), actionsTitle: $("actionsTitle"), featureAction: $("featureActionButton"), availabilityAction: $("availabilityActionButton"), stockDialog: $("stockDialog"), stockForm: $("stockForm"), quickStock: $("quickStockQuantity"), stockProductName: $("stockProductName")
   };
 
   function setView(name) {
@@ -156,6 +156,25 @@
     if (value <= 5) return { label: `Quedan ${value}`, className: "low" };
     return { label: "Disponible", className: "available" };
   }
+
+  function syncAvailabilityFromStock() {
+    const rawStock = $("stockQuantity").value.trim();
+    const isOut = rawStock !== "" && Number(rawStock) === 0;
+    $("availabilityOut").checked = isOut;
+    $("availabilityAvailable").checked = !isOut;
+  }
+
+  function syncStockFromAvailability() {
+    if ($("availabilityOut").checked) {
+      $("stockQuantity").value = "0";
+    } else if ($("stockQuantity").value.trim() === "0") {
+      $("stockQuantity").value = "";
+    }
+  }
+
+  $("stockQuantity").addEventListener("input", syncAvailabilityFromStock);
+  $("availabilityAvailable").addEventListener("change", syncStockFromAvailability);
+  $("availabilityOut").addEventListener("change", syncStockFromAvailability);
 
   function money(value) { return new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(Number(value) || 0); }
   function escapeHtml(value = "") { const node = document.createElement("div"); node.textContent = String(value); return node.innerHTML; }
@@ -304,6 +323,9 @@
     state.actionProductId = id;
     els.actionsTitle.textContent = product.name || "Producto";
     els.featureAction.lastChild.textContent = product.is_featured ? " Quitar destacado" : " Destacar";
+    const isOut = stockQuantityValue(product.stock_quantity) === 0;
+    els.availabilityAction.querySelector("span").textContent = isOut ? "●" : "○";
+    els.availabilityAction.lastChild.textContent = isOut ? " Marcar disponible" : " Marcar agotado";
     els.actionsDialog.hidden = false;
     $("closeActionsButton").focus();
   }
@@ -333,7 +355,15 @@
       requestAnimationFrame(() => els.quickStock.select());
       return;
     }
-    if (action === "sold-out") { await quickUpdate(id, { stock_quantity: 0 }, "Producto marcado como agotado"); return; }
+    if (action === "availability") {
+      const isOut = stockQuantityValue(product.stock_quantity) === 0;
+      await quickUpdate(
+        id,
+        { stock_quantity: isOut ? null : 0 },
+        isOut ? "Producto marcado como disponible" : "Producto marcado como agotado"
+      );
+      return;
+    }
     if (action === "feature") { await quickUpdate(id, { is_featured: !product.is_featured }, product.is_featured ? "Producto quitado de destacados" : "Producto destacado"); return; }
     if (action === "delete") requestDelete(id);
   });
@@ -370,6 +400,8 @@
   async function openEditor(id = null) {
     els.form.reset(); cleanupPreview(); state.currentImage = null; state.editingId = id; els.preview.hidden = true; els.placeholder.hidden = false; els.tonesPanel.hidden = true; els.formMessage.hidden = true; els.variants.innerHTML = ""; renderTonesEditor();
     $("isActive").checked = true;
+    $("availabilityAvailable").checked = true;
+    $("availabilityOut").checked = false;
     els.editorTitle.textContent = id ? "Editar producto" : "Nuevo producto";
     els.save.textContent = id ? "Guardar cambios" : "Publicar producto";
     els.delete.hidden = !id;
@@ -378,6 +410,7 @@
       if (!product) return;
       $("name").value = product.name || ""; $("brand").value = product.brand || ""; $("category").value = product.category || ""; $("description").value = product.description || ""; $("catalogNote").value = product.catalog_note || "";
       $("price").value = product.price ?? ""; $("compareAtPrice").value = product.compare_at_price ?? ""; $("stockQuantity").value = product.stock_quantity ?? "";
+      syncAvailabilityFromStock();
       $("isNew").checked = Boolean(product.is_new); $("isFeatured").checked = Boolean(product.is_featured); $("priorityRecent").checked = Boolean(product.priority_recent); $("isRestock").checked = Boolean(product.is_restock); $("isActive").checked = product.is_active ?? true;
       state.currentImage = state.images.get(product.id) || null; if (state.currentImage?.displayUrl) setPreview(state.currentImage.displayUrl);
       state.editorTones = (state.tonesImages.get(product.id) || []).map(image => ({ ...image, file: null, previewUrl: null }));
@@ -528,7 +561,8 @@
   function showFormError(message) { els.formMessage.textContent = message; els.formMessage.hidden = false; }
   function productPayload() {
     const rawStock = $("stockQuantity").value.trim();
-    return { name: $("name").value.trim(), slug: slugify($("name").value), brand: $("brand").value.trim() || null, category: $("category").value.trim(), description: $("description").value.trim() || null, catalog_note: $("catalogNote").value.trim() || null, price: Number($("price").value), compare_at_price: $("compareAtPrice").value === "" ? null : Number($("compareAtPrice").value), stock_quantity: rawStock === "" ? null : Number(rawStock), is_new: $("isNew").checked, is_featured: $("isFeatured").checked, priority_recent: $("priorityRecent").checked, is_restock: $("isRestock").checked, is_active: $("isActive").checked };
+    const stockQuantity = $("availabilityOut").checked ? 0 : (rawStock === "" ? null : Number(rawStock));
+    return { name: $("name").value.trim(), slug: slugify($("name").value), brand: $("brand").value.trim() || null, category: $("category").value.trim(), description: $("description").value.trim() || null, catalog_note: $("catalogNote").value.trim() || null, price: Number($("price").value), compare_at_price: $("compareAtPrice").value === "" ? null : Number($("compareAtPrice").value), stock_quantity: stockQuantity, is_new: $("isNew").checked, is_featured: $("isFeatured").checked, priority_recent: $("priorityRecent").checked, is_restock: $("isRestock").checked, is_active: $("isActive").checked };
   }
 
   async function uniqueSlug(payload) {

@@ -81,6 +81,20 @@
               <label>Precio<input id="price" name="price" type="number" inputmode="decimal" min="0" step="0.01" required></label>
               <label>Precio anterior <small>(opcional)</small><input id="compareAtPrice" name="compare_at_price" type="number" inputmode="decimal" min="0" step="0.01"></label>
             </div>
+            <fieldset class="availability-field">
+              <legend>Disponibilidad</legend>
+              <div class="availability-control">
+                <label>
+                  <input id="availabilityAvailable" type="radio" name="availability" value="available" checked>
+                  <span><i aria-hidden="true"></i> Disponible</span>
+                </label>
+                <label>
+                  <input id="availabilityOut" type="radio" name="availability" value="out">
+                  <span><i aria-hidden="true"></i> Agotado</span>
+                </label>
+              </div>
+              <small>La cantidad puede quedar vacía cuando el producto está disponible.</small>
+            </fieldset>
             <label>Cantidad de stock <small>(opcional)</small><input id="stockQuantity" name="stock_quantity" type="number" inputmode="numeric" min="0" step="1" placeholder="Sin registrar"><small>Déjalo vacío si todavía no registraste una cantidad.</small></label>
           </section>
 
@@ -132,7 +146,7 @@
       <div class="actions-menu-heading"><div><small>Acciones</small><h2 id="actionsTitle">Producto</h2></div><button id="closeActionsButton" type="button" aria-label="Cerrar">×</button></div>
       <button type="button" data-product-action="edit"><span>✎</span> Editar</button>
       <button type="button" data-product-action="stock"><span>⌗</span> Cambiar stock</button>
-      <button type="button" data-product-action="sold-out"><span>○</span> Marcar agotado</button>
+      <button id="availabilityActionButton" type="button" data-product-action="availability"><span>○</span> Marcar agotado</button>
       <button id="featureActionButton" type="button" data-product-action="feature"><span>★</span> Destacar</button>
       <button class="danger-action" type="button" data-product-action="delete"><span>⌫</span> Eliminar</button>
     </div>

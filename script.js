@@ -2824,6 +2824,14 @@ function ajustarEntregasPwa(isMobile) {
     return;
   }
 
+  // En la web móvil, Clientes felices forma parte del inicio y precede al
+  // catálogo. Se mueve el mismo bloque para conservar su lógica y su lazy load.
+  const productosSeccion = document.getElementById("productos");
+  if (isMobile && !estaEnModoStandalone() && productosSeccion) {
+    productosSeccion.before(entregasSeccionPwa);
+    return;
+  }
+
   entregasPadreOriginal.insertBefore(
     entregasSeccionPwa,
     entregasSiguienteOriginal
@@ -2891,11 +2899,6 @@ function renderizarMobileProductos() {
 
     const tarjeta = document.createElement("div");
     tarjeta.className = "aitana-mobile-product";
-    const vistaPwa = estaEnModoStandalone();
-
-    const hrefWA =
-      crearUrlWhatsapp(crearMensajeProductoWhatsapp(producto));
-
     tarjeta.innerHTML = `
       <button
         type="button"
@@ -2906,23 +2909,11 @@ function renderizarMobileProductos() {
       >
         <i class="fa-regular fa-heart" aria-hidden="true"></i>
       </button>
-      ${vistaPwa ? `<button type="button" class="aitana-mobile-destacado-trigger" data-vista-rapida-index="${index}" aria-label="Ver detalles de ${producto.nombre}">` : `<a href="${hrefWA}" target="_blank" rel="noopener noreferrer" data-whatsapp-producto-index="${index}" aria-label="Consultar ${producto.nombre} por WhatsApp">`}
+      <button type="button" class="aitana-mobile-destacado-trigger" data-vista-rapida-index="${index}" aria-label="Ver detalles de ${producto.nombre}">
         ${imagenHTML(producto.imagen, producto.nombre, "", producto.imagenDiagnostico)}
-      ${vistaPwa ? "</button>" : "</a>"}
+      </button>
       <h3>${producto.nombre}</h3>
       <div class="aitana-mobile-precio">S/${producto.precio}</div>
-      ${vistaPwa ? "" : `<a href="${hrefWA}" target="_blank" rel="noopener noreferrer" class="aitana-mobile-whatsapp" data-whatsapp-producto-index="${index}" aria-label="Consultar por WhatsApp">
-        <i class="fa-brands fa-whatsapp"></i> WhatsApp
-      </a>
-      <button
-        type="button"
-        class="agregar-consulta agregar-consulta-mobile"
-        data-consulta-index="${index}"
-        aria-label="Agregar ${producto.nombre} a Mi consulta"
-        aria-pressed="false"
-      >
-        + Agregar a consulta
-      </button>`}
     `;
 
     contenedor.appendChild(tarjeta);
@@ -2932,6 +2923,13 @@ function renderizarMobileProductos() {
   actualizarBotonesFavoritos();
   registrarImagenesDiferidas(contenedor);
 }
+
+document.querySelector(".aitana-mobile-ver-todos")?.addEventListener("click", evento => {
+  if (estaEnModoStandalone()) return;
+  evento.preventDefault();
+  renderizarFavoritos();
+  abrirMobileSheet(favoritosSheet);
+});
 
 function sincronizarBottomNav() {
   const linksNav = document.querySelectorAll(".aitana-mobile-bottom-link");

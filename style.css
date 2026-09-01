@@ -8343,7 +8343,8 @@ button, input, select, a { -webkit-tap-highlight-color: transparent; }
 
 /* Pulido final exclusivo de la web desktop. */
 @media (min-width: 769px) {
-  #lista-productos .etiqueta-nuevo:not(.etiqueta-reingreso) {
+  #lista-productos .etiqueta-nuevo:not(.etiqueta-reingreso),
+  .recien-llegados-lista .producto-reciente .etiqueta-nuevo:not(.etiqueta-reingreso) {
     top: 10px;
     right: auto;
     left: 10px;
@@ -8432,7 +8433,8 @@ button, input, select, a { -webkit-tap-highlight-color: transparent; }
 
 /* Desktop con ventana estrecha: conservar el chip sin afectar dispositivos táctiles. */
 @media (hover: hover) and (pointer: fine) {
-  html:not(.modo-standalone) #lista-productos .etiqueta-nuevo:not(.etiqueta-reingreso) {
+  html:not(.modo-standalone) #lista-productos .etiqueta-nuevo:not(.etiqueta-reingreso),
+  html:not(.modo-standalone) .recien-llegados-lista .producto-reciente .etiqueta-nuevo:not(.etiqueta-reingreso) {
     top: 10px;
     right: auto;
     bottom: auto;

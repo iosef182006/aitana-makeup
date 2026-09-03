@@ -20,8 +20,6 @@ if (pantallaActualizacion) {
   }
 }
 
-const TOTAL_PRODUCTOS_SUPABASE_ESPERADO = 55;
-
 async function cargarCatalogoSupabase() {
   if (esRutaRevision || MODO_ACTUALIZACION) return;
 
@@ -29,9 +27,6 @@ async function cargarCatalogoSupabase() {
 
   try {
     const cargaSupabase = await obtenerProductosSupabase();
-    if (cargaSupabase.productos.length !== TOTAL_PRODUCTOS_SUPABASE_ESPERADO) {
-      throw new Error(`Se esperaban ${TOTAL_PRODUCTOS_SUPABASE_ESPERADO} productos activos de Supabase y se recibieron ${cargaSupabase.productos.length}.`);
-    }
 
     const [filasImagenes, filasVariantes] = await Promise.all([
       cargarImagenesSupabase(cargaSupabase),

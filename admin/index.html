@@ -68,7 +68,14 @@
               <img id="imagePreview" alt="Vista previa del producto" hidden>
               <span id="imagePlaceholder"><b>＋</b> Seleccionar o tomar foto<small>JPG, PNG o WEBP · máximo 5 MB</small></span>
             </label>
-            <input id="productImage" class="visually-hidden" type="file" accept="image/jpeg,image/png,image/webp" capture="environment">
+            <div class="main-image-controls">
+              <label class="button secondary main-image-change-button" for="productImage">📷 Cambiar foto principal</label>
+              <div id="mainImagePending" class="main-image-pending" hidden>
+                <span>Nueva foto seleccionada</span>
+                <button id="cancelMainImageChange" class="main-image-cancel-button" type="button">Cancelar cambio</button>
+              </div>
+            </div>
+            <input id="productImage" class="visually-hidden" type="file" accept="image/jpeg,image/png,image/webp,image/*">
           </section>
 
           <section class="form-card fields">

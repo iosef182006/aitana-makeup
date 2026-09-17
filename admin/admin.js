@@ -21,6 +21,7 @@
     loginForm: $("loginForm"), loginError: $("loginError"), loginButton: $("loginButton"), logout: $("logoutButton"),
     list: $("productList"), productsMessage: $("productsMessage"), search: $("searchInput"), form: $("productForm"), formMessage: $("formMessage"),
     editorTitle: $("editorTitle"), save: $("saveButton"), delete: $("deleteButton"), image: $("productImage"), preview: $("imagePreview"), placeholder: $("imagePlaceholder"),
+    mainImagePending: $("mainImagePending"), cancelMainImageChange: $("cancelMainImageChange"),
     hasTones: $("hasTones"), tonesPanel: $("tonesImagePanel"), tonesImage: $("tonesImage"), tonesList: $("tonesImagesList"), tonesEmpty: $("tonesImagesEmpty"),
     variants: $("variantList"), dialog: $("confirmDialog"), confirmDelete: $("confirmDeleteButton"), toast: $("toast"),
     count: $("productsCount"), filters: $("productFilters"), sort: $("productSort"), actionsDialog: $("actionsDialog"), actionsTitle: $("actionsTitle"), featureAction: $("featureActionButton"), availabilityAction: $("availabilityActionButton"), stockDialog: $("stockDialog"), stockForm: $("stockForm"), quickStock: $("quickStockQuantity"), stockProductName: $("stockProductName")
@@ -390,10 +391,20 @@
 
   function slugify(value) { return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
   function setPreview(url) { els.preview.src = url; els.preview.hidden = false; els.placeholder.hidden = true; }
+  function resetMainImageSelection() {
+    if (state.previewUrl) URL.revokeObjectURL(state.previewUrl);
+    state.previewUrl = null;
+    els.image.value = "";
+    els.mainImagePending.hidden = true;
+    if (state.currentImage?.displayUrl) setPreview(state.currentImage.displayUrl);
+    else { els.preview.removeAttribute("src"); els.preview.hidden = true; els.placeholder.hidden = false; }
+  }
   function cleanupPreview() {
     if (state.previewUrl) URL.revokeObjectURL(state.previewUrl);
     state.editorTones.forEach(image => { if (image.previewUrl) URL.revokeObjectURL(image.previewUrl); });
     state.previewUrl = null;
+    els.image.value = "";
+    els.mainImagePending.hidden = true;
     state.editorTones = [];
   }
 
@@ -433,10 +444,11 @@
 
   els.image.addEventListener("change", () => {
     const file = els.image.files?.[0]; if (!file) return;
-    if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size > MAX_IMAGE_BYTES) { els.image.value = ""; showFormError("Selecciona una imagen JPG, PNG o WEBP de máximo 5 MB."); return; }
+    if (!validImageFile(file)) { resetMainImageSelection(); showFormError("Selecciona una imagen JPG, PNG o WEBP de máximo 5 MB."); return; }
     if (state.previewUrl) URL.revokeObjectURL(state.previewUrl);
-    state.previewUrl = URL.createObjectURL(file); setPreview(state.previewUrl); els.formMessage.hidden = true;
+    state.previewUrl = URL.createObjectURL(file); setPreview(state.previewUrl); els.mainImagePending.hidden = false; els.formMessage.hidden = true;
   });
+  els.cancelMainImageChange.addEventListener("click", () => { resetMainImageSelection(); els.formMessage.hidden = true; });
 
   els.hasTones.addEventListener("change", () => {
     els.tonesPanel.hidden = !els.hasTones.checked;
@@ -581,12 +593,33 @@
     if (uploadError) throw uploadError;
     try {
       if (state.currentImage?.id) {
-        const { error } = await db.from("product_images").update({ storage_path: path, alt_text: $("name").value.trim() }).eq("id", state.currentImage.id); if (error) throw error;
-        const oldPath = state.currentImage.storage_path; if (oldPath) await db.storage.from("product-images").remove([oldPath]);
+        const { data: updated, error } = await db.from("product_images")
+          .update({ storage_path: path, alt_text: $("name").value.trim(), sort_order: 0, is_primary: true })
+          .eq("id", state.currentImage.id)
+          .eq("product_id", productId)
+          .select("id, product_id, storage_path, alt_text, sort_order, is_primary")
+          .single();
+        if (error || !updated || updated.storage_path !== path || updated.is_primary !== true || Number(updated.sort_order) !== 0) {
+          throw error || new Error("Supabase no confirmó la nueva foto principal.");
+        }
+        const oldPath = state.currentImage.storage_path;
+        state.currentImage = { ...state.currentImage, ...updated };
+        if (oldPath && oldPath !== path) {
+          const { error: removeError } = await db.storage.from("product-images").remove([oldPath]);
+          if (removeError) console.warn("La foto principal se actualizó, pero no se pudo retirar el archivo anterior.", { storage_path: oldPath, error: removeError });
+        }
       } else {
-        const { error } = await db.from("product_images").insert({ product_id: productId, storage_path: path, alt_text: $("name").value.trim(), sort_order: 0, is_primary: true }); if (error) throw error;
+        const { data: inserted, error } = await db.from("product_images")
+          .insert({ product_id: productId, storage_path: path, alt_text: $("name").value.trim(), sort_order: 0, is_primary: true })
+          .select("id, product_id, storage_path, alt_text, sort_order, is_primary")
+          .single();
+        if (error || !inserted || inserted.storage_path !== path || inserted.is_primary !== true) {
+          throw error || new Error("Supabase no confirmó la foto principal.");
+        }
+        state.currentImage = inserted;
       }
     } catch (error) { await db.storage.from("product-images").remove([path]); throw error; }
+    return path;
   }
 
   async function removeStoragePath(path) {
@@ -684,8 +717,10 @@
       else result = await db.from("products").insert(payload).select().single();
       if (result.error) throw result.error;
       createdId = result.data.id;
+      const mainImageChanged = Boolean(els.image.files?.[0]);
       await uploadImage(createdId); await syncTonesImages(createdId); await saveVariants(createdId);
       cleanupPreview(); await loadProducts(); setView("dashboard"); toast(state.editingId ? "Cambios guardados" : "Producto publicado en el panel");
+      if (state.editingId && mainImageChanged) toast("Foto principal actualizada correctamente");
     } catch (error) {
       if (!state.editingId && createdId) await db.from("products").delete().eq("id", createdId);
       showFormError(errorText(error, "No se pudo guardar el producto."));

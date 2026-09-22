@@ -447,10 +447,11 @@ function imagenHTML(nombre, alt, clase = "", diagnostico = null, opciones = {}) 
 
   if (/^https?:\/\//i.test(nombre || "")) {
     const {
-      diferirSrc = true,
+      diferirSrc = false,
       loading = "lazy",
       fetchPriority = null
     } = opciones;
+    // El navegador gestiona loading="lazy" sin depender del observador.
     const atributoOrigen = diferirSrc
       ? `data-src="${nombre}"`
       : `src="${nombre}"`;

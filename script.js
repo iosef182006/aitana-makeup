@@ -423,6 +423,13 @@ const dimensionesImagenes = {
 const imagenesFallidasReportadas = new Set();
 
 function reportarErrorImagen(elemento) {
+  // Si el optimizador no está disponible, cargar el original una sola vez.
+  if (elemento.dataset.imageOriginal) {
+    const original = elemento.dataset.imageOriginal;
+    delete elemento.dataset.imageOriginal;
+    elemento.src = original;
+    return;
+  }
   const productId = decodeURIComponent(elemento.dataset.imageProductId || "");
   const storagePath = decodeURIComponent(elemento.dataset.imageStoragePath || "");
   const url = decodeURIComponent(elemento.dataset.imageUrl || elemento.currentSrc || elemento.src || "");
@@ -443,6 +450,14 @@ function codificarDatoImagen(valor) {
   return encodeURIComponent(String(valor || "")).replace(/'/g, "%27");
 }
 
+function obtenerMiniaturaCatalogo(origen) {
+  const url = new URL(origen);
+  if (window.location.protocol !== "https:" ||
+      url.origin !== window.AITANA_SUPABASE_CONFIG?.url ||
+      !url.pathname.startsWith("/storage/v1/object/public/product-images/")) return origen;
+  return `/_vercel/image?url=${encodeURIComponent(origen)}&w=640&q=75`;
+}
+
 function imagenHTML(nombre, alt, clase = "", diagnostico = null, opciones = {}) {
 
   if (/^https?:\/\//i.test(nombre || "")) {
@@ -451,10 +466,17 @@ function imagenHTML(nombre, alt, clase = "", diagnostico = null, opciones = {}) 
       loading = "lazy",
       fetchPriority = null
     } = opciones;
+    // Las tarjetas necesitan una miniatura; los detalles conservan el original.
+    const origen = loading === "lazy" && !diferirSrc
+      ? obtenerMiniaturaCatalogo(nombre)
+      : nombre;
+    const atributoOriginal = origen !== nombre
+      ? `data-image-original="${nombre}"`
+      : "";
     // El navegador gestiona loading="lazy" sin depender del observador.
     const atributoOrigen = diferirSrc
-      ? `data-src="${nombre}"`
-      : `src="${nombre}"`;
+      ? `data-src="${origen}"`
+      : `src="${origen}"`;
     const atributoPrioridad = fetchPriority
       ? `fetchpriority="${fetchPriority}"`
       : "";
@@ -462,6 +484,7 @@ function imagenHTML(nombre, alt, clase = "", diagnostico = null, opciones = {}) 
     return `
       <img
         ${atributoOrigen}
+        ${atributoOriginal}
         alt="${alt}"
         class="${clase}"
         data-image-product-id="${codificarDatoImagen(diagnostico?.productId)}"

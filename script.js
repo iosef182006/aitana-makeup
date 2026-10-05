@@ -139,6 +139,9 @@ function normalizeSupabaseProduct(producto, imagenes, variantes, clienteSupabase
     categoria: producto.category,
     marca: producto.brand || "",
     imagen: imagenPublica,
+    video: producto.slug === "espejo-led-para-tocador"
+      ? new URL("img/espejo-led-tres-tonos.mp4", document.baseURI).href
+      : null,
     imagenTonos: imagenesTonosPublicas[0] || null,
     imagenesTonos: imagenesTonosPublicas,
     imagenDiagnostico: imagenPrincipal?.storage_path ? { productId: producto.id, storagePath: imagenPrincipal.storage_path, url: imagenPublica } : null,
@@ -805,6 +808,12 @@ function crearTarjetaProducto(producto, index, claseAdicional = "") {
 
 
         <div class="acciones-producto">
+
+          ${producto.video ? `
+            <button type="button" class="ver-tonos" data-vista-rapida-index="${index}">
+              Ver video
+            </button>
+          ` : ""}
 
           ${
             !producto.agotado && tieneDetalles
@@ -1489,6 +1498,8 @@ function obtenerElementosFocoVistaRapida() {
 function cerrarVistaRapida() {
   if (!vistaRapidaModal.classList.contains("activo")) return;
 
+  vistaRapidaCuerpo.querySelectorAll("video").forEach(video => video.pause());
+
   vistaRapidaModal.classList.remove("activo");
   vistaRapidaModal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("vista-rapida-abierta");
@@ -1545,6 +1556,17 @@ function abrirVistaRapida(index) {
         </div>
       </div>
       ${producto.nota ? `<p class="vista-rapida-nota">${producto.nota}</p>` : ""}
+
+      ${producto.video ? `
+        <div class="vista-rapida-tonos-resumen">
+          <span>Así funcionan sus 3 tonos de luz</span>
+          <video class="vista-rapida-imagen" controls playsinline preload="none"
+            poster="${producto.imagen}" aria-label="Demostración de los 3 tonos de luz del espejo LED">
+            <source src="${producto.video}" type="video/mp4">
+            <a href="${producto.video}" target="_blank" rel="noopener noreferrer">Ver video del espejo LED</a>
+          </video>
+        </div>
+      ` : ""}
 
       ${tieneTonos ? `
         <div class="vista-rapida-tonos-resumen">

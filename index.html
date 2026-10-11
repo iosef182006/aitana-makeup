@@ -50,7 +50,9 @@
   </style>
 
   <script>
-    window.AITANA_CONFIG = Object.freeze({ modoActualizacion: false });
+    // Halloween: "auto" (20–31 octubre local), "off" o "on".
+    // Previsualización temporal: volver a "auto" después de aprobar el diseño.
+    window.AITANA_CONFIG = Object.freeze({ modoActualizacion: false, halloween: "on" });
 
     (() => {
       const rutaActual = window.location.pathname.replace(/\/+$/, "");
@@ -98,6 +100,9 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   >
   <link rel="stylesheet" href="style.css?v=18-navigation-fix">
+  <link rel="stylesheet" href="halloween.css">
+  <script src="halloween-sounds.js" defer></script>
+  <script src="halloween.js" defer></script>
 </head>
 
 <body>

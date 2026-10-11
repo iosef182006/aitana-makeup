@@ -1,0 +1,365 @@
+﻿/* Haunted Beauty: capa reversible, superficies de compra claras. */
+html.tema-halloween { background: #160f22; }
+html.tema-halloween body,
+html.tema-halloween.modo-standalone body.pwa-navegacion-lista {
+  background: radial-gradient(ellipse at 5% 20%, #50235b80, transparent 48%), radial-gradient(ellipse at 95% 65%, #85225155, transparent 45%), #160f22;
+}
+html.tema-halloween .hero, html.tema-halloween.modo-standalone .hero {
+  background: radial-gradient(ellipse at 80% 30%, #6b2a654d, transparent 60%), transparent;
+}
+html.tema-halloween :is(.home-premium, .productos, .entregas-aitana, .ayuda) {
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480' viewBox='0 0 480 480'%3E%3Cg fill='%23b16bba' opacity='.11'%3E%3Cpath d='m41 47 19 9 7-6 4 5 4-5 7 6 19-9-9 21-14-2-7 8-7-8-14 2Z'/%3E%3Cpath d='m391 301 2 6 6 2-6 2-2 6-2-6-6-2 6-2Z'/%3E%3Ccircle cx='170' cy='268' r='1.5'/%3E%3Ccircle cx='324' cy='104' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* Logo original; sin cambiar altura ni safe areas del header. */
+html.tema-halloween .header,
+html.tema-halloween.modo-standalone body.pwa-navegacion-lista .header {
+  background: #21152e; border-bottom: 1px solid #8e3e79;
+  box-shadow: 0 3px 18px #08050d50; backdrop-filter: none;
+}
+html.tema-halloween .logo img { border-color: #f778c7; box-shadow: 0 0 16px #f451b438; }
+html.tema-halloween .header :is(nav a, .menu-toggle, .pwa-header-actions button),
+html.tema-halloween .logo::before { color: #fff0fb; }
+html.tema-halloween .logo::after { color: #efb8de; }
+html.tema-halloween .header :is(.menu-toggle, .pwa-header-actions button) { background: #3b2447; border-color: #825574; }
+html.tema-halloween .header nav a.nav-admin-link { background: #35203f; color: #f6d7ee; border-color: #78446b; }
+html.tema-halloween .header nav a:hover,
+html.tema-halloween .header nav a.activo-menu { background: #b92d79; }
+.halloween-banner { display: none; }
+html.tema-halloween .halloween-banner {
+  position: relative; isolation: isolate; display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: center;
+  overflow: hidden; max-width: 1320px; min-height: 310px; margin: 24px auto 0;
+  padding: 24px 5%; border: 1px solid #b6529366; border-radius: 28px;
+  background: radial-gradient(ellipse at 80% 20%, #77326988, transparent 60%), linear-gradient(120deg, #2e173d, #201327 70%);
+  box-shadow: inset 0 0 70px #f05bb50a, 0 18px 40px #09050d40; color: #fff4fc;
+}
+.halloween-banner::before {
+  content: ""; position: absolute; z-index: -1; inset: 60% -12% -20%; pointer-events: none;
+  background: radial-gradient(ellipse, #c56cdc35, transparent 65%);
+  animation: haunted-mist 15s ease-in-out infinite alternate;
+}
+.haunted-copy { min-width: 0; position: relative; z-index: 1; }
+.haunted-eyebrow { display: block; color: #f4d5ec; font-size: 12px; font-weight: 600; letter-spacing: .1em; line-height: 1.7; }
+.haunted-copy h2 { margin: 14px 0; font-size: clamp(26px, 3.6vw, 48px); line-height: 1.08; letter-spacing: -.035em; color: #fff4fc; }
+.haunted-copy h2 span { display: block; color: #ff88ce; }
+.haunted-copy p { color: #fbe7f6; font-size: clamp(17px, 2vw, 23px); line-height: 1.5; }
+.haunted-copy small { display: block; margin-top: 7px; color: #efdaef; font-size: 14px; line-height: 1.6; }
+.haunted-sound {
+  display: block; margin-top: 20px; padding: 10px 15px; min-height: 44px;
+  border: 1px solid #ba689f; border-radius: 30px; background: #49233e;
+  color: #fff0fa; font: 600 14px Arial, sans-serif; cursor: pointer;
+  max-width: 100%; white-space: normal; overflow-wrap: anywhere;
+}
+.haunted-sound[aria-pressed="true"] { background: #8d245e; border-color: #ff9fdb; }
+.haunted-sound:focus-visible { outline: 3px solid #ffd5ed; outline-offset: 4px; }
+.haunted-scene { width: 100%; max-height: 300px; pointer-events: none; overflow: visible; }
+.haunted-floating { animation: haunted-float 7s ease-in-out infinite; }
+.haunted-bat { animation: haunted-flight 24s ease-in-out infinite; }
+.haunted-sparkles { animation: haunted-shimmer 6s ease-in-out infinite; }
+/* Solo titulares exteriores, sin cambiar textos de formularios ni fichas. */
+html.tema-halloween :is(.hero-texto h1, .busca-hoy-encabezado h2, .catalogo-encabezado h2, .titulo-catalogo h2, .recien-llegados-encabezado h2, .aitana-mobile-section-header h2, .entregas-encabezado h2, .ayuda > h2) { color: #fff1fc; }
+html.tema-halloween :is(.hero-texto h1 span, .hero-texto .mini, .aitana-mobile-section-kicker, .busca-hoy-encabezado > span, .aitana-mobile-ver-todos) { color: #ff94d4; }
+html.tema-halloween :is(.hero-texto > p, .hero-secundario, .hero-confianza, .busca-hoy-encabezado p, .catalogo-encabezado > p, .entregas-encabezado > p) { color: #e2c9e6; }
+html.tema-halloween .hero-texto { background: transparent; }
+html.tema-halloween .aitana-mobile-products { background: transparent; border-color: #74436e; }
+html.tema-halloween :is(.resultado-total, .resultado-total strong, .catalogo-mini,
+  .stock-filtros .grupo-etiqueta, .beneficios-home b, .beneficios-home small, .ayuda > p,
+  .recien-llegados-encabezado p, .catalogo-encabezado p) { color: #e2c9e6; }
+html.tema-halloween :is(.catalogo-panel, .recien-llegados, .beneficios-home) {
+  background: #2a1b36; border: 1px solid #74436e; box-shadow: 0 12px 32px #08040c30;
+}
+html.tema-halloween :is(.catalogo-panel .catalogo-encabezado h2, .recien-llegados #tituloRecienLlegados) { color: #fff1fc; }
+html.tema-halloween :is(.catalogo-panel .catalogo-encabezado p, .recien-llegados-encabezado p, .catalogo-panel .progreso-productos) { color: #e2c9e6; }
+html.tema-halloween :is(.busca-hoy-card, .entrega-tarjeta, .ayuda-tarjeta) { border-color: #b77bb3; }
+/* Brillo en bordes; nunca encima de fotos, precios ni acciones. */
+html.tema-halloween :is(.producto, .producto-reciente, .aitana-mobile-product),
+html.tema-halloween.modo-standalone :is(#lista-productos .producto, .aitana-mobile-product) {
+  border: 1px solid #9963b0; background: #fff9fd;
+  box-shadow: inset 0 -2px 0 #f2b6db, 0 0 0 2px #bd3a9415, 0 8px 22px #08040e35;
+}
+html.tema-halloween .producto-info { background: #fff9fd; }
+html.tema-halloween .producto:hover { border-color: #ff73c6; box-shadow: 0 0 0 2px #f44db333, 0 10px 28px #12091f50; }
+html.tema-halloween :is(.busca-hoy-encabezado, .titulo-catalogo) h2::after {
+  content: ""; display: inline-block; width: 27px; height: 17px; margin-inline-start: 7px; vertical-align: middle; pointer-events: none;
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 22'%3E%3Cpath fill='%23ef8acb' d='M1 2l11 7 4-4 2 3 2-3 4 4 11-7-4 14-7-1-6 6-6-6-7 1z'/%3E%3C/svg%3E");
+}
+html.tema-halloween.modo-standalone body:is(.pwa-vista-favoritos, .pwa-vista-consulta) { background: #fffafb; }
+html.tema-halloween.modo-standalone body:is(.pwa-vista-favoritos, .pwa-vista-consulta) .header {
+  background: #fff; border-bottom-color: #f0e3e8; box-shadow: 0 3px 18px #48202e0b;
+}
+html.tema-halloween.modo-standalone body:is(.pwa-vista-favoritos, .pwa-vista-consulta) .logo::before { color: #2c2025; }
+html.tema-halloween.modo-standalone body:is(.pwa-vista-favoritos, .pwa-vista-consulta) .logo::after { color: #74656b; }
+html.tema-halloween.modo-standalone body:is(.pwa-vista-favoritos, .pwa-vista-consulta) .header :is(.menu-toggle, .pwa-header-actions button) {
+  color: #b92559; background: #fff6f9; border-color: #f0e3e8;
+}
+html.tema-halloween.modo-standalone body:is(.pwa-vista-favoritos, .pwa-vista-consulta) .halloween-banner,
+html.tema-halloween.ruta-revision .halloween-banner,
+html.tema-halloween body.modo-actualizacion-activo .halloween-banner { display: none; }
+@media (min-width: 769px) {
+  html.tema-halloween .halloween-banner { width: calc(100% - 12%); }
+}
+@media (max-width: 768px) {
+  html.tema-halloween .header nav { background: #2b1a37; }
+  html.tema-halloween .halloween-banner {
+    grid-template-columns: minmax(0, 1fr); min-height: 0;
+    margin: 12px max(12px, env(safe-area-inset-right, 0px)) 0 max(12px, env(safe-area-inset-left, 0px));
+    padding: 23px 20px 0; border-radius: 23px; text-align: center;
+  }
+  .haunted-eyebrow { font-size: 11px; letter-spacing: .06em; }
+  .haunted-copy h2 { font-size: 31px; margin: 10px 0; }
+  .haunted-copy p { font-size: 18px; }
+  .haunted-copy small { font-size: 13px; }
+  .haunted-sound { margin: 14px auto 0; }
+  .haunted-scene { width: 100%; height: 155px; margin-top: 3px; }
+  html.tema-halloween.modo-standalone body.pwa-vista-catalogo .halloween-banner {
+    grid-template-columns: minmax(0, 1fr) 72px; gap: 8px; padding: 15px; text-align: left;
+  }
+  html.tema-halloween.modo-standalone body.pwa-vista-catalogo .haunted-copy h2 { font-size: 20px; }
+  html.tema-halloween.modo-standalone body.pwa-vista-catalogo .haunted-copy :is(small, .haunted-eyebrow) { display: none; }
+  html.tema-halloween.modo-standalone body.pwa-vista-catalogo .haunted-copy p { font-size: 13px; }
+  html.tema-halloween.modo-standalone body.pwa-vista-catalogo .haunted-sound { margin: 10px 0 0; }
+  html.tema-halloween.modo-standalone body.pwa-vista-catalogo .haunted-scene { height: 105px; }
+}
+@keyframes haunted-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes haunted-flight { 0%, 72%, 100% { transform: translate(0, 0); } 83% { transform: translate(-90px, -20px); } 91% { transform: translate(60px, 9px); } }
+@keyframes haunted-shimmer { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+@keyframes haunted-mist { to { transform: translateX(8%); opacity: .5; } }
+@media (prefers-reduced-motion: reduce) {
+  html.tema-halloween .halloween-banner::before,
+  html.tema-halloween :is(.haunted-floating, .haunted-bat, .haunted-sparkles) { animation: none; }
+}
+html.tema-halloween.modo-standalone body:is(.pwa-vista-favoritos, .pwa-vista-consulta) .halloween-banner * { animation-play-state: paused; }
+
+/* Retoques: decoraciones de fondo en los márgenes, sin capas sobre el contenido. */
+html.tema-halloween :is(.home-premium, .productos, .entregas-aitana, .ayuda, .aitana-mobile-products) {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 240'%3E%3Cpath d='M0 0h28M0 0v28M0 0l22 22M0 9Q7 7 9 0M0 18Q13 13 18 0M0 27Q20 20 27 0' fill='none' stroke='%23d7a1e5' stroke-width='.7' opacity='.4'/%3E%3Cpath d='m8 132 2 5 5 2-5 2-2 5-2-5-5-2 5-2Z' fill='%23ef8acb' opacity='.35'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 240'%3E%3Cg fill='%23f7b4df' opacity='.35'%3E%3Cpath d='m20 34 2 6 6 2-6 2-2 6-2-6-6-2 6-2Z'/%3E%3Ccircle cx='24' cy='130' r='1.5'/%3E%3Cpath d='m17 194 1 4 4 1-4 1-1 4-1-4-4-1 4-1Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-position: left top, right 35px;
+  background-repeat: repeat-y;
+  background-size: 26px 240px;
+}
+
+/* PWA: solo cambia la paleta. Se conservan alturas y padding de safe areas. */
+html.tema-halloween.modo-standalone .aitana-mobile-bottom-nav {
+  background: #24152f;
+  border-top-color: #815072;
+  box-shadow: 0 -5px 18px #10071d55;
+  backdrop-filter: none;
+}
+html.tema-halloween.modo-standalone .aitana-mobile-bottom-link {
+  color: #f5d8ee;
+  background: transparent;
+  font-size: 11px;
+  line-height: 1.25;
+  min-width: 0;
+}
+html.tema-halloween.modo-standalone .aitana-mobile-bottom-link i { color: #f58bcb; }
+html.tema-halloween.modo-standalone .aitana-mobile-bottom-link.active { color: #ffc5e9; }
+html.tema-halloween.modo-standalone .aitana-mobile-bottom-link.active::before { background: #ff8bd2; }
+html.tema-halloween.modo-standalone .aitana-mobile-bottom-link:focus-visible { outline-color: #ffd7ef; outline-offset: -3px; }
+
+@media (max-width: 768px) {
+  html.tema-halloween :is(.home-premium, .productos, .entregas-aitana, .ayuda, .aitana-mobile-products) { background-size: 12px 200px; }
+  .haunted-copy :is(h2, p, small, .haunted-eyebrow) { overflow-wrap: anywhere; }
+  html.tema-halloween .haunted-copy { min-width: 0; }
+}
+/* Réplica de composición de la referencia aprobada. El fondo no contiene interfaz. */
+html.tema-halloween body,
+html.tema-halloween.modo-standalone body.pwa-navegacion-lista {
+  background-color: #150b1b;
+  background-image: url('/assets/halloween/haunted-scene.webp');
+  background-position: center top;
+  background-size: min(100%, 1440px) auto;
+  background-repeat: repeat-y;
+}
+html.tema-halloween :is(.hero, .home-premium, .productos, .entregas-aitana, .ayuda, .aitana-mobile-products) {
+  background: transparent;
+}
+html.tema-halloween .halloween-banner {
+  display: block; min-height: 0; margin-top: 0; padding: 20px 7% 28px;
+  border: 0; border-radius: 0; background: transparent; box-shadow: none; text-align: center;
+}
+html.tema-halloween .haunted-copy { max-width: 750px; margin-inline: auto; }
+html.tema-halloween .haunted-scene { display: none; }
+.haunted-stardust { position: absolute; inset: 15% 2%; pointer-events: none; color: #ffd0e8; }
+.haunted-stardust span { position: absolute; left: 4%; top: 20%; animation: haunted-shimmer 6s ease-in-out infinite; }
+.haunted-stardust span + span { left: auto; right: 4%; top: 70%; animation-delay: -3s; }
+@media (prefers-reduced-motion: reduce) { .haunted-stardust span { animation: none; } }
+.haunted-brand { color: #f5a6d3; font: 700 46px/1 Georgia, 'Times New Roman', serif; text-shadow: 0 0 20px #f32a9266; }
+.haunted-brand small { margin: 7px 0 20px; color: #fff1fc; font: 600 12px/1.4 Arial, sans-serif; letter-spacing: .34em; }
+html.tema-halloween .haunted-eyebrow {
+  display: inline-block; padding: 5px 12px; border-radius: 20px;
+  background: #622144ce; border: 1px solid #f263a970; color: #fff0f9;
+  font-size: 12px; letter-spacing: .04em;
+}
+html.tema-halloween .haunted-copy h2 {
+  margin: 12px 0 9px; color: #ffc7e5; font: 700 clamp(40px, 5vw, 70px)/1.02 Georgia, 'Times New Roman', serif;
+  text-shadow: 0 0 3px #fff0f7, 0 0 14px #ff008c, 0 0 35px #e71b85;
+}
+html.tema-halloween .haunted-copy h2 span { font-size: .72em; margin-top: 6px; color: #ff9dcf; }
+html.tema-halloween .haunted-copy p { color: #fff7ff; font-size: 20px; text-shadow: 0 2px 7px #160619; }
+html.tema-halloween .haunted-copy > small { font-size: 14px; color: #f7e3f3; text-shadow: 0 2px 7px #160619; }
+html.tema-halloween .haunted-sound {
+  min-height: 46px; margin: 16px auto 0; width: min(100%, 340px); padding: 12px 18px;
+  border: 1px solid #ff91d0; background: #341128e8; box-shadow: inset 0 0 12px #ff5cb039, 0 0 13px #fa399480;
+  color: #fff4fc; font-size: 14px;
+}
+html.tema-halloween .haunted-sound::before { content: '♫'; margin-right: 10px; color: #ffb2db; }
+html.tema-halloween .haunted-sound[aria-pressed='true'] { background: #78204fdc; }
+html.tema-halloween :is(.catalogo-panel, .recien-llegados, .beneficios-home) {
+  background: #1a0b22bf; border-color: #d9529a55;
+}
+html.tema-halloween :is(.recien-llegados-encabezado h2, .aitana-mobile-section-header h2, .catalogo-encabezado h2) {
+  font-family: Georgia, 'Times New Roman', serif; color: #fff1fb; text-shadow: 0 0 10px #f32b9260;
+}
+html.tema-halloween :is(.producto, .producto-reciente, .aitana-mobile-product),
+html.tema-halloween.modo-standalone :is(#lista-productos .producto, .aitana-mobile-product) {
+  border-color: #ef99c6; border-radius: 18px;
+  box-shadow: 0 0 0 1px #f368b238, 0 0 15px #ef3b9350;
+}
+html.tema-halloween :is(.producto-info, .aitana-mobile-product) { background-color: #fff8fc; }
+html.tema-halloween .ver-todos-nuevos,
+html.tema-halloween.modo-standalone .ver-todos-nuevos {
+  color: #fff; border: 1px solid #ff8bc7; background: linear-gradient(135deg, #ef2178, #c51667);
+  box-shadow: 0 0 13px #ef258859; font-size: 13px;
+}
+html.tema-halloween .aitana-mobile-bottom-nav {
+  background: #210e25f5; border-top-color: #b34780; color: #f7dbef; backdrop-filter: none;
+}
+html.tema-halloween .aitana-mobile-bottom-link { color: #efd3e8; font-size: 11px; }
+html.tema-halloween .aitana-mobile-bottom-link.active,
+html.tema-halloween .aitana-mobile-bottom-link.active i { color: #ff409f; }
+html.tema-halloween.modo-standalone body.pwa-navegacion-lista .header {
+  background: #210e25ed; border-bottom-color: #b3478070;
+}
+html.tema-halloween.modo-standalone body.pwa-navegacion-lista .logo::before { color: #fff0fb; }
+html.tema-halloween.modo-standalone body.pwa-navegacion-lista .logo::after { color: #efb8de; }
+html.tema-halloween .mobile-sheet-panel { border-color: #e694c5; box-shadow: 0 0 18px #ef3b9340; }
+@media (min-width: 769px) {
+  html.tema-halloween .hero { min-height: 0; padding: 0; }
+  html.tema-halloween .hero :is(.hero-texto, .hero-imagen) { display: none; }
+}
+@media (max-width: 768px) {
+  html.tema-halloween body,
+  html.tema-halloween.modo-standalone body.pwa-navegacion-lista {
+    /* Capa fija independiente: Safari no depende de background-attachment. */
+    background-image: none;
+    background-color: #150b1b;
+    isolation: isolate;
+  }
+  html.tema-halloween body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: linear-gradient(90deg, #150b1b00 15%, #150b1b55 35% 65%, #150b1b00 85%),
+      url('/assets/halloween/haunted-pink-mobile.webp');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
+  html.tema-halloween .header,
+  html.tema-halloween.modo-standalone body.pwa-navegacion-lista .header { background: #200e25d9; }
+  html.tema-halloween .halloween-banner {
+    margin: 0 max(12px, env(safe-area-inset-right, 0px)) 0 max(12px, env(safe-area-inset-left, 0px));
+    width: auto; padding: 10px 8% 16px;
+  }
+  .haunted-brand { font-size: 36px; }
+  .haunted-brand small { font-size: 10px; margin-bottom: 14px; }
+  html.tema-halloween .haunted-copy h2 { font-size: clamp(37px, 10vw, 44px); }
+  html.tema-halloween .haunted-copy h2 span { font-size: .76em; }
+  html.tema-halloween .haunted-copy p { font-size: 17px; }
+  html.tema-halloween .haunted-copy > small { font-size: 12px; }
+  html.tema-halloween .haunted-eyebrow { font-size: 10px; }
+  html.tema-halloween .aitana-mobile-search {
+    margin: 0 9% 12px; width: auto; min-height: 46px; background: #fff3faf5;
+    border: 1px solid #ee88bd; border-radius: 18px; box-shadow: 0 0 12px #f33b9a44;
+  }
+  html.tema-halloween .aitana-mobile-search-input { min-width: 0; }
+  html.tema-halloween .recien-llegados-mobile-slot .recien-llegados {
+    background: #1a0b2299; border: 0; border-radius: 0; padding-top: 6px;
+  }
+  html.tema-halloween .recien-llegados-encabezado,
+  html.tema-halloween.modo-standalone .recien-llegados-encabezado {
+    flex-direction: column; align-items: flex-start; gap: 8px; margin-inline: 9%;
+  }
+  html.tema-halloween .recien-llegados-encabezado h2,
+  html.tema-halloween.modo-standalone .recien-llegados-encabezado h2 {
+    font-size: clamp(20px, 5.4vw, 24px); line-height: 1.2; white-space: normal; overflow: visible;
+  }
+  html.tema-halloween .recien-llegados-encabezado p,
+  html.tema-halloween.modo-standalone .recien-llegados-encabezado p {
+    color: #f3d8ee; font-size: 13px; white-space: normal; overflow: visible;
+  }
+  html.tema-halloween .recien-llegados-encabezado .catalogo-mini { font-size: 11px; color: #ffb6d9; }
+  html.tema-halloween .ver-todos-nuevos,
+  html.tema-halloween.modo-standalone .ver-todos-nuevos { max-width: 100%; min-height: 44px; padding: 8px 13px; }
+  html.tema-halloween .recien-llegados-mobile-slot .recien-llegados-lista,
+  html.tema-halloween.modo-standalone .recien-llegados-mobile-slot .recien-llegados-lista {
+    padding: 8px 9% 16px; gap: 12px; scroll-padding-inline: 9%;
+  }
+  html.tema-halloween .recien-llegados-mobile-slot .producto-reciente,
+  html.tema-halloween.modo-standalone .recien-llegados-mobile-slot .producto-reciente {
+    flex: 0 0 calc((82vw - 12px) / 2); width: calc((82vw - 12px) / 2);
+    min-height: 0; height: auto; display: flex; flex-direction: column;
+  }
+  html.tema-halloween .recien-llegados-mobile-slot .producto-reciente .producto-imagen,
+  html.tema-halloween.modo-standalone .recien-llegados-mobile-slot .producto-reciente .producto-imagen {
+    height: auto; aspect-ratio: 1 / 1.04;
+  }
+  html.tema-halloween .recien-llegados-mobile-slot .producto-reciente .producto-imagen img { object-fit: contain; }
+  html.tema-halloween .recien-llegados-mobile-slot .producto-reciente .producto-info,
+  html.tema-halloween.modo-standalone .recien-llegados-mobile-slot .producto-reciente .producto-info {
+    height: auto; min-height: 100px; flex: 1; padding: 10px;
+  }
+  html.tema-halloween .recien-llegados-mobile-slot .producto-reciente h3,
+  html.tema-halloween.modo-standalone .recien-llegados-mobile-slot .producto-reciente h3 {
+    height: auto; min-height: 34px; font-size: 13px; line-height: 1.3;
+  }
+  html.tema-halloween .recien-llegados-mobile-slot .producto-reciente .precio { font-size: 22px; }
+  html.tema-halloween .aitana-mobile-section-header { margin-inline: 9%; }
+  html.tema-halloween .aitana-mobile-section-header h2 { font-size: 25px; }
+  html.tema-halloween .aitana-mobile-products { margin-top: 12px; border-top-color: #f17fba80; }
+  html.tema-halloween .aitana-mobile-bottom-nav {
+    left: max(8px, env(safe-area-inset-left, 0px)); right: max(8px, env(safe-area-inset-right, 0px));
+    width: auto; border-radius: 28px 28px 0 0; box-shadow: 0 -4px 20px #f3319940;
+  }
+  html.tema-halloween.modo-standalone body.pwa-vista-catalogo .halloween-banner { display: block; padding: 14px 5%; }
+  html.tema-halloween.modo-standalone body.pwa-vista-catalogo .haunted-brand { display: none; }
+  html.tema-halloween.modo-standalone body.pwa-vista-catalogo .haunted-sound { margin-inline: auto; }
+}
+@media (max-width: 768px) {
+  /* Orden visual de referencia, conservando todos los controles existentes. */
+  html.tema-halloween .aitana-mobile-home { display: flex; flex-direction: column; min-width: 0; }
+  html.tema-halloween .aitana-mobile-search { order: 0; }
+  html.tema-halloween .recien-llegados-mobile-slot { order: 1; }
+  html.tema-halloween .aitana-mobile-products { order: 2; }
+  html.tema-halloween .busca-hoy-mobile { order: 3; }
+  html.tema-halloween .aitana-mobile-cta { order: 4; }
+}
+
+/* Desktop/tablet horizontal: escena panorámica continua, sin tocar <=768px. */
+@media (min-width: 769px) {
+  html.tema-halloween body,
+  html.tema-halloween.modo-standalone body.pwa-navegacion-lista {
+    background-image: linear-gradient(180deg, #150b1b18, #150b1b38),
+      url('/assets/halloween/haunted-desktop.webp');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+}
+
+/* Control global, compacto y accesible; no altera la altura del encabezado. */
+html.tema-halloween .haunted-effects-toggle {
+  display: inline-grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px;
+  border: 1px solid #b76a9c; border-radius: 12px; color: #ffd4ed;
+  background: #35203f; font-size: 19px; cursor: pointer;
+}
+html.tema-halloween .haunted-effects-toggle[aria-pressed="false"] { background: #24152f; }
+html.tema-halloween .haunted-effects-toggle:focus-visible { outline: 3px solid #ffd7ef; outline-offset: 2px; }
+html.tema-halloween .haunted-sound:disabled { opacity: .7; cursor: default; }

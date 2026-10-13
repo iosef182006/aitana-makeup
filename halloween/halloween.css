@@ -169,7 +169,7 @@ html.tema-halloween.modo-standalone .aitana-mobile-bottom-link:focus-visible { o
 html.tema-halloween body,
 html.tema-halloween.modo-standalone body.pwa-navegacion-lista {
   background-color: #150b1b;
-  background-image: url('/assets/halloween/haunted-scene.webp');
+  background-image: url('/halloween/assets/haunted-scene.webp');
   background-position: center top;
   background-size: min(100%, 1440px) auto;
   background-repeat: repeat-y;
@@ -255,8 +255,9 @@ html.tema-halloween .mobile-sheet-panel { border-color: #e694c5; box-shadow: 0 0
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background-image: linear-gradient(90deg, #150b1b00 15%, #150b1b55 35% 65%, #150b1b00 85%),
-      url('/assets/halloween/haunted-pink-mobile.webp');
+    background-image: linear-gradient(180deg, #150b1b66, #150b1b8c),
+      linear-gradient(90deg, #150b1b00 15%, #150b1b33 35% 65%, #150b1b00 85%),
+      url('/halloween/assets/haunted-pink-mobile.webp');
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
@@ -345,8 +346,8 @@ html.tema-halloween .mobile-sheet-panel { border-color: #e694c5; box-shadow: 0 0
 @media (min-width: 769px) {
   html.tema-halloween body,
   html.tema-halloween.modo-standalone body.pwa-navegacion-lista {
-    background-image: linear-gradient(180deg, #150b1b18, #150b1b38),
-      url('/assets/halloween/haunted-desktop.webp');
+    background-image: linear-gradient(180deg, #150b1b66, #150b1b8c),
+      url('/halloween/assets/haunted-desktop.webp');
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
@@ -363,3 +364,103 @@ html.tema-halloween .haunted-effects-toggle {
 html.tema-halloween .haunted-effects-toggle[aria-pressed="false"] { background: #24152f; }
 html.tema-halloween .haunted-effects-toggle:focus-visible { outline: 3px solid #ffd7ef; outline-offset: 2px; }
 html.tema-halloween .haunted-sound:disabled { opacity: .7; cursor: default; }
+
+/* Portada móvil compacta; el catálogo conserva el protagonismo. */
+@media (max-width: 768px) {
+  html.tema-halloween:is(.modo-standalone, :not(.modo-standalone)) .header {
+    height: calc(72px + env(safe-area-inset-top, 0px));
+    padding-top: calc(24px + env(safe-area-inset-top, 0px));
+    grid-template-rows: 48px;
+    background: #210f29f5;
+  }
+
+  html.tema-halloween:is(.modo-standalone, :not(.modo-standalone)) .header nav {
+    top: calc(72px + env(safe-area-inset-top, 0px));
+  }
+
+  html.tema-halloween .halloween-banner,
+  html.tema-halloween.modo-standalone body.pwa-vista-catalogo .halloween-banner {
+    margin-inline: 16px;
+    min-height: 0;
+    padding: 16px 8px 14px;
+    background: transparent;
+  }
+
+  html.tema-halloween .haunted-brand { display: none; }
+  html.tema-halloween .haunted-eyebrow { margin-bottom: 10px; font-size: 9px; letter-spacing: .12em; }
+  html.tema-halloween .haunted-copy h2 { font-size: clamp(28px, 8vw, 34px); line-height: 1.08; }
+  html.tema-halloween .haunted-copy h2 span { font-size: .78em; }
+  html.tema-halloween .haunted-copy p { margin-top: 8px; font-size: 14px; }
+  html.tema-halloween .haunted-copy > small { display: none; }
+  html.tema-halloween .haunted-sound { min-height: 40px; margin: 12px auto 0; padding: 9px 16px; font-size: 12px; }
+
+  html.tema-halloween .aitana-mobile-search { margin: 0 16px 14px; border-radius: 14px; }
+
+  html.tema-halloween :is(.recien-llegados-mobile-slot .recien-llegados, .aitana-mobile-products, .productos) {
+    background: #211027f2;
+    border-radius: 20px;
+    border: 1px solid #eaa0c51f;
+  }
+
+  html.tema-halloween .recien-llegados-mobile-slot .recien-llegados {
+    padding-top: 16px;
+    margin-inline: 8px;
+  }
+
+  html.tema-halloween:is(.modo-standalone, :not(.modo-standalone)) .recien-llegados-encabezado {
+    margin-inline: 12px;
+    gap: 6px;
+  }
+
+  html.tema-halloween:is(.modo-standalone, :not(.modo-standalone)) .recien-llegados-encabezado h2 {
+    font-size: 20px;
+    line-height: 1.25;
+  }
+
+  html.tema-halloween:is(.modo-standalone, :not(.modo-standalone)) .recien-llegados-mobile-slot .recien-llegados-lista {
+    padding: 10px 12px 18px;
+    gap: 12px;
+    scroll-padding-inline: 12px;
+  }
+
+  html.tema-halloween:is(.modo-standalone, :not(.modo-standalone)) .recien-llegados-mobile-slot .producto-reciente {
+    flex: 0 0 calc((100% - 12px) / 2);
+    width: calc((100% - 12px) / 2);
+  }
+
+  html.tema-halloween:is(.modo-standalone, :not(.modo-standalone)) .recien-llegados-mobile-slot .producto-reciente .producto-imagen {
+    aspect-ratio: 1;
+    background: #fff;
+  }
+
+  html.tema-halloween:is(.modo-standalone, :not(.modo-standalone)) .recien-llegados-mobile-slot .producto-reciente h3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    min-height: 36px;
+    height: 36px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  /* El acceso a WhatsApp pasa al final de la página, sin cubrir tarjetas. */
+  html.tema-halloween:is(.modo-standalone, :not(.modo-standalone)) .whatsapp-flotante {
+    position: static;
+    display: flex;
+    width: calc(100% - 32px);
+    height: auto;
+    min-height: 48px;
+    margin: 16px auto 24px;
+    padding: 12px 18px;
+    gap: 10px;
+    border-radius: 16px;
+    transform: none;
+    animation: none;
+  }
+
+  html.tema-halloween .whatsapp-flotante::after {
+    content: "¿Te ayudamos? Escríbenos";
+    font: 600 14px/1.4 Arial, sans-serif;
+  }
+}

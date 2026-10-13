@@ -126,10 +126,10 @@ test('Audio offline: respuestas completas y Range compatibles con Safari', async
     caches: { async open() { return { async match() { return new Response(new Uint8Array(100)); } }; } }
   };
   vm.createContext(context);
-  vm.runInContext(fs.readFileSync(`${__dirname}/service-worker.js`, 'utf8'), context);
+  vm.runInContext(fs.readFileSync(`${__dirname}/../service-worker.js`, 'utf8'), context);
   for (const [range, status, length] of [[null, 200, 100], ['bytes=0-1', 206, 2],
     ['bytes=90-', 206, 10], ['bytes=-10', 206, 10], ['bytes=100-', 416, 0]]) {
-    context.request = new Request('https://aitana.local/audio/haunted-beauty.wav', {
+    context.request = new Request('https://aitana.local/halloween/audio/haunted-beauty.wav', {
       headers: range ? { Range: range } : {}
     });
     const response = await vm.runInContext('halloweenAudio(request)', context);

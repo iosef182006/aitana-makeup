@@ -20,6 +20,43 @@ if (pantallaActualizacion) {
   }
 }
 
+const CATALOGO_RESPALDO_KEY = "aitana-catalogo-respaldo-v1";
+let catalogoEsRespaldo = false;
+
+function guardarRespaldoCatalogo() {
+  try {
+    localStorage.setItem(CATALOGO_RESPALDO_KEY, JSON.stringify({
+      productos, fecha: new Date().toISOString()
+    }));
+  } catch (_) { /* El catálogo sigue disponible si no hay espacio. */ }
+}
+
+function leerRespaldoCatalogo() {
+  try {
+    const respaldo = JSON.parse(localStorage.getItem(CATALOGO_RESPALDO_KEY) || "null");
+    if (!respaldo || !Array.isArray(respaldo.productos) || !respaldo.fecha ||
+        !Number.isFinite(Date.parse(respaldo.fecha)) ||
+        !respaldo.productos.every(producto => producto && typeof producto.nombre === "string" && Array.isArray(producto.variantes))) return null;
+    return respaldo;
+  } catch (_) { return null; }
+}
+
+function mostrarEstadoRespaldo(fecha) {
+  document.getElementById("catalogoRespaldoAviso")?.remove();
+  if (!fecha) return;
+  const aviso = document.createElement("p");
+  aviso.id = "catalogoRespaldoAviso";
+  aviso.setAttribute("role", "status");
+  aviso.textContent = `Mostrando el catálogo guardado del ${new Date(fecha).toLocaleString("es-PE")}. Los precios y el stock pueden haber cambiado. `;
+  const reintentar = document.createElement("button");
+  reintentar.type = "button";
+  reintentar.className = "filtro";
+  reintentar.textContent = "Actualizar catálogo";
+  reintentar.addEventListener("click", cargarCatalogoSupabase);
+  aviso.append(reintentar);
+  contenedor.before(aviso);
+}
+
 async function cargarCatalogoSupabase() {
   if (esRutaRevision || MODO_ACTUALIZACION) return;
 
@@ -33,12 +70,23 @@ async function cargarCatalogoSupabase() {
       cargarVariantesSupabase(cargaSupabase)
     ]);
     productos = normalizarCatalogoSupabase(cargaSupabase, filasImagenes, filasVariantes);
+    catalogoEsRespaldo = false;
+    productosConsulta.clear();
     refrescarInterfazCatalogo();
+    guardarRespaldoCatalogo();
+    mostrarEstadoRespaldo(null);
   } catch (error) {
-    productos = [];
     console.warn("Aitana: no se pudo cargar el catálogo de Supabase.", error);
+    const respaldo = leerRespaldoCatalogo();
+    if (respaldo) {
+      productos = respaldo.productos;
+      catalogoEsRespaldo = true;
+      productosConsulta.clear();
+      refrescarInterfazCatalogo();
+      mostrarEstadoRespaldo(respaldo.fecha);
+      return;
+    }
     mostrarErrorCatalogo();
-    guardarConsultaPersistente();
   }
 }
 
@@ -88,7 +136,7 @@ function refrescarInterfazCatalogo() {
     actualizarConsultaMultiple();
     actualizarCarruselRecientes();
     if (window.matchMedia("(max-width: 768px)").matches) renderizarMobileProductos();
-    guardarConsultaPersistente();
+    if (!catalogoEsRespaldo) guardarConsultaPersistente();
     finalizarCargaCatalogo();
   } catch (error) {
     console.error("Aitana: el catálogo se cargó, pero ocurrió un error al refrescar la interfaz.", error);
@@ -262,6 +310,7 @@ function obtenerIdProductoFavorito(producto) {
 }
 
 function guardarConsultaPersistente() {
+  if (!productos.length) return false;
   const ids = [...productosConsulta]
     .map(index => productos[index])
     .filter(producto => producto && !producto.agotado)
@@ -273,6 +322,7 @@ function guardarConsultaPersistente() {
 
   try {
     localStorage.setItem(CONSULTA_STORAGE_KEY, JSON.stringify(ids));
+    consultaGuardadaInicial = ids;
     return true;
   } catch (error) {
     return false;
@@ -2593,6 +2643,14 @@ const menu =
 
 if(menuToggle && menu){
 
+  document.addEventListener("keydown", evento => {
+    if (evento.key !== "Escape" || !menu.classList.contains("abierto")) return;
+    menu.classList.remove("abierto");
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute("aria-label", "Abrir menú");
+    menuToggle.focus();
+  });
+
   menuToggle.addEventListener("click", () => {
 
     menu.classList.toggle("abierto");
@@ -2798,6 +2856,31 @@ window.addEventListener("load", () => {
 // ======================================
 // ENTREGAS REALES: CARRUSEL Y VISOR
 // ======================================
+
+// Mantener el teclado dentro del diálogo visible que está por encima de los demás.
+document.addEventListener("keydown", evento => {
+  if (evento.key !== "Tab") return;
+  const dialogos = [...document.querySelectorAll('[role="dialog"][aria-modal="true"]')]
+    .filter(dialogo => !dialogo.hidden && dialogo.getAttribute("aria-hidden") !== "true" && dialogo.getClientRects().length)
+    .sort((a, b) => (Number.parseInt(getComputedStyle(b).zIndex) || 0) - (Number.parseInt(getComputedStyle(a).zIndex) || 0));
+  const dialogo = dialogos[0];
+  if (!dialogo) return;
+  const controles = [...dialogo.querySelectorAll('a[href], button, input, select, textarea, [tabindex]')]
+    .filter(control => !control.disabled && control.tabIndex >= 0 && !control.closest('[hidden], [inert]') && control.getClientRects().length);
+  const primero = controles[0];
+  const ultimo = controles[controles.length - 1];
+  evento.stopImmediatePropagation();
+  if (!primero) {
+    evento.preventDefault();
+    dialogo.tabIndex = -1;
+    dialogo.focus();
+  } else if (!dialogo.contains(document.activeElement) ||
+      (evento.shiftKey && document.activeElement === primero) ||
+      (!evento.shiftKey && document.activeElement === ultimo)) {
+    evento.preventDefault();
+    (evento.shiftKey ? ultimo : primero).focus();
+  }
+}, true);
 
 const entregasGaleria = document.getElementById("entregasGaleria");
 const entregaModal = document.getElementById("entregaModal");

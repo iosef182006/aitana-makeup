@@ -1,4 +1,4 @@
-const CACHE_VERSION = "aitana-pwa-v28";
+const CACHE_VERSION = "aitana-pwa-v35";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const NETWORK_CACHE = `${CACHE_VERSION}-network`;
 
@@ -6,14 +6,14 @@ const ESSENTIAL_FILES = [
   "/",
   "/index.html",
   "/style.css",
-  "/halloween.css",
-  "/halloween.js",
-  "/halloween-sounds.js",
-  "/audio/halloween-welcome.wav",
-  "/audio/haunted-beauty.wav",
-  "/assets/halloween/haunted-scene.webp",
-  "/assets/halloween/haunted-pink-mobile.webp",
-  "/assets/halloween/haunted-desktop.webp",
+  "/halloween/halloween.css",
+  "/halloween/halloween.js",
+  "/halloween/halloween-sounds.js",
+  "/halloween/audio/halloween-welcome.wav",
+  "/halloween/audio/haunted-beauty.wav",
+  "/halloween/assets/haunted-scene.webp",
+  "/halloween/assets/haunted-pink-mobile.webp",
+  "/halloween/assets/haunted-desktop.webp",
   "/script.js",
   "/revision-auth.js",
   "/supabase-config.js",
@@ -37,6 +37,13 @@ self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then(cache => cache.addAll(ESSENTIAL_FILES))
+      .then(async () => {
+        // La dependencia externa es opcional para instalar; si está disponible,
+        // queda lista para abrir el catálogo offline después de la primera visita.
+        try {
+          await imagenGuardada(new Request("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js", { mode: "cors" }));
+        } catch (_) {}
+      })
   );
 });
 
@@ -72,7 +79,7 @@ async function networkFirst(request) {
     const staticCache = await caches.open(STATIC_CACHE);
     const staticFallback = request.mode === "navigate"
       ? await staticCache.match("/index.html")
-      : await staticCache.match(request);
+      : await staticCache.match(request, { ignoreSearch: true });
 
     if (staticFallback) return staticFallback;
     throw error;
@@ -87,6 +94,17 @@ async function cacheFirstIcon(request) {
   const response = await fetch(request);
   if (response && response.ok) {
     await cache.put(request, response.clone());
+  }
+  return response;
+}
+
+async function imagenGuardada(request) {
+  const cache = await caches.open(NETWORK_CACHE);
+  const guardada = await cache.match(request);
+  if (guardada) return guardada;
+  const response = await fetch(request);
+  if (response.ok || response.type === "opaque") {
+    try { await cache.put(request, response.clone()); } catch (_) {}
   }
   return response;
 }
@@ -125,10 +143,28 @@ self.addEventListener("fetch", event => {
   if (request.method !== "GET") return;
 
   const url = new URL(request.url);
+  // Solo archivos públicos de imágenes y dependencias; nunca sesiones ni API de datos.
+  if (url.origin === "https://vbbnjaquoxzcoanzrhuk.supabase.co" &&
+      url.pathname.startsWith("/storage/v1/object/public/product-images/") &&
+      request.destination === "image") {
+    event.respondWith(imagenGuardada(request));
+    return;
+  }
+  if (url.origin === "https://cdn.jsdelivr.net" &&
+      url.pathname === "/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js") {
+    event.respondWith(imagenGuardada(request));
+    return;
+  }
+  if (url.origin === "https://cdnjs.cloudflare.com" &&
+      url.pathname.startsWith("/ajax/libs/font-awesome/6.5.2/") &&
+      ["style", "font"].includes(request.destination)) {
+    event.respondWith(imagenGuardada(request));
+    return;
+  }
   if (url.origin !== self.location.origin) return;
 
-  if (url.pathname === "/audio/haunted-beauty.wav" ||
-      /^\/audio\/halloween-(welcome|search|favorite|consult|navigate)\.wav$/.test(url.pathname)) {
+  if (url.pathname === "/halloween/audio/haunted-beauty.wav" ||
+      /^\/halloween\/audio\/halloween-(welcome|search|favorite|consult|navigate)\.wav$/.test(url.pathname)) {
     // Safari solicita rangos también cuando el audio viene de la caché offline.
     event.respondWith(halloweenAudio(request));
     return;
@@ -139,10 +175,16 @@ self.addEventListener("fetch", event => {
     return;
   }
 
+  if (request.destination === "image" &&
+      (url.pathname.startsWith("/img/") || url.pathname === "/_vercel/image")) {
+    event.respondWith(imagenGuardada(request));
+    return;
+  }
+
   if (ICON_ASSETS.has(url.pathname) || [
-    "/assets/halloween/haunted-scene.webp",
-    "/assets/halloween/haunted-pink-mobile.webp",
-    "/assets/halloween/haunted-desktop.webp"
+    "/halloween/assets/haunted-scene.webp",
+    "/halloween/assets/haunted-pink-mobile.webp",
+    "/halloween/assets/haunted-desktop.webp"
   ].includes(url.pathname)) {
     event.respondWith(cacheFirstIcon(request));
   }

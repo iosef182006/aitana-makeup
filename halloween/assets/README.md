@@ -2,7 +2,7 @@
 
 ## Fondo móvil vigente: archivo aportado por la usuaria
 
-Fuente: `referencia/halloween-fondo-rosa-mobile.png` (941×1672). La carpeta
+Fuente: `halloween/referencias/halloween-fondo-rosa-mobile.png` (941×1672). La carpeta
 encontrada es `referencia/`, en singular. No se generó ninguna imagen nueva.
 Se conserva el PNG original y se convierte una copia a
 `haunted-pink-mobile.webp` (860×1528, 289678 bytes) para reducir su peso.
@@ -10,7 +10,7 @@ Solo se reescala proporcionalmente y se convierte a WebP; sin modificar la escen
 Esta copia sustituye al fondo móvil anterior, que también se conserva en disco.
 El panorámico desktop permanece intacto.
 
-Referencia visual inspeccionada: `referencia/aitana-halloween-diseno.png`.
+Referencia visual inspeccionada: `halloween/referencias/aitana-halloween-diseno.png`.
 
 Se generó un fondo nuevo con la herramienta integrada ImageGen; no se usa la captura como fondo ni se recortan sus productos. La ilustración no contiene textos, precios, controles, fotografías de productos reales ni marcas en los frascos decorativos. Los frascos de los estantes son utilería ilustrada, no artículos del catálogo.
 

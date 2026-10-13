@@ -2,8 +2,8 @@
 
 ## Último cambio: únicamente fondo móvil rosado
 
-Se usa el archivo proporcionado `referencia/halloween-fondo-rosa-mobile.png`.
-Original intacto, copia optimizada en `assets/halloween/haunted-pink-mobile.webp`.
+Se usa el archivo proporcionado `halloween/referencias/halloween-fondo-rosa-mobile.png`.
+Original intacto, copia optimizada en `halloween/assets/haunted-pink-mobile.webp`.
 No se generó otra imagen. Solo se modifica el bloque de fondo de hasta 768px:
 capa fija `body::before`, cover proporcional, sin repetición y sin interacción.
 Un sombreado central tenue del fondo ayuda a conservar legibilidad sin cambiar
@@ -34,17 +34,17 @@ Configuración actual en index.html: `AITANA_CONFIG.halloween: "on"` para revisi
 
 ## Composición y recursos
 
-Se inspeccionó `referencia/aitana-halloween-diseno.png` (la carpeta encontrada es singular). La nueva escena sigue luna rosa, castillo, fantasmas, murciélagos, estantes de maquillaje decorativos, velas, calabazas, rosas, telarañas y niebla en los márgenes. Fue creada por ImageGen sin texto ni interfaz: no se utiliza la captura completa como fondo. Archivos, dimensiones y prompt exacto en `assets/halloween/README.md`.
+Se inspeccionó `halloween/referencias/aitana-halloween-diseno.png` (la carpeta encontrada es singular). La nueva escena sigue luna rosa, castillo, fantasmas, murciélagos, estantes de maquillaje decorativos, velas, calabazas, rosas, telarañas y niebla en los márgenes. Fue creada por ImageGen sin texto ni interfaz: no se utiliza la captura completa como fondo. Archivos, dimensiones y prompt exacto en `halloween/assets/README.md`.
 
 El título, marca, subtítulo, botón de sonido, buscadores, filtros y productos son HTML real. Tipografía serif rosa luminosa, buscador claro, sección de novedades con tarjetas blancas y brillo rosa. En móvil se ordenan buscador, novedades, favoritos destacados y descubrimiento; ningún control se elimina. El fondo se extiende al catálogo y PWA; la navegación inferior conserva sus alturas, safe areas y controles. Los sheets de Favoritos y Mi consulta mantienen superficies claras y borde rosa, con decoración en el entorno. La PWA de escritorio también conserva el diseño responsive.
 
-El SVG simplificado anterior queda en `backup-halloween/`; la versión actual usa una escena nueva según la referencia definitiva. Los productos, fotografías del catálogo, precios y datos no se sustituyen por los de la captura. No se añaden promociones ni artículos.
+El SVG simplificado anterior queda en `halloween/backup/`; la versión actual usa una escena nueva según la referencia definitiva. Los productos, fotografías del catálogo, precios y datos no se sustituyen por los de la captura. No se añaden promociones ni artículos.
 
 La escena móvil WebP pesa ~104KB y la de escritorio ~255KB. Se seleccionan con CSS; sin dependencias visuales nuevas ni fuentes externas. El service worker v25 incluye ambas para offline. Niebla y dos destellos CSS usan transform/opacity y se detienen con prefers-reduced-motion. Los fantasmas y elementos de la escena son ilustración estática.
 
 ## Audio actual: efectos y ambiente opcional
 
-Cinco efectos originales CC0 en audio/: bienvenida, buscador, favoritos, consulta y navegacion. Documentacion completa, archivos, duraciones, licencia y limites en audio/README-SFX.md. Escucha individual: http://localhost:8010/audio/halloween-preview.html .
+Cinco efectos originales CC0 en audio/: bienvenida, buscador, favoritos, consulta y navegacion. Documentacion completa, archivos, duraciones, licencia y limites en audio/README-SFX.md. Escucha individual: http://localhost:8010/halloween/audio/halloween-preview.html .
 
 El control de altavoz del encabezado activa/silencia todos los sonidos y recuerda solo esa preferencia local. Por defecto los efectos estan habilitados; se intenta una risa breve al entrar y, si autoplay se bloquea, tras el primer gesto permitido. No se garantiza autoplay en Safari ni en otros navegadores.
 
@@ -52,7 +52,7 @@ El ambiente se conserva con su boton independiente, pero ahora es opcional y com
 
 ## Comprobación y límites
 
-Pruebas: `node --test --test-isolation=none halloween.test.cjs`, sintaxis de halloween.js, script.js y service-worker.js, y git diff --check. Cubren calendario/rutas, restauración, audio permitido/bloqueado, primera interacción, silencio, cancelación, ocultación y rangos de audio offline.
+Pruebas desde la raíz: `node halloween/halloween.test.cjs` y `node halloween/halloween-sounds.test.cjs`; sintaxis de halloween/halloween.js, script.js y service-worker.js, y git diff --check. Cubren calendario/rutas, restauración, audio permitido/bloqueado, primera interacción, silencio, cancelación, ocultación y rangos de audio offline.
 
 Se inspeccionaron la referencia y la ilustración generada. Se revisaron las reglas responsive con especial atención a 430px: dos tarjetas dentro del 82% del viewport, márgenes ilustrados, texto adaptable, tamaños de botón de 44px o más, imágenes de producto contain. Esto no sustituye una captura real.
 
@@ -60,7 +60,7 @@ Browser volvió a fallar al inicializarse: Importing module "node:process" is no
 
 ## Respaldo y alcance
 
-backup-halloween/ conserva index/CSS originales de Git y el estado previo al forzado on. Excluido de Git y Vercel. Se excluyen de Vercel también la referencia y el PNG fuente; los WebP sí se usan en la tienda.
+halloween/backup/ conserva index/CSS originales de Git y el estado previo al forzado on. Excluido de Git y Vercel. Se excluyen de Vercel también la referencia y el PNG fuente; los WebP sí se usan en la tienda.
 
 No se modifica Supabase, administración, autenticación, productos, precios, stock, imágenes de catálogo, lógica de favoritos, consulta o WhatsApp. No se ejecutan git add, commit, push ni publicación.
 
@@ -71,7 +71,7 @@ La causa de las franjas era `background-size: min(100%, 1440px) auto` sobre una 
 
 Cover conserva las proporciones, aunque puede recortar los bordes en ventanas con otra relaci?n de aspecto. Se comprob? matem?ticamente la cobertura de 1024?768, 1440?900, 1920?1080 y 2560?1440, sin huecos ni escalado desigual. No se usa 100% 100%. No son comprobaciones de renderizado real. La fuente panor?mica nativa tiene 1672?941; a 2560px se ampl?a uniformemente, por lo que la nitidez puede ser inferior a una imagen nativa 2560px.
 
-Para 375, 390, 430 y 768px no se modifica ninguna regla previa. Se compararon hashes: imagen m?vil, escena vertical, halloween.js (incluido sonido), index.html, script.js, style.css y WAV permanecen iguales al inicio de este ajuste. El CSS original tambi?n permanece ?ntegro como prefijo, con solo el bloque desktop a?adido. Respaldo y hashes en backup-halloween/desktop-before/.
+Para 375, 390, 430 y 768px no se modifica ninguna regla previa. Se compararon hashes: imagen m?vil, escena vertical, halloween.js (incluido sonido), index.html, script.js, style.css y WAV permanecen iguales al inicio de este ajuste. El CSS original tambi?n permanece ?ntegro como prefijo, con solo el bloque desktop a?adido. Respaldo y hashes en halloween/backup/desktop-before/.
 
 El service worker v26 a?ade el WebP panor?mico (~290KB) a la cach? offline. No se cambia su c?digo de audio ni l?gica comercial. El incremento de instalaci?n offline aplica tambi?n a m?viles; el dise?o m?vil no cambia.
 

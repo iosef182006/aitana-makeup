@@ -5,9 +5,9 @@
   const KEY = 'aitana-halloween-sounds';
   const root = document.documentElement;
   const files = Object.freeze({
-    welcome: '/audio/halloween-welcome.wav', search: '/audio/halloween-search.wav',
-    favorite: '/audio/halloween-favorite.wav', consult: '/audio/halloween-consult.wav',
-    navigate: '/audio/halloween-navigate.wav'
+    welcome: '/halloween/audio/halloween-welcome.wav', search: '/halloween/audio/halloween-search.wav',
+    favorite: '/halloween/audio/halloween-favorite.wav', consult: '/halloween/audio/halloween-consult.wav',
+    navigate: '/halloween/audio/halloween-navigate.wav'
   });
   let enabled = true;
   try { enabled = localStorage.getItem(KEY) !== 'off'; } catch { /* Safari privado: preferencia en memoria. */ }

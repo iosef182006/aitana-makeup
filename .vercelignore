@@ -1,7 +1,13 @@
-backup-halloween/
+halloween/backup/
 preview-local.py
 __pycache__/
-assets/halloween/*source.png
+halloween/assets/*source.png
 referencia/
+clientes/
+migration/
+*.test.cjs
 referencias/
-audio/halloween-preview.html
+halloween/audio/halloween-preview.html
+halloween/*.test.cjs
+halloween/referencias/
+halloween/audio/*.py

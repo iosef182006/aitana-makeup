@@ -17,7 +17,7 @@ El ambiente original `haunted-beauty.wav` conserva su botón y volumen de 22%.
 
 ## Escuchar localmente
 
-http://localhost:8010/audio/halloween-preview.html
+http://localhost:8010/halloween/audio/halloween-preview.html
 
 Controles nativos para escuchar cada efecto. Solo reproduce un clip a la vez y
 pausa al ocultar la página. Esta página de pruebas está excluida de Vercel.

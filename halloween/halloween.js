@@ -28,7 +28,7 @@
         window.AITANA_HALLOWEEN_SOUNDS?.enabled === false) return;
     if (audio && !audio.paused) { mute(); return; }
     if (!audio) {
-      audio = new Audio("/audio/haunted-beauty.wav");
+      audio = new Audio("/halloween/audio/haunted-beauty.wav");
       audio.loop = true;
       audio.volume = 0.22;
       audio.preload = "none";

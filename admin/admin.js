@@ -7,15 +7,6 @@
   const TONES_IMAGE_ALT = "tones";
   const state = { products: [], images: new Map(), tonesImages: new Map(), editingId: null, currentImage: null, editorTones: [], previewUrl: null, filter: "all", sort: "recent", actionProductId: null, pendingDeleteId: null };
 
-  if (!window.supabase || !config?.url || !config?.publishableKey) {
-    showLogin("No fue posible cargar la configuración de Supabase.");
-    return;
-  }
-
-  const db = window.supabase.createClient(config.url, config.publishableKey, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-  });
-
   const els = {
     loading: $("loadingView"), login: $("loginView"), admin: $("adminView"), dashboard: $("dashboardView"), editor: $("editorView"),
     loginForm: $("loginForm"), loginError: $("loginError"), loginButton: $("loginButton"), logout: $("logoutButton"),
@@ -41,6 +32,16 @@
     els.loginError.hidden = !message;
     els.loginError.textContent = message;
   }
+
+  if (!window.supabase || !config?.url || !config?.publishableKey) {
+    showLogin("No fue posible conectar. Revisa tu conexión y recarga la página.");
+    els.loginButton.disabled = true;
+    return;
+  }
+
+  const db = window.supabase.createClient(config.url, config.publishableKey, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  });
 
   function transitionToLoggedOut(message = "") {
     cleanupPreview();

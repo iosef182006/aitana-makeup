@@ -8295,7 +8295,11 @@ button, input, select, a { -webkit-tap-highlight-color: transparent; }
   }
   html:not(.modo-standalone) .header-whatsapp { display: none; }
   html:not(.modo-standalone) .pwa-header-actions[hidden] { display: flex; }
-  html:not(.modo-standalone) .pwa-header-actions { gap: 4px; }
+  html:not(.modo-standalone) .pwa-header-actions {
+    order: 2;
+    margin-left: auto;
+    gap: 4px;
+  }
   html:not(.modo-standalone) .pwa-header-actions button {
     width: 34px; min-width: 34px; height: 34px; border: 1px solid #f0dbe3;
     border-radius: 11px; color: #b92559; background: #fff6f9;
@@ -8448,6 +8452,56 @@ button, input, select, a { -webkit-tap-highlight-color: transparent; }
     font-size: 11px;
     line-height: 1;
     box-shadow: 0 3px 9px rgba(94, 28, 53, .12);
+  }
+}
+
+/* Encabezado móvil: columnas reservadas para cada control y la marca. */
+@media (max-width: 768px) {
+  html:is(.modo-standalone, :not(.modo-standalone)) .header {
+    display: grid;
+    grid-template-columns: 40px 40px minmax(0, 1fr) 40px 40px;
+    column-gap: 8px;
+    height: calc(64px + env(safe-area-inset-top, 0px));
+    width: 100%;
+    margin: 0;
+    padding: env(safe-area-inset-top, 0px) max(12px, env(safe-area-inset-right, 0px)) 0 max(12px, env(safe-area-inset-left, 0px));
+  }
+
+  html .header .logo {
+    position: static;
+    transform: none;
+    grid-column: 3;
+    grid-row: 1;
+    min-width: 0;
+    justify-self: center;
+  }
+
+  html .header .menu-toggle {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  html .header .haunted-effects-toggle {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  html:is(.modo-standalone, :not(.modo-standalone)) .header .pwa-header-actions {
+    grid-column: 4 / 6;
+    grid-row: 1;
+    margin: 0;
+    gap: 8px;
+  }
+
+  html:is(.modo-standalone, :not(.modo-standalone)) .header :is(.menu-toggle, .haunted-effects-toggle, .pwa-header-actions button) {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+  }
+
+  html:is(.modo-standalone, :not(.modo-standalone)) .header nav {
+    top: calc(64px + env(safe-area-inset-top, 0px));
   }
 }
 

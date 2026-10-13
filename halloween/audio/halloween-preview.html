@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prueba local de sonidos Aitana</title>
+<style>
+body{max-width:650px;margin:30px auto;padding:0 20px;background:#24152f;color:#fff0fa;font:16px/1.5 Arial}
+h1{font-size:24px;color:#ff94d4}label{display:block;margin:20px 0}audio{display:block;width:100%;margin-top:6px}a{color:#ffb6de}
+</style>
+<h1>Sonidos Halloween · Prueba local</h1>
+<p>Reproduce cada efecto por separado. Solo suena después de pulsar Play. Recursos originales CC0.</p>
+<label>Entrada: risa fantasmal suave<audio controls preload="none" src="halloween-welcome.wav"></audio></label>
+<label>Buscador: campanita mágica<audio controls preload="none" src="halloween-search.wav"></audio></label>
+<label>Favoritos: hechizo brillante<audio controls preload="none" src="halloween-favorite.wav"></audio></label>
+<label>Mi consulta: huesitos<audio controls preload="none" src="halloween-consult.wav"></audio></label>
+<label>Navegación: aleteo de murciélago<audio controls preload="none" src="halloween-navigate.wav"></audio></label>
+<p><a href="/">Volver a Aitana</a></p>
+<script>
+const players = [...document.querySelectorAll('audio')];
+players.forEach(player => {
+  player.volume = .32;
+  player.addEventListener('play', () => players.forEach(other => { if (other !== player) other.pause(); }));
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden) players.forEach(player => player.pause()); });
+window.addEventListener('pagehide', () => players.forEach(player => player.pause()));
+</script>
+</html>

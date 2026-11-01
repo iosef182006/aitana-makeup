@@ -474,6 +474,47 @@ const dimensionesImagenes = {
 };
 
 const imagenesFallidasReportadas = new Set();
+const nombresImagenesLocales = new Map([
+  ["body splash dup victoria secret", "WhatsApp Image 2026-09-30 at 11.48.02 AM (1)"],
+  ["delineador liquido matte 3d a prueba de agua linda jhade", "WhatsApp Image 2026-09-30 at 11.48.02 AM (2)"],
+  ["labial liquido matte nazca jarusa", "WhatsApp Image 2026-09-30 at 11.48.02 AM (3)"],
+  ["espejo led para tocador", "Espejo led para tocador  3 tonos de luces"],
+  ["pestanas postizas uno por uno pegamento", "Pestañas postizas uno por uno+pegamento"],
+  ["parches de ojeras", "Parches de ojeras contiene colageno, ácido hialuronico y baba de caracol"]
+]);
+const extensionesImagenLocal = ["jpeg", "jpg", "webp", "png"];
+
+function normalizarNombreImagenLocal(nombre) {
+  return String(nombre || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function usarFallbackImagenLocal(elemento) {
+  const indice = Number(elemento.dataset.imageLocalFallbackIndex || 0);
+  if (indice < extensionesImagenLocal.length) {
+    const nombreProducto = normalizarNombreImagenLocal(elemento.alt);
+    const nombreArchivo = nombresImagenesLocales.get(nombreProducto) || elemento.alt;
+    elemento.dataset.imageLocalFallbackIndex = String(indice + 1);
+    elemento.src = new URL(
+      `img/${encodeURIComponent(nombreArchivo)}.${extensionesImagenLocal[indice]}`,
+      document.baseURI
+    ).href;
+    return true;
+  }
+
+  if (elemento.dataset.imageIconFallback !== "true") {
+    elemento.dataset.imageIconFallback = "true";
+    elemento.src = new URL("img/app-icon-aitana.webp", document.baseURI).href;
+    return true;
+  }
+
+  elemento.onerror = null;
+  return false;
+}
 
 function reportarErrorImagen(elemento) {
   // Si el optimizador no está disponible, cargar el original una sola vez.
@@ -496,7 +537,7 @@ function reportarErrorImagen(elemento) {
       bucket: SUPABASE_PRODUCT_IMAGES_BUCKET
     });
   }
-  elemento.onerror = null;
+  usarFallbackImagenLocal(elemento);
 }
 
 function codificarDatoImagen(valor) {

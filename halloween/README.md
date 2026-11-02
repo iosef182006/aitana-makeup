@@ -12,7 +12,8 @@ Todos los archivos propios del evento están en esta carpeta:
 - `HALLOWEEN.md`: documentación e historial del diseño.
 - `*.test.cjs`: pruebas del evento, excluidas del despliegue.
 
-El evento permanece activado con `halloween: "on"` en `index.html`.
+El evento está desactivado para conservar la interfaz rosa habitual de Aitana;
+`halloween: "off"` en `index.html` también bloquea las previsualizaciones por URL.
 La página principal carga los archivos desde aquí y `service-worker.js`
 mantiene sus rutas de caché y audio para la aplicación instalada.
 

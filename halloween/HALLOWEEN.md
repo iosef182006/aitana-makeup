@@ -30,7 +30,7 @@ http://localhost:8010/
 
 Servidor desde la raíz real: `python preview-local.py`. Envía Cache-Control: no-store y bloquea backups/archivos ocultos. El HTML servido debe coincidir con el index principal; no existe un segundo index de la tienda.
 
-Configuración actual en index.html: `AITANA_CONFIG.halloween: "on"` para revisión. Cambiar a `"auto"` después de aprobar: activo del 20 al 31 de octubre, fecha local, retorno al diseño habitual desde noviembre. `"off"` desactiva el tema. En modo auto se admiten `?halloween=on` y `?halloween=off`. On es un forzado manual y no expira. Se recalcula a medianoche y al regresar a la página.
+Configuración actual en index.html: `AITANA_CONFIG.halloween: "off"` conserva la interfaz rosa habitual y bloquea previsualizaciones. `"auto"` activa el tema del 20 al 31 de octubre, fecha local, y vuelve al diseño habitual desde noviembre; en modo auto se admiten `?halloween=on` y `?halloween=off`. `"on"` es un forzado manual y no expira. El estado se recalcula a medianoche y al regresar a la página.
 
 ## Composición y recursos
 

@@ -50,9 +50,6 @@
   </style>
 
   <script>
-    // Halloween: "auto" (20–31 octubre local), "off" o "on".
-    window.AITANA_CONFIG = Object.freeze({ modoActualizacion: false, halloween: "off" });
-
     (() => {
       const rutaActual = window.location.pathname.replace(/\/+$/, "");
       const standalone = window.matchMedia("(display-mode: standalone)").matches ||
@@ -61,7 +58,7 @@
       const prepararSplash =
         standalone &&
         rutaActual !== "/revision" &&
-        !window.AITANA_CONFIG.modoActualizacion &&
+        !window.AITANA_CONFIG?.modoActualizacion &&
         tipoNavegacion !== "reload";
 
       window.AITANA_SPLASH_PREPARADA = prepararSplash;
@@ -99,9 +96,6 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   >
   <link rel="stylesheet" href="style.css?v=20-header-spacing">
-  <link rel="stylesheet" href="halloween/halloween.css?v=3-fondo-suave">
-  <script src="halloween/halloween-sounds.js" defer></script>
-  <script src="halloween/halloween.js" defer></script>
 </head>
 
 <body>

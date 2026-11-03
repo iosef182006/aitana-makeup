@@ -4036,6 +4036,26 @@ footer {
      text-decoration: none;
    }
 
+   html.modo-standalone body:not(.pwa-vista-inicio) .logo img {
+     display: none;
+   }
+
+   html.modo-standalone body.pwa-vista-catalogo .logo::before {
+     content: "Catálogo";
+   }
+
+   html.modo-standalone body.pwa-vista-favoritos .logo::before {
+     content: "Favoritos";
+   }
+
+   html.modo-standalone body.pwa-vista-consulta .logo::before {
+     content: "Mi consulta";
+   }
+
+   html.modo-standalone body:not(.pwa-vista-inicio) .logo::after {
+     content: "AITANA MAKE UP";
+   }
+
    .header-whatsapp {
      order: 2;
      display: inline-flex;
